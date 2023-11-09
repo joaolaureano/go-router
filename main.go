@@ -1,17 +1,32 @@
 package main
 
+import (
+	"fmt"
+	"net/http"
+
+	router2 "web/router"
+	"web/router/tree/router"
+)
+
 func main() {
 
-	//router := router.NewRouter()
-	//path := "/path"
-	//path2 := "/path/{test}/path/{test1}"
-	//path3 := "/path/{test1}/path/{test2}"
-	////pathToTest := "/path/hello/path/world"
-	//method := func(w http.ResponseWriter, r *http.Request) {
-	//	//rp := r.Context().Value("RouterContext").(*context.Context)
-	//	//w.Write([]byte(fmt.Sprintf("%s_%s", rp.Value("test"), rp.Value("test2"))))
-	//}
-	//router.Register(path, method)
-	//router.Register(path2, method)
-	//router.Register(path3, method)
+	router := router.NewRouter()
+	path := "/path"
+	method := func(w http.ResponseWriter, r *http.Request) {
+
+		w.Write([]byte(fmt.Sprintf("Hello World Route")))
+	}
+
+	fn := func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			r.Header.Set("kkk", "lol")
+			w.Write([]byte(fmt.Sprintf("Hello World Middleware")))
+			next.ServeHTTP(w, r)
+		})
+	}
+
+	router.Use(fn)
+	router.Register(router2.GET, path, method)
+
+	http.ListenAndServe("localhost:8080", router)
 }

@@ -26,6 +26,6 @@ func TestContext_InvalidKey(t *testing.T) {
 	assert.Equal(t, "", value)
 }
 
-func setup() *Context {
+func setup() *RouterContext {
 	return NewContext()
 }
