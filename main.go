@@ -5,12 +5,11 @@ import (
 	"net/http"
 
 	router2 "web/router"
-	"web/router/tree/router"
 )
 
 func main() {
 
-	router := router.NewRouter()
+	router := NewRouter()
 	path := "/path"
 	method := func(w http.ResponseWriter, r *http.Request) {
 
