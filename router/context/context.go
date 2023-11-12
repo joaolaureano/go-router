@@ -1,30 +1,38 @@
 package context
 
-import "slices"
+import (
+	"context"
+	"net/http"
+	"slices"
+)
 
-const ContextKey = "RouterContext"
+const RouterContextKey = "RouterContext"
 
-type Context struct {
+type RouterContext struct {
 	paramNames []string
 	paramValue []string
 }
 
-func (rp *Context) Value(key string) string {
-	idx := slices.Index(rp.paramNames, key)
+func (routerCtx *RouterContext) Value(key string) string {
+	idx := slices.Index(routerCtx.paramNames, key)
 	if idx > -1 {
-		return rp.paramValue[idx]
+		return routerCtx.paramValue[idx]
 	}
 	return ""
 }
 
-func (rp *Context) Set(key string, value string) {
-	rp.paramNames = append(rp.paramNames, key)
-	rp.paramValue = append(rp.paramValue, value)
+func (routerCtx *RouterContext) Set(key string, value string) {
+	routerCtx.paramNames = append(routerCtx.paramNames, key)
+	routerCtx.paramValue = append(routerCtx.paramValue, value)
 }
 
-func NewContext() *Context {
-	return &Context{
+func NewContext() *RouterContext {
+	return &RouterContext{
 		paramNames: make([]string, 0),
 		paramValue: make([]string, 0),
 	}
+}
+
+func (routerCtx *RouterContext) InjectIntoRequest(r *http.Request) {
+	*r = *r.WithContext(context.WithValue((*r).Context(), RouterContextKey, routerCtx))
 }

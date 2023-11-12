@@ -1,4 +1,4 @@
-package router
+package tree
 
 import (
 	"fmt"
@@ -7,17 +7,18 @@ import (
 	"slices"
 	"strings"
 
+	"web/router"
 	"web/router/context"
 )
 
 type Node struct {
 	path     string
 	children []*Node
-	method   map[HTTPMethods]Method
+	Method   map[router.HTTPMethods]Method
 }
 
 type Method struct {
-	handler      http.Handler
+	Handler      http.Handler
 	variableName []string
 }
 
@@ -25,43 +26,38 @@ type Tree struct {
 	root *Node
 }
 
-type TreeRouter interface {
-	RegisterRoute(httpMethod HTTPMethods, newValue string, method http.Handler)
-	FindRoute(ctx *context.Context, httpMethods HTTPMethods, value string) *Node
+type RouterTree interface {
+	RegisterRoute(httpMethod router.HTTPMethods, newValue string, method http.Handler)
+	FindRoute(ctx *context.RouterContext, httpMethods router.HTTPMethods, value string) *Node
 }
 
-func createTree() Tree {
+func CreateTree() Tree {
 	return Tree{
 		root: &Node{
 			path:     "",
 			children: make([]*Node, 0),
-			method:   make(map[HTTPMethods]Method),
+			Method:   make(map[router.HTTPMethods]Method),
 		},
 	}
 }
 
-func (t *Tree) RegisterRoute(httpMethod HTTPMethods, newValue string, method http.Handler) {
+func (t *Tree) RegisterRoute(httpMethod router.HTTPMethods, newValue string, method http.Handler) {
 	if len(newValue) > 0 {
 		t.register(httpMethod, newValue, method)
 	}
 }
 
-func (t *Tree) register(httpMethod HTTPMethods, path string, method http.Handler) {
+func (t *Tree) register(httpMethod router.HTTPMethods, path string, method http.Handler) {
 	currNode := &t.root
 	if path[0] != '/' {
 		panic("Path must begin with front-slash (/)")
 	}
 	if path == "/" {
-		if reflect.ValueOf((*currNode).method[httpMethod]).IsZero() {
-			*currNode = &Node{
-				path:     "/",
-				children: []*Node{},
-				method:   map[HTTPMethods]Method{httpMethod: {handler: method, variableName: nil}},
-			}
-		} else {
-			(*currNode).method[httpMethod] = Method{handler: method, variableName: nil}
+		*currNode = &Node{
+			path:     "/",
+			children: []*Node{},
+			Method:   map[router.HTTPMethods]Method{httpMethod: {Handler: method, variableName: nil}},
 		}
-
 		return
 	}
 	path = strings.Trim(path, "/")
@@ -70,11 +66,10 @@ func (t *Tree) register(httpMethod HTTPMethods, path string, method http.Handler
 	for _, pathSplitted := range strings.Split(path, "/") {
 		nextNode := (*currNode).getChild(pathSplitted)
 		if nextNode == nil {
-			//methodMap :=
 			nextNode = &Node{
 				path:     pathSplitted,
 				children: []*Node{},
-				method:   make(map[HTTPMethods]Method),
+				Method:   make(map[router.HTTPMethods]Method),
 			}
 			if isParam(pathSplitted) {
 				nextNode.path = "{*}"
@@ -86,20 +81,20 @@ func (t *Tree) register(httpMethod HTTPMethods, path string, method http.Handler
 		}
 		currNode = &nextNode
 	}
-	if !reflect.ValueOf((*(currNode)).method[httpMethod]).IsZero() {
+	if !reflect.ValueOf((*(currNode)).Method[httpMethod]).IsZero() {
 		panic(fmt.Sprintf("Duplicated path: %s", path))
 	}
 	(*currNode).setEndpoint(httpMethod, method, pathVariablesName)
 }
 
-func (t *Tree) FindRoute(ctx *context.Context, httpMethods HTTPMethods, value string) *Node {
+func (t *Tree) FindRoute(ctx *context.RouterContext, httpMethods router.HTTPMethods, value string) *Node {
 	if len(value) == 0 {
 		return nil
 	}
 	return t.findRoute(ctx, httpMethods, value)
 }
 
-func (t *Tree) findRoute(ctx *context.Context, httpMethod HTTPMethods, path string) *Node {
+func (t *Tree) findRoute(ctx *context.RouterContext, httpMethod router.HTTPMethods, path string) *Node {
 	currNode := t.root
 	if len((*currNode).children) == 0 {
 		return nil
@@ -120,10 +115,10 @@ func (t *Tree) findRoute(ctx *context.Context, httpMethod HTTPMethods, path stri
 		}
 		idx++
 		if idx == len(paths) {
-			if reflect.ValueOf(nextNode.method[httpMethod]).IsZero() {
+			if reflect.ValueOf(nextNode.Method[httpMethod]).IsZero() {
 				return nil
 			}
-			setPathVariableValues(ctx, nextNode.method[httpMethod].variableName, pathVariableValues)
+			setPathVariableValues(ctx, nextNode.Method[httpMethod].variableName, pathVariableValues)
 			return nextNode
 
 		}
@@ -131,15 +126,15 @@ func (t *Tree) findRoute(ctx *context.Context, httpMethod HTTPMethods, path stri
 	}
 }
 
-func setPathVariableValues(ctx *context.Context, keys, values []string) {
+func setPathVariableValues(ctx *context.RouterContext, keys, values []string) {
 	for i, k := range keys {
 		(*ctx).Set(k, values[i])
 	}
 }
 
-func (n *Node) setEndpoint(httpMethod HTTPMethods, handler http.Handler, pathVariables []string) {
-	n.method[httpMethod] = Method{
-		handler:      handler,
+func (n *Node) setEndpoint(httpMethod router.HTTPMethods, handler http.Handler, pathVariables []string) {
+	n.Method[httpMethod] = Method{
+		Handler:      handler,
 		variableName: pathVariables,
 	}
 }
