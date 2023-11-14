@@ -35,6 +35,22 @@ func TestRouter_RegisterSimplePath(t *testing.T) {
 	body, _ := io.ReadAll(res.Body)
 	assert.Equal(t, "hello_world", string(body))
 }
+
+func TestRouter_NotFound(t *testing.T) {
+	r := NewRouter()
+	path := "/not-found"
+	method := func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("hello_world"))
+	}
+	r.NotFound(method)
+	s := setup(r)
+	defer s.Close()
+
+	res, _ := http.Get(fmt.Sprintf("%s%s", s.URL, path))
+
+	body, _ := io.ReadAll(res.Body)
+	assert.Equal(t, "hello_world", string(body))
+}
 func TestRouter_RegisterWithMiddleware(t *testing.T) {
 	r := NewRouter()
 	path := "/path"
