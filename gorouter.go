@@ -22,6 +22,8 @@ type Router interface {
 	// Middleware functions can process or modify requests before reaching the route handler.
 	// This method enhances the router's functionality by allowing the insertion of additional processing steps.
 	Use(middleware func(http.Handler) http.Handler)
+
+	NotFound(notFoundFn http.HandlerFunc)
 }
 
 func NewRouter() Router {

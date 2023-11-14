@@ -10,16 +10,20 @@ import (
 )
 
 type Router struct {
-	root  tree.RouterTree
+	root tree.RouterTree
+
 	chain chain.Middleware
+
+	notFound http.HandlerFunc
 }
 
 func NewRouter() *Router {
 	tree := tree.CreateTree()
 
 	return &Router{
-		root:  &tree,
-		chain: &chain.Chain{},
+		root:     &tree,
+		chain:    &chain.Chain{},
+		notFound: http.NotFound,
 	}
 }
 
@@ -32,6 +36,8 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if route != nil {
 		routeHandler := route.Method[router2.HTTPMethods(r.Method)].Handler
 		router.chain.BuildHandler(routeHandler).ServeHTTP(w, r)
+	} else {
+		router.notFound(w, r)
 	}
 }
 
@@ -41,4 +47,8 @@ func (router *Router) Register(httpMethod router2.HTTPMethods, path string, meth
 
 func (router *Router) Use(middleware func(http.Handler) http.Handler) {
 	router.chain.Add(middleware)
+}
+
+func (router *Router) NotFound(notFoundFn http.HandlerFunc) {
+	router.notFound = notFoundFn
 }
