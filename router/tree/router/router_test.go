@@ -51,16 +51,13 @@ func TestRouter_NotFound(t *testing.T) {
 	body, _ := io.ReadAll(res.Body)
 	assert.Equal(t, "hello_world", string(body))
 }
+
 func TestRouter_RegisterWithMiddleware(t *testing.T) {
 	r := NewRouter()
 	path := "/path"
 	method := func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("hello_world"))
 	}
-	r.Register(router.GET, path, method)
-	s := setup(r)
-	defer s.Close()
-
 	middleware := func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Middleware", "HIT")
@@ -69,6 +66,10 @@ func TestRouter_RegisterWithMiddleware(t *testing.T) {
 	}
 
 	r.Use(middleware)
+
+	r.Register(router.GET, path, method)
+	s := setup(r)
+	defer s.Close()
 
 	res, _ := http.Get(fmt.Sprintf("%s%s", s.URL, path))
 

@@ -161,6 +161,15 @@ func TestFindRoute_InexistentPath(t *testing.T) {
 	assert.Nil(t, foundNode, "Found node should be nil")
 }
 
+func TestFindRoute_InexistentMethod(t *testing.T) {
+	tree := CreateTree()
+	ctx := &context.RouterContext{}
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
+	tree.RegisterRoute(router.GET, "/path", handler)
+	foundNode := tree.FindRoute(ctx, router.POST, "/path")
+	assert.Nil(t, foundNode, "Found node should be nil")
+}
+
 func TestFindRoute_RootWithoutChildren(t *testing.T) {
 	tree := CreateTree()
 	ctx := &context.RouterContext{}

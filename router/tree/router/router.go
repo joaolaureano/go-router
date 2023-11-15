@@ -35,14 +35,15 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	route := router.root.FindRoute(ctx, router2.HTTPMethods(method), uri)
 	if route != nil {
 		routeHandler := route.Method[router2.HTTPMethods(r.Method)].Handler
-		router.chain.BuildHandler(routeHandler).ServeHTTP(w, r)
+		routeHandler.ServeHTTP(w, r)
 	} else {
 		router.notFound(w, r)
 	}
 }
 
 func (router *Router) Register(httpMethod router2.HTTPMethods, path string, method http.HandlerFunc) {
-	router.root.RegisterRoute(httpMethod, path, method)
+	m := router.chain.BuildHandler(method)
+	router.root.RegisterRoute(httpMethod, path, m)
 }
 
 func (router *Router) Use(middleware func(http.Handler) http.Handler) {
