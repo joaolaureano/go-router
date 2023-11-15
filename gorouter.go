@@ -24,6 +24,8 @@ type Router interface {
 	Use(middleware func(http.Handler) http.Handler)
 
 	NotFound(notFoundFn http.HandlerFunc)
+
+	Group(fn func(r router2.Router)) router2.Router
 }
 
 func NewRouter() Router {
