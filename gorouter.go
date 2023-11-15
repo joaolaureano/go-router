@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 
+	_const "web/const"
 	"web/router"
-	router2 "web/router/tree/router"
 )
 
 // Router is an interface that extends the http.Handler interface,
@@ -16,7 +16,7 @@ type Router interface {
 	// Register is a method for adding a new route to the router.
 	// It takes an HTTP method, a path, and a handler function as parameters.
 	// The router will use these parameters to associate incoming requests with the specified handler.
-	Register(httpMethod router.HTTPMethods, path string, method http.HandlerFunc)
+	Register(httpMethod _const.HTTPMethods, path string, method http.HandlerFunc)
 
 	// Use is a method for adding middleware to the router.
 	// Middleware functions can process or modify requests before reaching the route handler.
@@ -25,9 +25,9 @@ type Router interface {
 
 	NotFound(notFoundFn http.HandlerFunc)
 
-	Group(fn func(r router2.Router)) router2.Router
+	Group(fn func(r router.Router)) router.Router
 }
 
 func NewRouter() Router {
-	return router2.NewRouter()
+	return router.NewRouter()
 }

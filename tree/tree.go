@@ -7,14 +7,14 @@ import (
 	"slices"
 	"strings"
 
-	"web/router"
+	_const "web/const"
 	"web/router/context"
 )
 
 type Node struct {
 	path     string
 	children []*Node
-	Method   map[router.HTTPMethods]Method
+	Method   map[_const.HTTPMethods]Method
 }
 
 type Method struct {
@@ -27,8 +27,8 @@ type Tree struct {
 }
 
 type RouterTree interface {
-	RegisterRoute(httpMethod router.HTTPMethods, newValue string, method http.Handler)
-	FindRoute(ctx *context.RouterContext, httpMethods router.HTTPMethods, value string) *Node
+	RegisterRoute(httpMethod _const.HTTPMethods, newValue string, method http.Handler)
+	FindRoute(ctx *context.RouterContext, httpMethods _const.HTTPMethods, value string) *Node
 }
 
 func CreateTree() Tree {
@@ -36,18 +36,18 @@ func CreateTree() Tree {
 		root: &Node{
 			path:     "",
 			children: make([]*Node, 0),
-			Method:   make(map[router.HTTPMethods]Method),
+			Method:   make(map[_const.HTTPMethods]Method),
 		},
 	}
 }
 
-func (t *Tree) RegisterRoute(httpMethod router.HTTPMethods, newValue string, method http.Handler) {
+func (t *Tree) RegisterRoute(httpMethod _const.HTTPMethods, newValue string, method http.Handler) {
 	if len(newValue) > 0 {
 		t.register(httpMethod, newValue, method)
 	}
 }
 
-func (t *Tree) register(httpMethod router.HTTPMethods, path string, method http.Handler) {
+func (t *Tree) register(httpMethod _const.HTTPMethods, path string, method http.Handler) {
 	currNode := &t.root
 	if path[0] != '/' {
 		panic("Path must begin with front-slash (/)")
@@ -56,7 +56,7 @@ func (t *Tree) register(httpMethod router.HTTPMethods, path string, method http.
 		*currNode = &Node{
 			path:     "/",
 			children: []*Node{},
-			Method:   map[router.HTTPMethods]Method{httpMethod: {Handler: method, variableName: nil}},
+			Method:   map[_const.HTTPMethods]Method{httpMethod: {Handler: method, variableName: nil}},
 		}
 		return
 	}
@@ -69,7 +69,7 @@ func (t *Tree) register(httpMethod router.HTTPMethods, path string, method http.
 			nextNode = &Node{
 				path:     pathSplitted,
 				children: []*Node{},
-				Method:   make(map[router.HTTPMethods]Method),
+				Method:   make(map[_const.HTTPMethods]Method),
 			}
 			if isParam(pathSplitted) {
 				nextNode.path = "{*}"
@@ -87,14 +87,14 @@ func (t *Tree) register(httpMethod router.HTTPMethods, path string, method http.
 	(*currNode).setEndpoint(httpMethod, method, pathVariablesName)
 }
 
-func (t *Tree) FindRoute(ctx *context.RouterContext, httpMethods router.HTTPMethods, value string) *Node {
+func (t *Tree) FindRoute(ctx *context.RouterContext, httpMethods _const.HTTPMethods, value string) *Node {
 	if len(value) == 0 {
 		return nil
 	}
 	return t.findRoute(ctx, httpMethods, value)
 }
 
-func (t *Tree) findRoute(ctx *context.RouterContext, httpMethod router.HTTPMethods, path string) *Node {
+func (t *Tree) findRoute(ctx *context.RouterContext, httpMethod _const.HTTPMethods, path string) *Node {
 	currNode := t.root
 	if len((*currNode).children) == 0 {
 		return nil
@@ -129,7 +129,7 @@ func setPathVariableValues(ctx *context.RouterContext, keys, values []string) {
 	}
 }
 
-func (n *Node) setEndpoint(httpMethod router.HTTPMethods, handler http.Handler, pathVariables []string) {
+func (n *Node) setEndpoint(httpMethod _const.HTTPMethods, handler http.Handler, pathVariables []string) {
 	n.Method[httpMethod] = Method{
 		Handler:      handler,
 		variableName: pathVariables,
