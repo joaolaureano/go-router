@@ -100,9 +100,6 @@ func (t *Tree) findRoute(ctx *context.RouterContext, httpMethod router.HTTPMetho
 		return nil
 	}
 	paths := strings.Split(strings.Trim(path, "/"), "/")
-	if len(paths) == 0 {
-		return nil
-	}
 	idx := 0
 	pathVariableValues := make([]string, 0)
 	for {
