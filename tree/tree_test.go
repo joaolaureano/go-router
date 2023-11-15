@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"web/router"
+	_const "web/const"
 	"web/router/context"
 
 	"github.com/stretchr/testify/assert"
@@ -22,7 +22,7 @@ func TestRegister_EmptyPath(t *testing.T) {
 	tree := CreateTree()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 
-	tree.RegisterRoute(router.GET, "", handler)
+	tree.RegisterRoute(_const.GET, "", handler)
 
 	// Root
 	assert.Len(t, tree.root.children, 0, "Children should not be nil")
@@ -32,7 +32,7 @@ func TestRegister_DuplicatedPathVariable(t *testing.T) {
 	tree := CreateTree()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 
-	assert.Panics(t, func() { tree.RegisterRoute(router.GET, "/test/{test}/{test}", handler) }, "Insert should panic for an invalid path")
+	assert.Panics(t, func() { tree.RegisterRoute(_const.GET, "/test/{test}/{test}", handler) }, "Insert should panic for an invalid path")
 }
 
 func TestRegister_PanicInvalidPath(t *testing.T) {
@@ -40,14 +40,14 @@ func TestRegister_PanicInvalidPath(t *testing.T) {
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 	invalidPath := "invalidPath"
 
-	assert.PanicsWithValue(t, "Path must begin with front-slash (/)", func() { tree.RegisterRoute(router.GET, invalidPath, handler) }, "Insert should panic for an invalid path")
+	assert.PanicsWithValue(t, "Path must begin with front-slash (/)", func() { tree.RegisterRoute(_const.GET, invalidPath, handler) }, "Insert should panic for an invalid path")
 }
 
 func TestRegister_OnlyRoot(t *testing.T) {
 	tree := CreateTree()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 
-	tree.RegisterRoute(router.GET, "/", handler)
+	tree.RegisterRoute(_const.GET, "/", handler)
 
 	// Root
 	assert.Equal(t, "/", tree.root.path, "Path should be /")
@@ -59,7 +59,7 @@ func TestRegister_SimpleTree(t *testing.T) {
 	tree := CreateTree()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 
-	tree.RegisterRoute(router.GET, "/path/{valid}/path", handler)
+	tree.RegisterRoute(_const.GET, "/path/{valid}/path", handler)
 
 	// Root
 	firstChild := tree.root.children[0]
@@ -76,7 +76,7 @@ func TestRegister_SimpleTree(t *testing.T) {
 	assert.NotNil(t, thirdChild.children, "Second child's children should not be nil")
 	assert.Equal(t, "path", thirdChild.path, "Path should be /path")
 	assert.NotZero(t, len(thirdChild.Method), "Method should not be empty")
-	assert.NotZero(t, thirdChild.Method[router.GET], "Method should not be nil")
+	assert.NotZero(t, thirdChild.Method[_const.GET], "Method should not be nil")
 }
 
 func TestRegister_DuplicatedPath(t *testing.T) {
@@ -85,16 +85,16 @@ func TestRegister_DuplicatedPath(t *testing.T) {
 
 	assert.Panics(t,
 		func() {
-			tree.RegisterRoute(router.GET, "/path/{valid}/path", handler)
-			tree.RegisterRoute(router.GET, "/path/{valid}/path", handler)
+			tree.RegisterRoute(_const.GET, "/path/{valid}/path", handler)
+			tree.RegisterRoute(_const.GET, "/path/{valid}/path", handler)
 		}, "Should panic when creating same route multiple times")
 }
 
 func TestRegister_MultipleBranches(t *testing.T) {
 	tree := CreateTree()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
-	tree.RegisterRoute(router.GET, "/path/{valid}/path1", handler)
-	tree.RegisterRoute(router.GET, "/path/{valid}/path2", handler)
+	tree.RegisterRoute(_const.GET, "/path/{valid}/path1", handler)
+	tree.RegisterRoute(_const.GET, "/path/{valid}/path2", handler)
 
 	// First Child
 	firstChild := tree.root.children[0]
@@ -134,21 +134,21 @@ func TestFindRoute(t *testing.T) {
 	tree := CreateTree()
 	ctx := &context.RouterContext{}
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
-	tree.RegisterRoute(router.GET, "/path/{test}/test2", handler)
-	foundNode := tree.FindRoute(ctx, router.GET, "/path/test1/test2")
+	tree.RegisterRoute(_const.GET, "/path/{test}/test2", handler)
+	foundNode := tree.FindRoute(ctx, _const.GET, "/path/test1/test2")
 	assert.NotNil(t, foundNode, "Found node should not be nil")
 }
 
 func TestFindRoute_PathEmpty(t *testing.T) {
 	tree := CreateTree()
-	foundNode := tree.FindRoute(nil, router.GET, "")
+	foundNode := tree.FindRoute(nil, _const.GET, "")
 	assert.Nil(t, foundNode, "Found node should not be nil")
 }
 
 func TestFindRoute_InexistentRoot(t *testing.T) {
 	tree := CreateTree()
 	ctx := &context.RouterContext{}
-	foundNode := tree.FindRoute(ctx, router.GET, "/path/error")
+	foundNode := tree.FindRoute(ctx, _const.GET, "/path/error")
 	assert.Nil(t, foundNode, "Found node should be nil")
 }
 
@@ -156,8 +156,8 @@ func TestFindRoute_InexistentPath(t *testing.T) {
 	tree := CreateTree()
 	ctx := &context.RouterContext{}
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
-	tree.RegisterRoute(router.GET, "/path", handler)
-	foundNode := tree.FindRoute(ctx, router.GET, "/path/error")
+	tree.RegisterRoute(_const.GET, "/path", handler)
+	foundNode := tree.FindRoute(ctx, _const.GET, "/path/error")
 	assert.Nil(t, foundNode, "Found node should be nil")
 }
 
@@ -165,15 +165,15 @@ func TestFindRoute_InexistentMethod(t *testing.T) {
 	tree := CreateTree()
 	ctx := &context.RouterContext{}
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
-	tree.RegisterRoute(router.GET, "/path", handler)
-	foundNode := tree.FindRoute(ctx, router.POST, "/path")
+	tree.RegisterRoute(_const.GET, "/path", handler)
+	foundNode := tree.FindRoute(ctx, _const.POST, "/path")
 	assert.Nil(t, foundNode, "Found node should be nil")
 }
 
 func TestFindRoute_RootWithoutChildren(t *testing.T) {
 	tree := CreateTree()
 	ctx := &context.RouterContext{}
-	foundNode := tree.FindRoute(ctx, router.GET, "")
+	foundNode := tree.FindRoute(ctx, _const.GET, "")
 	assert.Nil(t, foundNode, "Found node should be nil")
 }
 
@@ -181,8 +181,8 @@ func TestFindRoute_EmptyPath(t *testing.T) {
 	tree := CreateTree()
 	ctx := &context.RouterContext{}
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
-	tree.RegisterRoute(router.GET, "/path", handler)
-	foundNode := tree.FindRoute(ctx, router.GET, "")
+	tree.RegisterRoute(_const.GET, "/path", handler)
+	foundNode := tree.FindRoute(ctx, _const.GET, "")
 	assert.Nil(t, foundNode, "Found node should be nil")
 }
 
@@ -190,8 +190,8 @@ func TestFindRoute_InvalidPath(t *testing.T) {
 	tree := CreateTree()
 	ctx := &context.RouterContext{}
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
-	tree.RegisterRoute(router.GET, "/path", handler)
-	foundNode := tree.FindRoute(ctx, router.GET, "/")
+	tree.RegisterRoute(_const.GET, "/path", handler)
+	foundNode := tree.FindRoute(ctx, _const.GET, "/")
 	assert.Nil(t, foundNode, "Found node should be nil")
 }
 
