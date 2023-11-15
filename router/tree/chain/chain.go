@@ -5,6 +5,7 @@ import "net/http"
 type Middleware interface {
 	Add(middleware func(handler http.Handler) http.Handler)
 	BuildHandler(endpoint http.Handler) http.Handler
+	Middlewares() []func(handler http.Handler) http.Handler
 }
 
 type Chain struct {
@@ -25,4 +26,14 @@ func (chain *Chain) BuildHandler(endpoint http.Handler) http.Handler {
 	}
 
 	return handler
+}
+
+func NewChain(middlewares ...func(http.Handler) http.Handler) *Chain {
+	return &Chain{
+		middlewares: middlewares,
+	}
+}
+
+func (chain *Chain) Middlewares() []func(http.Handler) http.Handler {
+	return chain.middlewares
 }

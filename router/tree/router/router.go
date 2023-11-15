@@ -53,3 +53,15 @@ func (router *Router) Use(middleware func(http.Handler) http.Handler) {
 func (router *Router) NotFound(notFoundFn http.HandlerFunc) {
 	router.notFound = notFoundFn
 }
+
+func (router *Router) Group(fn func(r Router)) Router {
+	chain := chain.NewChain(router.chain.Middlewares()...)
+	subrouter := &Router{
+		root:     router.root,
+		chain:    chain,
+		notFound: http.NotFound,
+	}
+	fn(*subrouter)
+
+	return *subrouter
+}
