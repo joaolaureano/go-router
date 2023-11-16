@@ -92,3 +92,14 @@ func (router *Router) Group(prefix string, fn func(r Router)) Router {
 
 	return *subrouter
 }
+
+func (router *Router) With(middleware ...func(http.Handler) http.Handler) *Router {
+	r := NewRouter()
+	r.root = router.root
+
+	for _, m := range middleware {
+		r.Use(m)
+	}
+
+	return r
+}

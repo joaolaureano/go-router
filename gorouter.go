@@ -26,6 +26,8 @@ type Router interface {
 	NotFound(notFoundFn http.HandlerFunc)
 
 	Group(prefix string, fn func(r router.Router)) router.Router
+
+	With(middleware ...func(http.Handler) http.Handler) *router.Router
 }
 
 func NewRouter() Router {

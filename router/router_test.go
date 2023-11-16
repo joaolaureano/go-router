@@ -188,6 +188,30 @@ func TestRouter_Group(t *testing.T) {
 	body, _ = io.ReadAll(res.Body)
 	assert.Equal(t, "Hello World Middleware 1Hello World Middleware 2", string(body))
 }
+func TestRouter_With(t *testing.T) {
+	r := NewRouter()
+	path := "/path"
+	method := func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("hello_world"))
+	}
+	methodWith := func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.Write([]byte("test_with"))
+			next.ServeHTTP(w, r)
+		})
+	}
+	r.Register(_const.GET, path, method)
+	s := setup(r)
+	defer s.Close()
+
+	r.With(methodWith).Register(_const.GET, "/path_with", method)
+	res, _ := http.Get(fmt.Sprintf("%s%s", s.URL, path))
+	body, _ := io.ReadAll(res.Body)
+	assert.Equal(t, "hello_world", string(body))
+	res, _ = http.Get(fmt.Sprintf("%s%s", s.URL, "/path_with"))
+	body, _ = io.ReadAll(res.Body)
+	assert.Equal(t, "test_withhello_world", string(body))
+}
 func setup(r http.Handler) *httptest.Server {
 
 	return httptest.NewServer(r)
