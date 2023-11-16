@@ -127,3 +127,17 @@ func TestChain_NoMiddleware(t *testing.T) {
 	// Assert the response status code
 	assert.Equal(t, http.StatusOK, res.StatusCode)
 }
+
+func TestNewChain(t *testing.T) {
+	chain := NewChain()
+
+	assert.NotNil(t, chain, "Chain should not be nil")
+
+}
+
+func TestNewChain_Middlewares(t *testing.T) {
+	chain := NewChain()
+
+	assert.NotNil(t, len(chain.Middlewares()), "Chain should not be nil")
+
+}
