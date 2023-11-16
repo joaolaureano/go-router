@@ -29,6 +29,8 @@ type Tree struct {
 type RouterTree interface {
 	RegisterRoute(httpMethod _const.HTTPMethods, newValue string, method http.Handler)
 	FindRoute(ctx *context.RouterContext, httpMethods _const.HTTPMethods, value string) *Node
+	Merge(tree RouterTree)
+	Root() *Node
 }
 
 func CreateTree() Tree {
@@ -121,6 +123,25 @@ func (t *Tree) findRoute(ctx *context.RouterContext, httpMethod _const.HTTPMetho
 		}
 		currNode = nextNode
 	}
+}
+
+func (t *Tree) Merge(tree RouterTree) {
+	stack := []*Node{tree.Root()}
+	for len(stack) > 0 {
+		current := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		for httpMethod, method := range current.Method {
+			t.RegisterRoute(httpMethod, current.path, method.Handler)
+		}
+		for _, child := range current.children {
+			child.path = current.path + "/" + child.path
+			stack = append(stack, child)
+		}
+	}
+}
+
+func (t *Tree) Root() *Node {
+	return t.root
 }
 
 func setPathVariableValues(ctx *context.RouterContext, keys, values []string) {

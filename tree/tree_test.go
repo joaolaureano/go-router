@@ -201,3 +201,21 @@ func TestIsParam(t *testing.T) {
 	assert.False(t, isParam("test}"), "Should return false for a non-parameter")
 	assert.False(t, isParam("test"), "Should return false for a non-parameter")
 }
+
+func TestTree_Merge(t *testing.T) {
+	tree := CreateTree()
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
+
+	tree.RegisterRoute(_const.GET, "/path/", handler)
+
+	tree.RegisterRoute(_const.GET, "/path/test", handler)
+
+	tree2 := CreateTree()
+
+	tree2.RegisterRoute(_const.GET, "/pathz/", handler)
+
+	tree2.RegisterRoute(_const.GET, "/pathz/test", handler)
+
+	tree.Merge(&tree2)
+
+}
