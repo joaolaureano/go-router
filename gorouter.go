@@ -25,7 +25,7 @@ type Router interface {
 
 	NotFound(notFoundFn http.HandlerFunc)
 
-	Group(fn func(r router.Router)) router.Router
+	Group(prefix string, fn func(r router.Router)) router.Router
 }
 
 func NewRouter() Router {

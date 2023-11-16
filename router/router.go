@@ -17,6 +17,8 @@ type Router struct {
 	notFound http.HandlerFunc
 
 	closed bool
+
+	prefix string
 }
 
 func NewRouter() *Router {
@@ -26,6 +28,17 @@ func NewRouter() *Router {
 		root:     &tree,
 		chain:    &chain.Chain{},
 		notFound: http.NotFound,
+	}
+}
+
+func NewPrefixRouter(prefix string) *Router {
+	tree := tree.CreateTree()
+
+	return &Router{
+		root:     &tree,
+		chain:    &chain.Chain{},
+		notFound: http.NotFound,
+		prefix:   prefix,
 	}
 }
 
@@ -45,6 +58,9 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func (router *Router) Register(httpMethod _const.HTTPMethods, path string, method http.HandlerFunc) {
 	router.closed = true
+	if router.prefix != "" {
+		path = router.prefix + path
+	}
 	router.root.RegisterRoute(httpMethod,
 		path,
 		router.chain.BuildHandler(method))
@@ -61,14 +77,18 @@ func (router *Router) NotFound(notFoundFn http.HandlerFunc) {
 	router.notFound = notFoundFn
 }
 
-func (router *Router) Group(fn func(r Router)) Router {
+func (router *Router) Group(prefix string, fn func(r Router)) Router {
 	chain := chain.NewChain(router.chain.Middlewares()...)
 	subrouter := &Router{
 		root:     router.root,
 		chain:    chain,
 		notFound: http.NotFound,
+		prefix:   prefix,
 	}
+
 	fn(*subrouter)
+
+	router.root.Merge(subrouter.root)
 
 	return *subrouter
 }

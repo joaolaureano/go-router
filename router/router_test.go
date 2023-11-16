@@ -20,6 +20,14 @@ func TestNewRouter(t *testing.T) {
 	assert.NotNil(t, router.root, "Root should not be nil")
 
 }
+func TestNewRouterWithPrefix(t *testing.T) {
+	router := NewPrefixRouter("/prefix")
+
+	assert.NotNil(t, router, "Router should not be nil")
+	assert.NotNil(t, router.root, "Root should not be nil")
+	assert.Equal(t, "/prefix", router.prefix, "Root should not be nil")
+
+}
 func TestRouter_RegisterSimplePath(t *testing.T) {
 	r := NewRouter()
 	path := "/path"
@@ -35,7 +43,6 @@ func TestRouter_RegisterSimplePath(t *testing.T) {
 	body, _ := io.ReadAll(res.Body)
 	assert.Equal(t, "hello_world", string(body))
 }
-
 func TestRouter_NotFound(t *testing.T) {
 	r := NewRouter()
 	path := "/not-found"
@@ -51,7 +58,6 @@ func TestRouter_NotFound(t *testing.T) {
 	body, _ := io.ReadAll(res.Body)
 	assert.Equal(t, "hello_world", string(body))
 }
-
 func TestRouter_RegisterWithMiddleware(t *testing.T) {
 	r := NewRouter()
 	path := "/path"
@@ -151,6 +157,7 @@ func TestRouter_RegisterMultiplePath(t *testing.T) {
 func TestRouter_Group(t *testing.T) {
 	router := NewRouter()
 	path1 := "/path1"
+	group := "/group"
 	path2 := "/path2"
 	method := func(w http.ResponseWriter, r *http.Request) {
 	}
@@ -162,7 +169,7 @@ func TestRouter_Group(t *testing.T) {
 	}
 	router.Use(fn)
 	router.Register(_const.GET, path1, method)
-	router.Group(func(r Router) {
+	router.Group(group, func(r Router) {
 		r.Use(func(next http.Handler) http.Handler {
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				next.ServeHTTP(w, r)
@@ -177,7 +184,7 @@ func TestRouter_Group(t *testing.T) {
 	res, _ := http.Get(fmt.Sprintf("%s%s", s.URL, path1))
 	body, _ := io.ReadAll(res.Body)
 	assert.Equal(t, "Hello World Middleware 1", string(body))
-	res, _ = http.Get(fmt.Sprintf("%s%s", s.URL, path2))
+	res, _ = http.Get(fmt.Sprintf("%s%s", s.URL, group+path2))
 	body, _ = io.ReadAll(res.Body)
 	assert.Equal(t, "Hello World Middleware 1Hello World Middleware 2", string(body))
 }
