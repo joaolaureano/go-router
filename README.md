@@ -1,3 +1,6 @@
+[![en](https://img.shields.io/badge/lang-en-blue.svg)](https://github.com/joaolaureano/gorouter/blob/main/README.md)
+[![pt-br](https://img.shields.io/badge/lang-pt--br-green.svg)](https://github.com/joaolaureano/gorouter/blob/main/README.pt-PT.md)
+
 # Go-Router
 
 Go-Router is a simple Golang router to handle HTTP requests.
