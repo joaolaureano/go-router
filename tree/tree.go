@@ -18,8 +18,9 @@ type Node struct {
 }
 
 type Method struct {
-	Handler      http.Handler
-	variableName []string
+	Handler       http.Handler
+	variableName  []string
+	variableValue []string
 }
 
 type Tree struct {
@@ -74,12 +75,14 @@ func (t *Tree) register(httpMethod _const.HTTPMethods, path string, method http.
 				Method:   make(map[_const.HTTPMethods]Method),
 			}
 			if isParam(pathSplitted) {
-				nextNode.path = "{*}"
 				(*currNode).children = append((*currNode).children, nextNode)
-				pathVariablesName = append(pathVariablesName, strings.Trim(pathSplitted, "{}"))
 			} else {
 				(*currNode).children = append([]*Node{nextNode}, (*currNode).children...)
 			}
+		}
+		if isParam(pathSplitted) {
+			nextNode.path = "{*}"
+			pathVariablesName = append(pathVariablesName, strings.Trim(pathSplitted, "{}"))
 		}
 		currNode = &nextNode
 	}
@@ -98,14 +101,20 @@ func (t *Tree) FindRoute(ctx *context.RouterContext, httpMethods _const.HTTPMeth
 
 func (t *Tree) findRoute(ctx *context.RouterContext, httpMethod _const.HTTPMethods, path string) *Node {
 	currNode := t.root
+	if path == "/" || path == "" {
+		if reflect.ValueOf(currNode.Method[httpMethod]).IsZero() {
+			return nil
+		}
+		return currNode
+	}
 	if len((*currNode).children) == 0 {
 		return nil
 	}
 	paths := strings.Split(strings.Trim(path, "/"), "/")
 	idx := 0
 	pathVariableValues := make([]string, 0)
+	nextNode := (*currNode).getChild(paths[idx])
 	for {
-		nextNode := (*currNode).getChild(paths[idx])
 		if nextNode == nil {
 			return nil
 		}
@@ -122,6 +131,7 @@ func (t *Tree) findRoute(ctx *context.RouterContext, httpMethod _const.HTTPMetho
 
 		}
 		currNode = nextNode
+		nextNode = (*currNode).getChild(paths[idx])
 	}
 }
 
@@ -134,7 +144,7 @@ func (t *Tree) Merge(tree RouterTree) {
 			t.RegisterRoute(httpMethod, current.path, method.Handler)
 		}
 		for _, child := range current.children {
-			child.path = current.path + "/" + child.path
+			child.path = strings.TrimRight(current.path+"/"+child.path, "/")
 			stack = append(stack, child)
 		}
 	}
@@ -177,18 +187,21 @@ func (n *Node) getChild(path string) *Node {
 func validatePath(path string) {
 	paramList := make([]string, 0)
 	for _, v := range strings.Split(path, "/") {
-		if (v[0] == '{') != (v[len(v)-1] == '}') {
-			panic("Delimiter '{' must be closed by '}'")
-		}
-		if isParam(v) {
-			if slices.Contains(paramList, v) {
-				panic(fmt.Sprintf("routing pattern '%s' contains duplicate param key, '%s'", path, v))
+		if len(v) >= 3 {
+
+			if (v[0] == '{') != (v[len(v)-1] == '}') {
+				panic("Delimiter '{' must be closed by '}'")
 			}
-			paramList = append(paramList, v)
+			if isParam(v) {
+				if slices.Contains(paramList, v) {
+					panic(fmt.Sprintf("routing pattern '%s' contains duplicate param key, '%s'", path, v))
+				}
+				paramList = append(paramList, v)
+			}
 		}
 	}
 }
 
 func isParam(path string) bool {
-	return path[0] == '{' && path[len(path)-1] == '}'
+	return len(path) >= 3 && path[0] == '{' && path[len(path)-1] == '}'
 }
