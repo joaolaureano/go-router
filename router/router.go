@@ -79,6 +79,7 @@ func (router *Router) NotFound(notFoundFn http.HandlerFunc) {
 
 func (router *Router) Group(prefix string, fn func(r Router)) Router {
 	chain := chain.NewChain(router.chain.Middlewares()...)
+	//tree := tree.CreateTree()
 	subrouter := &Router{
 		root:     router.root,
 		chain:    chain,
@@ -88,7 +89,7 @@ func (router *Router) Group(prefix string, fn func(r Router)) Router {
 
 	fn(*subrouter)
 
-	router.root.Merge(subrouter.root)
+	//router.root.Merge(subrouter.root)
 
 	return *subrouter
 }
