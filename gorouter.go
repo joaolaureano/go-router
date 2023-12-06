@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 
-	_const "web/const"
-	"web/router"
+	_const "github.com/joaolaureano/go-router/const"
+	"github.com/joaolaureano/go-router/router"
 )
 
 // Router is an interface that extends the http.Handler interface,
