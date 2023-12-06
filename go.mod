@@ -1,9 +1,8 @@
-module web
+module github.com/joaolaureano/go-router
 
 go 1.19
 
 require (
-	github.com/go-chi/chi/v5 v5.0.10
 	github.com/stretchr/testify v1.8.4
 )
 
