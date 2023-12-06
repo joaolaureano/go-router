@@ -3,10 +3,10 @@ package router
 import (
 	"net/http"
 
-	"web/chain"
-	"web/const"
-	"web/router/context"
-	"web/tree"
+	"github.com/joaolaureano/go-router/chain"
+	"github.com/joaolaureano/go-router/const"
+	"github.com/joaolaureano/go-router/router/context"
+	"github.com/joaolaureano/go-router/tree"
 )
 
 type Router struct {
