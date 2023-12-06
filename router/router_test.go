@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	_const "web/const"
-	"web/router/context"
+	_const "github.com/joaolaureano/go-router/const"
+	"github.com/joaolaureano/go-router/router/context"
 
 	"github.com/stretchr/testify/assert"
 )

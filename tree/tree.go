@@ -7,8 +7,8 @@ import (
 	"slices"
 	"strings"
 
-	_const "web/const"
-	"web/router/context"
+	_const "github.com/joaolaureano/go-router/const"
+	"github.com/joaolaureano/go-router/router/context"
 )
 
 type Node struct {
