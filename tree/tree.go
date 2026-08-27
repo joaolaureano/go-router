@@ -3,7 +3,6 @@ package tree
 import (
 	"fmt"
 	"net/http"
-	"reflect"
 	"slices"
 	"strings"
 
@@ -18,9 +17,8 @@ type Node struct {
 }
 
 type Method struct {
-	Handler       http.Handler
-	variableName  []string
-	variableValue []string
+	Handler      http.Handler
+	variableName []string
 }
 
 type Tree struct {
@@ -52,23 +50,23 @@ func (t *Tree) RegisterRoute(httpMethod _const.HTTPMethods, newValue string, met
 }
 
 func (t *Tree) register(httpMethod _const.HTTPMethods, path string, method http.Handler) {
-	currNode := &t.root
+	currNode := t.root
 	if path[0] != '/' {
 		panic("Path must begin with front-slash (/)")
 	}
 	if path == "/" {
-		if !reflect.ValueOf((*currNode).Method[httpMethod]).IsZero() {
+		if _, exists := currNode.Method[httpMethod]; exists {
 			panic(fmt.Sprintf("Duplicated path: %s", path))
 		}
-		(*currNode).path = "/"
-		(*currNode).Method[httpMethod] = Method{Handler: method}
+		currNode.path = "/"
+		currNode.Method[httpMethod] = Method{Handler: method}
 		return
 	}
 	path = strings.Trim(path, "/")
 	validatePath(path)
 	pathVariablesName := make([]string, 0)
 	for _, pathSplitted := range strings.Split(path, "/") {
-		nextNode := (*currNode).getChild(pathSplitted)
+		nextNode := currNode.getChild(pathSplitted)
 		if nextNode == nil {
 			nextNode = &Node{
 				path:     pathSplitted,
@@ -76,99 +74,115 @@ func (t *Tree) register(httpMethod _const.HTTPMethods, path string, method http.
 				Method:   make(map[_const.HTTPMethods]Method),
 			}
 			if isParam(pathSplitted) {
-				(*currNode).children = append((*currNode).children, nextNode)
+				currNode.children = append(currNode.children, nextNode)
 			} else {
-				(*currNode).children = append([]*Node{nextNode}, (*currNode).children...)
+				currNode.children = append([]*Node{nextNode}, currNode.children...)
 			}
 		}
 		if isParam(pathSplitted) {
 			nextNode.path = "{*}"
 			pathVariablesName = append(pathVariablesName, strings.Trim(pathSplitted, "{}"))
 		}
-		currNode = &nextNode
+		currNode = nextNode
 	}
-	if !reflect.ValueOf((*(currNode)).Method[httpMethod]).IsZero() {
+	if _, exists := currNode.Method[httpMethod]; exists {
 		panic(fmt.Sprintf("Duplicated path: %s", path))
 	}
-	(*currNode).setEndpoint(httpMethod, method, pathVariablesName)
+	currNode.setEndpoint(httpMethod, method, pathVariablesName)
 }
 
 func (t *Tree) FindRoute(ctx *context.RouterContext, httpMethods _const.HTTPMethods, value string) *Node {
 	if len(value) == 0 {
 		return nil
 	}
-	node := t.FindPath(value)
-	if node == nil || reflect.ValueOf(node.Method[httpMethods]).IsZero() {
+	node, values := t.findPath(value)
+	if node == nil {
+		return nil
+	}
+	routeMethod, exists := node.Method[httpMethods]
+	if !exists {
 		return nil
 	}
 	if ctx != nil {
-		setPathVariableValues(ctx, node.Method[httpMethods].variableName, pathVariables(t.root, value))
+		setPathVariableValues(ctx, routeMethod.variableName, values)
 	}
 	return node
 }
 
 func (t *Tree) FindPath(path string) *Node {
+	node, _ := t.findPath(path)
+	return node
+}
+
+func (t *Tree) findPath(path string) (*Node, []string) {
 	currNode := t.root
 	if path == "/" || path == "" {
 		if currNode.path != "/" && len(currNode.Method) == 0 {
-			return nil
+			return nil, nil
 		}
-		return currNode
+		return currNode, nil
 	}
-	if len((*currNode).children) == 0 {
-		return nil
+	if len(currNode.children) == 0 {
+		return nil, nil
 	}
 	paths := strings.Split(strings.Trim(path, "/"), "/")
 	idx := 0
-	pathVariableValues := make([]string, 0)
-	nextNode := (*currNode).getChild(paths[idx])
+	pathVariableValues := make([]string, 0, len(paths))
+	nextNode := currNode.getChild(paths[idx])
 	for {
 		if nextNode == nil {
-			return nil
+			return nil, nil
 		}
 		if isParam(nextNode.path) {
 			pathVariableValues = append(pathVariableValues, paths[idx])
 		}
 		idx++
 		if idx == len(paths) {
-			return nextNode
-
+			return nextNode, pathVariableValues
 		}
 		currNode = nextNode
-		nextNode = (*currNode).getChild(paths[idx])
+		nextNode = currNode.getChild(paths[idx])
 	}
-}
-
-func pathVariables(root *Node, path string) []string {
-	paths := strings.Split(strings.Trim(path, "/"), "/")
-	values := make([]string, 0)
-	current := root
-	for _, pathPart := range paths {
-		next := current.getChild(pathPart)
-		if next == nil {
-			return values
-		}
-		if isParam(next.path) {
-			values = append(values, pathPart)
-		}
-		current = next
-	}
-	return values
 }
 
 func (t *Tree) Merge(tree RouterTree) {
-	stack := []*Node{tree.Root()}
+	type entry struct {
+		node *Node
+		path string
+	}
+	root := tree.Root()
+	stack := []entry{{node: root, path: "/"}}
 	for len(stack) > 0 {
-		current := stack[len(stack)-1]
+		currentEntry := stack[len(stack)-1]
 		stack = stack[:len(stack)-1]
+		current := currentEntry.node
 		for httpMethod, method := range current.Method {
-			t.RegisterRoute(httpMethod, current.path, method.Handler)
+			t.RegisterRoute(httpMethod, namedPath(currentEntry.path, method.variableName), method.Handler)
 		}
 		for _, child := range current.children {
-			child.path = strings.TrimRight(current.path+"/"+child.path, "/")
-			stack = append(stack, child)
+			childPath := currentEntry.path + "/" + child.path
+			if currentEntry.path == "/" {
+				childPath = "/" + child.path
+			}
+			childPath = strings.TrimRight(childPath, "/")
+			stack = append(stack, entry{node: child, path: childPath})
 		}
 	}
+}
+
+func namedPath(path string, variableNames []string) string {
+	if path == "/" {
+		return path
+	}
+	parts := strings.Split(strings.Trim(path, "/"), "/")
+	variableIndex := 0
+	for i, part := range parts {
+		if part == "{*}" && variableIndex < len(variableNames) {
+			parts[i] = "{" + variableNames[variableIndex] + "}"
+			variableIndex++
+		}
+	}
+	return "/" + strings.Join(parts, "/")
 }
 
 func (t *Tree) Root() *Node {
@@ -193,11 +207,10 @@ func (n *Node) getChild(path string) *Node {
 	if len(n.children) == 0 {
 		return nil
 	}
-	idx := slices.IndexFunc(n.children, func(n *Node) bool {
-		return path == n.path
-	})
-	if idx >= 0 {
-		return n.children[idx]
+	for _, child := range n.children {
+		if path == child.path {
+			return child
+		}
 	}
 	if isParam(n.children[len(n.children)-1].path) {
 		return n.children[len(n.children)-1]

@@ -266,4 +266,6 @@ func TestTree_Merge(t *testing.T) {
 
 	assert.NotNil(t, tree.FindRoute(&context.RouterContext{}, _const.GET, "/pathz"))
 	assert.NotNil(t, tree.FindRoute(&context.RouterContext{}, _const.GET, "/pathz/test"))
+	assert.NotNil(t, tree2.FindRoute(&context.RouterContext{}, _const.GET, "/pathz"))
+	assert.NotNil(t, tree2.FindRoute(&context.RouterContext{}, _const.GET, "/pathz/test"))
 }

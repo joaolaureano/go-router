@@ -3,38 +3,28 @@ package context
 import (
 	"context"
 	"net/http"
-	"slices"
 )
 
 const RouterContextKey = "RouterContext"
 
 type RouterContext struct {
-	paramNames []string
-	paramValue []string
+	params map[string]string
 }
 
 func (routerCtx *RouterContext) Value(key string) string {
-	idx := slices.Index(routerCtx.paramNames, key)
-	if idx > -1 {
-		return routerCtx.paramValue[idx]
-	}
-	return ""
+	return routerCtx.params[key]
 }
 
 func (routerCtx *RouterContext) Set(key string, value string) {
-	idx := slices.Index(routerCtx.paramNames, key)
-	if idx > -1 {
-		routerCtx.paramValue[idx] = value
-		return
+	if routerCtx.params == nil {
+		routerCtx.params = make(map[string]string)
 	}
-	routerCtx.paramNames = append(routerCtx.paramNames, key)
-	routerCtx.paramValue = append(routerCtx.paramValue, value)
+	routerCtx.params[key] = value
 }
 
 func NewContext() *RouterContext {
 	return &RouterContext{
-		paramNames: make([]string, 0),
-		paramValue: make([]string, 0),
+		params: make(map[string]string),
 	}
 }
 

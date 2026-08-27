@@ -1,0 +1,252 @@
+{
+  "communities": {
+    "0": [
+      "go_type_testing_t",
+      "tree_tree_createtree",
+      "tree_tree_test",
+      "tree_tree_test_testcreatetree",
+      "tree_tree_test_testfindroute",
+      "tree_tree_test_testfindroute_emptypath",
+      "tree_tree_test_testfindroute_inexistentmethod",
+      "tree_tree_test_testfindroute_inexistentpath",
+      "tree_tree_test_testfindroute_inexistentpathonlyroot",
+      "tree_tree_test_testfindroute_inexistentroot",
+      "tree_tree_test_testfindroute_inexistentrootmethod",
+      "tree_tree_test_testfindroute_invalidpath",
+      "tree_tree_test_testfindroute_pathempty",
+      "tree_tree_test_testfindroute_root",
+      "tree_tree_test_testfindroute_rootwithoutchildren",
+      "tree_tree_test_testisparam",
+      "tree_tree_test_testregister_duplicatedpath",
+      "tree_tree_test_testregister_duplicatedpathvariable",
+      "tree_tree_test_testregister_emptypath",
+      "tree_tree_test_testregister_multiplebranches",
+      "tree_tree_test_testregister_onlyroot",
+      "tree_tree_test_testregister_panicinvalidpath",
+      "tree_tree_test_testregister_simpletree",
+      "tree_tree_test_testtree_merge",
+      "tree_tree_test_testvalidatepath_shouldnotpanic",
+      "tree_tree_test_testvalidatepath_shouldpanic"
+    ],
+    "1": [
+      "const_const",
+      "const_const_go_const_httpmethods",
+      "context_routercontext_set",
+      "context_routercontext_value",
+      "router_context_context_go_context_routercontext",
+      "tree_method",
+      "tree_node",
+      "tree_node_getchild",
+      "tree_node_setendpoint",
+      "tree_tree",
+      "tree_tree_findroute",
+      "tree_tree_findroute_ed4cef",
+      "tree_tree_go_tree_routertree",
+      "tree_tree_isparam",
+      "tree_tree_merge",
+      "tree_tree_register",
+      "tree_tree_registerroute",
+      "tree_tree_root",
+      "tree_tree_setpathvariablevalues",
+      "tree_tree_validatepath"
+    ],
+    "2": [
+      "go_type_net_http_httptest_server",
+      "router_router_newrouter",
+      "router_router_test",
+      "router_router_test_setup",
+      "router_router_test_testnewrouter",
+      "router_router_test_testrouter_group",
+      "router_router_test_testrouter_notfound",
+      "router_router_test_testrouter_registerbeforemiddleware",
+      "router_router_test_testrouter_registercapturemultiplepathvariable",
+      "router_router_test_testrouter_registercapturepathvariable",
+      "router_router_test_testrouter_registermultiplepath",
+      "router_router_test_testrouter_registersimplepath",
+      "router_router_test_testrouter_registerwithmiddleware",
+      "router_router_test_testrouter_with"
+    ],
+    "3": [
+      "context_routercontext_injectintorequest",
+      "go_type_net_http_request",
+      "go_type_net_http_responsewriter",
+      "router_context_context",
+      "router_context_context_newcontext",
+      "router_context_context_test",
+      "router_context_context_test_setup",
+      "router_context_context_test_testcontext_invalidkey",
+      "router_context_context_test_testcontext_validkey",
+      "router_context_context_test_testinjectintorequest",
+      "router_router_servehttp"
+    ],
+    "4": [
+      "chain_chain_go_chain_middleware",
+      "go_type_net_http_handlerfunc",
+      "router_router",
+      "router_router_go_const_httpmethods",
+      "router_router_newprefixrouter",
+      "router_router_notfound",
+      "router_router_register",
+      "router_router_test_testnewrouterwithprefix",
+      "router_router_use",
+      "router_router_with"
+    ],
+    "5": [
+      "chain_chain",
+      "chain_chain_add",
+      "chain_chain_buildhandler",
+      "chain_chain_middlewares",
+      "go_router_router",
+      "go_type_net_http_handler",
+      "gorouter",
+      "gorouter_newrouter"
+    ],
+    "6": [
+      "chain_chain_newchain",
+      "chain_chain_test",
+      "chain_chain_test_testchain_multiplemiddleware",
+      "chain_chain_test_testchain_nomiddleware",
+      "chain_chain_test_testchain_singlemiddleware",
+      "chain_chain_test_testnewchain",
+      "chain_chain_test_testnewchain_middlewares",
+      "router_router_group"
+    ],
+    "7": [
+      "complete_article",
+      "complete_article_string",
+      "complete_repository",
+      "complete_repository_create",
+      "complete_repository_delete",
+      "complete_repository_get",
+      "example_complete_sampledb",
+      "example_complete_sampledb_new"
+    ],
+    "8": [
+      "pkg_github_com_joaolaureano_go_router"
+    ]
+  },
+  "cohesion": {
+    "0": 0.20307692307692307,
+    "1": 0.23684210526315788,
+    "2": 0.32967032967032966,
+    "3": 0.21818181818181817,
+    "4": 0.28888888888888886,
+    "5": 0.42857142857142855,
+    "6": 0.2857142857142857,
+    "7": 0.39285714285714285,
+    "8": 1.0
+  },
+  "gods": [
+    {
+      "id": "tree_tree_createtree",
+      "label": "CreateTree()",
+      "degree": 23
+    },
+    {
+      "id": "tree_tree",
+      "label": "Tree",
+      "degree": 15
+    },
+    {
+      "id": "router_router_newrouter",
+      "label": "NewRouter()",
+      "degree": 14
+    },
+    {
+      "id": "router_router",
+      "label": "Router",
+      "degree": 13
+    },
+    {
+      "id": "router_router_test_setup",
+      "label": "setup()",
+      "degree": 11
+    },
+    {
+      "id": "router_context_context_go_context_routercontext",
+      "label": "RouterContext",
+      "degree": 9
+    },
+    {
+      "id": "chain_chain",
+      "label": "Chain",
+      "degree": 8
+    },
+    {
+      "id": "tree_node",
+      "label": "Node",
+      "degree": 8
+    },
+    {
+      "id": "const_const_go_const_httpmethods",
+      "label": "HTTPMethods",
+      "degree": 7
+    },
+    {
+      "id": "complete_repository",
+      "label": "Repository",
+      "degree": 6
+    }
+  ],
+  "surprises": [
+    {
+      "source": "Router",
+      "target": "Middleware",
+      "source_files": [
+        "router/router.go",
+        "chain/chain.go"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories; peripheral node `Middleware` unexpectedly reaches hub `Router`"
+    },
+    {
+      "source": "NewRouter()",
+      "target": "NewRouter()",
+      "source_files": [
+        "gorouter.go",
+        "router/router.go"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "Router",
+      "target": "RouterTree",
+      "source_files": [
+        "router/router.go",
+        "tree/tree.go"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "NewRouter()",
+      "target": "CreateTree()",
+      "source_files": [
+        "router/router.go",
+        "tree/tree.go"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "NewPrefixRouter()",
+      "target": "CreateTree()",
+      "source_files": [
+        "router/router.go",
+        "tree/tree.go"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}
