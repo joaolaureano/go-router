@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -566,4 +567,95 @@ func TestTree_MergeWithItselfIsNoOp(t *testing.T) {
 	tree.Merge(&tree)
 
 	assertFound(t, &tree, GET, "/health")
+}
+
+func TestMerge_CombinesParameterAndCatchAllBranchesInPlace(t *testing.T) {
+	target := CreateTree[http.Handler]()
+	target.RegisterRoute(GET, "/{id}/a", handler)
+	target.RegisterRoute(GET, "/files/*", handler)
+
+	source := CreateTree[http.Handler]()
+	source.RegisterRoute(POST, "/{id}/b", handler)
+	source.RegisterRoute(POST, "/files/*", handler)
+	source.RegisterRoute(GET, "/{other}/c", handler)
+
+	target.Merge(&source)
+
+	// The parameter branch existed on both sides, so it was merged into rather
+	// than cloned over: everything either side declared has to be reachable.
+	assertFound(t, &target, GET, "/1/a")
+	assertFound(t, &target, POST, "/1/b")
+	assertFound(t, &target, GET, "/1/c")
+
+	// So did the catch-all, which is a single slot and cannot be duplicated.
+	assertFound(t, &target, GET, "/files/x/y")
+	assertFound(t, &target, POST, "/files/x/y")
+}
+
+func TestMerge_IsANoOpOnItself(t *testing.T) {
+	tree := CreateTree[http.Handler]()
+	tree.RegisterRoute(GET, "/users/{id}", handler)
+
+	tree.Merge(&tree)
+	tree.MergeAt("/", &tree)
+
+	assertFound(t, &tree, GET, "/users/7")
+}
+
+func TestLookup_CatchAllUnderAnotherMethodReports405(t *testing.T) {
+	tree := CreateTree[http.Handler]()
+	tree.RegisterRoute(GET, "/files/*", handler)
+
+	match, status := tree.Lookup(POST, "/files/a/b")
+
+	assert.Equal(t, StatusMethodNotAllowed, status)
+	assert.Equal(t, []Method{GET}, match.AllowedMethods)
+	assert.Empty(t, match.Params, "a refused route captures nothing")
+}
+
+func TestLookupDecoded_TransformsEveryKindOfSegment(t *testing.T) {
+	tree := CreateTree[http.Handler]()
+	tree.RegisterRoute(GET, "/a b/{name}", handler)
+	tree.RegisterRoute(GET, "/files/*", handler)
+
+	decode := func(segment string) string { return strings.ReplaceAll(segment, "+", " ") }
+
+	// The static and parameter segments each pass through decode as the walk
+	// reaches them...
+	match, status := tree.LookupDecoded(GET, "/a+b/jo+ao", decode)
+	assert.Equal(t, StatusFound, status)
+	assert.Equal(t, []Param{{Name: "name", Value: "jo ao"}}, match.Params)
+
+	// ...and so does the remainder a catch-all swallows whole.
+	match, status = tree.LookupDecoded(GET, "/files/x+y/z", decode)
+	assert.Equal(t, StatusFound, status)
+	assert.Equal(t, []Param{{Name: WildcardParam, Value: "x y/z"}}, match.Params)
+}
+
+func TestMerge_ClonesABranchTheTargetLacks(t *testing.T) {
+	source := CreateTree[http.Handler]()
+	source.RegisterRoute(GET, "/{id}", handler)
+	source.RegisterRoute(GET, "/*", handler)
+
+	// The target has neither slot filled, so both are cloned across rather than
+	// merged into.
+	target := CreateTree[http.Handler]()
+	target.RegisterRoute(GET, "/static", handler)
+	target.Merge(&source)
+
+	assertFound(t, &target, GET, "/static")
+	assertFound(t, &target, GET, "/7")
+
+	match, status := target.Lookup(GET, "/a/b")
+	assert.Equal(t, StatusFound, status, "the cloned catch-all has to answer too")
+	assert.Equal(t, []Param{{Name: WildcardParam, Value: "a/b"}}, match.Params)
+}
+
+func TestRegister_RejectsABraceInsideASegment(t *testing.T) {
+	tree := CreateTree[http.Handler]()
+
+	// Braces are how a variable is spelled, so a segment carrying one anywhere
+	// but around the whole of itself is a typo, not a literal.
+	assertPanicsWith(t, ErrInvalidPattern, func() { tree.RegisterRoute(GET, "/a{b}c", handler) })
+	assertPanicsWith(t, ErrInvalidPattern, func() { tree.RegisterRoute(GET, "/pre{id}", handler) })
 }

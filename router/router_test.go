@@ -875,3 +875,15 @@ func setup(r http.Handler) *httptest.Server {
 
 	return httptest.NewServer(r)
 }
+
+func TestDecodeSegmentLeavesMalformedEscapingAlone(t *testing.T) {
+	assert.Equal(t, "a/b", decodeSegment("a%2Fb"))
+	assert.Equal(t, "plain", decodeSegment("plain"))
+
+	// A target carrying "%zz" is refused by the server's own URI parsing long
+	// before a handler sees it, and EscapedPath re-encodes anything it cannot
+	// vouch for, so this is a guard rather than a path. Guessing at what was
+	// meant would be worse than routing on the text as sent: matching literally
+	// simply fails to route, which is the honest outcome.
+	assert.Equal(t, "%zz", decodeSegment("%zz"))
+}

@@ -102,3 +102,24 @@ func TestParam(t *testing.T) {
 func setup() *RouterContext {
 	return NewContext()
 }
+
+func TestFromParamsTakesOwnershipOfTheLookupSlice(t *testing.T) {
+	params := []routing.Param{{Name: "id", Value: "7"}, {Name: "postID", Value: "9"}}
+
+	routerCtx := FromParams(params)
+
+	assert.Equal(t, "7", routerCtx.Value("id"))
+	assert.Equal(t, "9", routerCtx.Value("postID"))
+	assert.Equal(t, "", routerCtx.Value("absent"))
+
+	routerCtx.Set("id", "8")
+	assert.Equal(t, "8", params[0].Value, "the slice is taken over, not copied")
+}
+
+func TestValueToleratesANilContext(t *testing.T) {
+	// The usual `routerCtx, _ := FromRequest(r)` shape leaves a nil pointer on a
+	// route that captured nothing, and reading from it has to stay safe.
+	var absent *RouterContext
+
+	assert.Equal(t, "", absent.Value("id"))
+}

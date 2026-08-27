@@ -166,3 +166,15 @@ func TestNewChain_Middlewares(t *testing.T) {
 	assert.NotNil(t, len(chain.Middlewares()), "Chain should not be nil")
 
 }
+
+func TestChainSealsOnceItIsBaked(t *testing.T) {
+	chain := NewChain()
+
+	assert.False(t, chain.Sealed(), "a fresh chain still accepts middleware")
+
+	chain.BuildHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
+
+	// Middleware added now would wrap later endpoints only, splitting the chain
+	// in two without saying so. Callers reject it on the strength of this.
+	assert.True(t, chain.Sealed())
+}
