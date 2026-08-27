@@ -1,6 +1,9 @@
 package chain
 
-import "net/http"
+import (
+	"net/http"
+	"slices"
+)
 
 type Middleware interface {
 	Add(middleware func(handler http.Handler) http.Handler)
@@ -31,8 +34,10 @@ func (chain *Chain) BuildHandler(endpoint http.Handler) http.Handler {
 		return endpoint
 	}
 	handler := endpoint
-	for i := len(chain.middlewares) - 1; i >= 0; i-- {
-		handler = chain.middlewares[i](handler)
+	// Applied back to front, so that the first middleware added is the
+	// outermost one a request meets.
+	for _, middleware := range slices.Backward(chain.middlewares) {
+		handler = middleware(handler)
 	}
 
 	return handler

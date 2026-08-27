@@ -232,20 +232,17 @@ func TestRouter_SupportsConcurrentRegistrationAndServing(t *testing.T) {
 	r.Register(GET, "/stable", func(w http.ResponseWriter, r *http.Request) {})
 
 	var waitGroup sync.WaitGroup
-	waitGroup.Add(2)
-	go func() {
-		defer waitGroup.Done()
-		for i := 0; i < 100; i++ {
+	waitGroup.Go(func() {
+		for i := range 100 {
 			r.Register(GET, fmt.Sprintf("/dynamic/%d", i), func(w http.ResponseWriter, r *http.Request) {})
 		}
-	}()
-	go func() {
-		defer waitGroup.Done()
-		for i := 0; i < 100; i++ {
+	})
+	waitGroup.Go(func() {
+		for range 100 {
 			request := httptest.NewRequest(http.MethodGet, "/stable", nil)
 			r.ServeHTTP(httptest.NewRecorder(), request)
 		}
-	}()
+	})
 
 	waitGroup.Wait()
 }
@@ -694,22 +691,18 @@ func TestRouter_RegistersWhileServing(t *testing.T) {
 	r.ServeHTTP(httptest.NewRecorder(), httptest.NewRequest(http.MethodGet, "/stable", nil))
 
 	var waitGroup sync.WaitGroup
-	for i := 0; i < 8; i++ {
-		waitGroup.Add(1)
-		go func() {
-			defer waitGroup.Done()
-			for j := 0; j < 200; j++ {
+	for range 8 {
+		waitGroup.Go(func() {
+			for range 200 {
 				r.ServeHTTP(httptest.NewRecorder(), httptest.NewRequest(http.MethodGet, "/stable", nil))
 			}
-		}()
+		})
 	}
-	waitGroup.Add(1)
-	go func() {
-		defer waitGroup.Done()
+	waitGroup.Go(func() {
 		r.Get("/added/{id}", func(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(context.Param(r, "id")))
 		})
-	}()
+	})
 	waitGroup.Wait()
 
 	response := httptest.NewRecorder()

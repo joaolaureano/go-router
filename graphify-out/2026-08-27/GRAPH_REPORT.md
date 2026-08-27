@@ -1,16 +1,16 @@
 # Graph Report - go-router  (2026-08-27)
 
 ## Corpus Check
-- 19 files · ~11,896 words
+- 19 files · ~11,876 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 277 nodes · 650 edges · 34 communities (11 shown, 23 thin omitted)
+- 277 nodes · 650 edges · 33 communities (10 shown, 23 thin omitted)
 - Extraction: 82% EXTRACTED · 18% INFERRED · 0% AMBIGUOUS · INFERRED: 114 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f71f7309`
+- Built from commit: `97cbe509`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -33,7 +33,7 @@
 - Go-Router
 - github.com/joaolaureano/go-router/router.Router
 - E
-- NewChain
+- Method
 - node
 - E
 - node
@@ -42,7 +42,6 @@
 - github.com/joaolaureano/go-router/tree.Method
 - Method
 - github.com/joaolaureano/go-router/tree.Param
-- Method
 - segmentKind
 - E
 - tree.Param
@@ -65,17 +64,17 @@
   router/router.go → chain/chain.go
 - `NewRouter()` --calls--> `NewRouter()`  [EXTRACTED]
   gorouter.go → router/router.go
-- `NewPrefixRouter()` --calls--> `CreateTree()`  [EXTRACTED]
-  router/router.go → routing/routing.go
 - `NewPrefixRouter()` --calls--> `NewPrefixRouter()`  [EXTRACTED]
   gorouter.go → router/router.go
-- `TestIsParam()` --calls--> `isParam()`  [INFERRED]
-  routing/routing_test.go → routing/routing.go
+- `NewPrefixRouter()` --calls--> `CreateTree()`  [EXTRACTED]
+  router/router.go → routing/routing.go
+- `TestRouter_BacktracksWhenStaticMatchLacksMethod()` --calls--> `NewRouter()`  [INFERRED]
+  router/router_test.go → router/router.go
 
 ## Import Cycles
 - None detected.
 
-## Communities (34 total, 23 thin omitted)
+## Communities (33 total, 23 thin omitted)
 
 ### Community 0 - "testing.T"
 Cohesion: 0.11
@@ -90,24 +89,20 @@ Cohesion: 0.12
 Nodes (23): contextKey, routeContext, RouterContext, context.Context, github.com/joaolaureano/go-router/routing.Param, net/http.Request, FromParams(), FromRequest() (+15 more)
 
 ### Community 6 - "Router"
-Cohesion: 0.12
-Nodes (14): net/http.HandlerFunc, net/http.ResponseWriter, sync/atomic.Bool, sync/atomic.Pointer, sync.Mutex, Method, Router, advertisedMethods() (+6 more)
+Cohesion: 0.11
+Nodes (17): net/http.HandlerFunc, net/http.ResponseWriter, sync/atomic.Bool, sync/atomic.Pointer, sync.Mutex, Router, advertisedMethods(), defaultMethodNotAllowed() (+9 more)
 
 ### Community 7 - "Repository"
 Cohesion: 0.39
 Nodes (3): Article, Repository, New()
 
 ### Community 11 - "Chain"
-Cohesion: 0.17
-Nodes (9): Chain, Middleware, Router, net/http.Handler, NewPrefixRouter(), NewRouter(), NewPrefixRouter(), TestNewRouterWithPrefix() (+1 more)
+Cohesion: 0.12
+Nodes (13): Chain, Middleware, NewChain(), TestChain_MiddlewareRunsInRegistrationOrder(), TestChain_MultipleMiddleware(), TestChain_NoMiddleware(), TestChain_SingleMiddleware(), TestNewChain() (+5 more)
 
 ### Community 17 - "E"
 Cohesion: 0.21
 Nodes (14): Match, Param, classify(), E, Method, isParam(), nameParams(), splitSegments() (+6 more)
-
-### Community 18 - "NewChain"
-Cohesion: 0.24
-Nodes (7): NewChain(), TestChain_MiddlewareRunsInRegistrationOrder(), TestChain_MultipleMiddleware(), TestChain_NoMiddleware(), TestChain_SingleMiddleware(), TestNewChain(), TestNewChain_Middlewares()
 
 ### Community 20 - "node"
 Cohesion: 0.22
@@ -121,9 +116,9 @@ Nodes (14): E, Param, endpoint, lookup, node, cloneEndpoint(), cloneNode(), node
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `CreateTree()` connect `testing.T` to `E`, `Chain`?**
+- **Why does `CreateTree()` connect `testing.T` to `E`, `Router`?**
   _High betweenness centrality (0.250) - this node is a cross-community bridge._
-- **Why does `Router` connect `Router` to `NewRouter`, `NewChain`, `Chain`?**
+- **Why does `Router` connect `Router` to `NewRouter`, `Chain`?**
   _High betweenness centrality (0.137) - this node is a cross-community bridge._
 - **Why does `Tree` connect `E` to `testing.T`, `node`?**
   _High betweenness centrality (0.136) - this node is a cross-community bridge._

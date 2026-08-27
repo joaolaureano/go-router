@@ -261,12 +261,12 @@ func TestLookup_FindsEveryChildAcrossTheBisectionThreshold(t *testing.T) {
 func TestRegister_OrderDoesNotAffectMatching(t *testing.T) {
 	descending := CreateTree[http.Handler]()
 	ascending := CreateTree[http.Handler]()
-	for i := 0; i < 20; i++ {
+	for i := range 20 {
 		descending.RegisterRoute(GET, fmt.Sprintf("/r%02d", 19-i), handler)
 		ascending.RegisterRoute(GET, fmt.Sprintf("/r%02d", i), handler)
 	}
 
-	for i := 0; i < 20; i++ {
+	for i := range 20 {
 		path := fmt.Sprintf("/r%02d", i)
 		_, descendingStatus := descending.Lookup(GET, path)
 		_, ascendingStatus := ascending.Lookup(GET, path)
