@@ -125,20 +125,15 @@ func (router *Router) Group(prefix string, fn func(r Router)) Router {
 
 func (router *Router) With(middleware ...func(http.Handler) http.Handler) *Router {
 	router.mu.RLock()
-	root := router.root
-	notFound := router.notFound
-	prefix := router.prefix
-	mu := router.mu
-	router.mu.RUnlock()
-	r := NewRouter()
-	r.root = root
-	r.notFound = notFound
-	r.prefix = prefix
-	r.mu = mu
-
-	for _, m := range middleware {
-		r.Use(m)
+	middlewares := append([]func(http.Handler) http.Handler(nil), router.chain.Middlewares()...)
+	subrouter := &Router{
+		root:     router.root,
+		notFound: router.notFound,
+		prefix:   router.prefix,
+		mu:       router.mu,
 	}
+	router.mu.RUnlock()
+	subrouter.chain = chain.NewChain(append(middlewares, middleware...)...)
 
-	return r
+	return subrouter
 }

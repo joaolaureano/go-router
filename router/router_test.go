@@ -277,6 +277,28 @@ func TestRouter_With(t *testing.T) {
 	assert.Equal(t, "test_withhello_world", string(body))
 }
 
+func TestRouter_WithInheritsParentMiddleware(t *testing.T) {
+	r := NewRouter()
+	tag := func(name string) func(http.Handler) http.Handler {
+		return func(next http.Handler) http.Handler {
+			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.Write([]byte(name))
+				next.ServeHTTP(w, r)
+			})
+		}
+	}
+	r.Use(tag("parent"))
+	r.With(tag("with")).Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("handler"))
+	})
+
+	request := httptest.NewRequest(http.MethodGet, "/path", nil)
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, request)
+
+	assert.Equal(t, "parentwithhandler", response.Body.String())
+}
+
 func TestRouter_RegisterPathWithQueryString(t *testing.T) {
 	r := NewRouter()
 	r.Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {
