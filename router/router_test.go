@@ -231,6 +231,11 @@ func TestRouter_SupportsConcurrentRegistrationAndServing(t *testing.T) {
 	r := NewRouter()
 	r.Register(GET, "/stable", func(w http.ResponseWriter, r *http.Request) {})
 
+	// Every reader records what it saw rather than discarding it: run under
+	// -race this catches the torn read, but a table published half-built would
+	// show up as a route going missing, which no race is obliged to report.
+	misses := make(chan int, 100)
+
 	var waitGroup sync.WaitGroup
 	waitGroup.Go(func() {
 		for i := range 100 {
@@ -239,12 +244,20 @@ func TestRouter_SupportsConcurrentRegistrationAndServing(t *testing.T) {
 	})
 	waitGroup.Go(func() {
 		for range 100 {
-			request := httptest.NewRequest(http.MethodGet, "/stable", nil)
-			r.ServeHTTP(httptest.NewRecorder(), request)
+			response := httptest.NewRecorder()
+			r.ServeHTTP(response, httptest.NewRequest(http.MethodGet, "/stable", nil))
+			if response.Code != http.StatusOK {
+				misses <- response.Code
+			}
 		}
 	})
 
 	waitGroup.Wait()
+	close(misses)
+
+	for code := range misses {
+		t.Errorf("a route registered before any writer started answered %d", code)
+	}
 }
 func TestRouter_With(t *testing.T) {
 	r := NewRouter()
@@ -700,11 +713,17 @@ func TestRouter_RegistersWhileServing(t *testing.T) {
 	// follows exercises publishing a new table under live readers.
 	r.ServeHTTP(httptest.NewRecorder(), httptest.NewRequest(http.MethodGet, "/stable", nil))
 
+	misses := make(chan int, 8*200)
+
 	var waitGroup sync.WaitGroup
 	for range 8 {
 		waitGroup.Go(func() {
 			for range 200 {
-				r.ServeHTTP(httptest.NewRecorder(), httptest.NewRequest(http.MethodGet, "/stable", nil))
+				response := httptest.NewRecorder()
+				r.ServeHTTP(response, httptest.NewRequest(http.MethodGet, "/stable", nil))
+				if response.Code != http.StatusOK {
+					misses <- response.Code
+				}
 			}
 		})
 	}
@@ -714,6 +733,13 @@ func TestRouter_RegistersWhileServing(t *testing.T) {
 		})
 	})
 	waitGroup.Wait()
+	close(misses)
+
+	// The whole point of publishing a copy is that a reader is always walking
+	// one whole table or the other, never a half-built one.
+	for code := range misses {
+		t.Errorf("an existing route answered %d while a new table was published", code)
+	}
 
 	response := httptest.NewRecorder()
 	r.ServeHTTP(response, httptest.NewRequest(http.MethodGet, "/added/7", nil))
