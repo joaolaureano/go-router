@@ -14,7 +14,7 @@ func TestNewNodeInitializesInvariantState(t *testing.T) {
 	assert.Equal(t, "users", node.path)
 	assert.Empty(t, node.children)
 	assert.Nil(t, node.parameter)
-	assert.Empty(t, node.Method)
+	assert.Empty(t, node.endpoints)
 }
 
 func TestNodeAddChildSeparatesStaticAndParameterChildren(t *testing.T) {
@@ -46,8 +46,8 @@ func TestNodeSetEndpoint(t *testing.T) {
 
 	node.setEndpoint(_const.GET, handler, []string{"id"})
 
-	method, exists := node.Method[_const.GET]
+	method, exists := node.endpoints[_const.GET]
 	assert.True(t, exists)
-	assert.NotNil(t, method.Handler)
-	assert.Equal(t, []string{"id"}, method.variableName)
+	assert.NotNil(t, method.handler)
+	assert.Equal(t, []string{"id"}, method.variableNames)
 }

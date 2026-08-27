@@ -7,31 +7,37 @@ import (
 	_const "github.com/joaolaureano/go-router/const"
 )
 
-type Node struct {
+// node is one path segment of the tree. It is deliberately unexported: the
+// invariant tying an endpoint's variable names to the parameter nodes above it
+// only holds while Tree is the sole writer.
+type node struct {
 	path      string
-	children  []*Node
-	parameter *Node
-	Method    map[_const.HTTPMethods]Method
+	children  []*node
+	parameter *node
+	endpoints map[_const.HTTPMethods]endpoint
 }
 
-type Method struct {
-	Handler      http.Handler
-	variableName []string
+// endpoint is what a single method registered on a node resolves to. The
+// variable names live here rather than on the node because two methods on the
+// same path may have been written with different parameter names.
+type endpoint struct {
+	handler       http.Handler
+	variableNames []string
 }
 
-func newNode(path string) *Node {
-	return &Node{
-		path:     path,
-		children: make([]*Node, 0),
-		Method:   make(map[_const.HTTPMethods]Method),
+func newNode(path string) *node {
+	return &node{
+		path:      path,
+		children:  make([]*node, 0),
+		endpoints: make(map[_const.HTTPMethods]endpoint),
 	}
 }
 
 // staticChild finds the child holding this exact segment. It never returns the
 // parameter branch: a request segment that happens to read "{*}" is literal
 // text, not a request for the parameter slot.
-func (node *Node) staticChild(path string) *Node {
-	for _, child := range node.children {
+func (n *node) staticChild(path string) *node {
+	for _, child := range n.children {
 		if path == child.path {
 			return child
 		}
@@ -42,38 +48,38 @@ func (node *Node) staticChild(path string) *Node {
 // childFor returns the slot a registration should descend into. Only the
 // registrar knows whether a segment was written as a parameter, so only it may
 // ask for the parameter branch.
-func (node *Node) childFor(path string, parameter bool) *Node {
+func (n *node) childFor(path string, parameter bool) *node {
 	if parameter {
-		return node.parameter
+		return n.parameter
 	}
-	return node.staticChild(path)
+	return n.staticChild(path)
 }
 
-func (node *Node) addChild(child *Node, parameter bool) {
+func (n *node) addChild(child *node, parameter bool) {
 	if child == nil {
 		panic("node child must not be nil")
 	}
 	if parameter {
-		node.parameter = child
+		n.parameter = child
 		return
 	}
-	node.children = append(node.children, child)
+	n.children = append(n.children, child)
 }
 
-func (node *Node) setEndpoint(httpMethod _const.HTTPMethods, handler http.Handler, pathVariables []string) {
-	node.Method[httpMethod] = Method{
-		Handler:      handler,
-		variableName: pathVariables,
+func (n *node) setEndpoint(httpMethod _const.HTTPMethods, handler http.Handler, variableNames []string) {
+	n.endpoints[httpMethod] = endpoint{
+		handler:       handler,
+		variableNames: variableNames,
 	}
 }
 
-func (node *Node) hasMethod(httpMethod _const.HTTPMethods) bool {
-	_, exists := node.Method[httpMethod]
+func (n *node) hasMethod(httpMethod _const.HTTPMethods) bool {
+	_, exists := n.endpoints[httpMethod]
 	return exists
 }
 
-func (node *Node) hasAnyMethod() bool {
-	return len(node.Method) > 0
+func (n *node) hasAnyMethod() bool {
+	return len(n.endpoints) > 0
 }
 
 // lookup carries the state of one walk. Parameter values accumulate as the
@@ -87,14 +93,14 @@ type lookup struct {
 	allowed    map[_const.HTTPMethods]struct{}
 }
 
-func (search *lookup) recordAllowed(node *Node) {
-	if !node.hasAnyMethod() {
+func (search *lookup) recordAllowed(n *node) {
+	if !n.hasAnyMethod() {
 		return
 	}
 	if search.allowed == nil {
-		search.allowed = make(map[_const.HTTPMethods]struct{}, len(node.Method))
+		search.allowed = make(map[_const.HTTPMethods]struct{}, len(n.endpoints))
 	}
-	for httpMethod := range node.Method {
+	for httpMethod := range n.endpoints {
 		search.allowed[httpMethod] = struct{}{}
 	}
 }
@@ -116,24 +122,24 @@ func (search *lookup) allowedMethods() []string {
 // match walks the remaining segments, preferring the static child and falling
 // back to the parameter branch, and returns the first node answering the
 // method being searched for.
-func (node *Node) match(paths []string, index int, search *lookup) *Node {
+func (n *node) match(paths []string, index int, search *lookup) *node {
 	if index == len(paths) {
-		if node.hasMethod(search.httpMethod) {
-			return node
+		if n.hasMethod(search.httpMethod) {
+			return n
 		}
-		search.recordAllowed(node)
+		search.recordAllowed(n)
 		return nil
 	}
 
-	if child := node.staticChild(paths[index]); child != nil {
+	if child := n.staticChild(paths[index]); child != nil {
 		if matched := child.match(paths, index+1, search); matched != nil {
 			return matched
 		}
 	}
 
-	if node.parameter != nil {
+	if n.parameter != nil {
 		search.values = append(search.values, paths[index])
-		if matched := node.parameter.match(paths, index+1, search); matched != nil {
+		if matched := n.parameter.match(paths, index+1, search); matched != nil {
 			return matched
 		}
 		search.values = search.values[:len(search.values)-1]
@@ -142,10 +148,10 @@ func (node *Node) match(paths []string, index int, search *lookup) *Node {
 	return nil
 }
 
-func mergeNodes(target, source *Node) {
-	for httpMethod, method := range source.Method {
+func mergeNodes(target, source *node) {
+	for httpMethod, sourceEndpoint := range source.endpoints {
 		if !target.hasMethod(httpMethod) {
-			target.Method[httpMethod] = cloneMethod(method)
+			target.endpoints[httpMethod] = cloneEndpoint(sourceEndpoint)
 		}
 	}
 
@@ -168,10 +174,10 @@ func mergeNodes(target, source *Node) {
 	mergeNodes(target.parameter, source.parameter)
 }
 
-func cloneNode(source *Node) *Node {
+func cloneNode(source *node) *node {
 	clone := newNode(source.path)
-	for httpMethod, method := range source.Method {
-		clone.Method[httpMethod] = cloneMethod(method)
+	for httpMethod, sourceEndpoint := range source.endpoints {
+		clone.endpoints[httpMethod] = cloneEndpoint(sourceEndpoint)
 	}
 	for _, child := range source.children {
 		clone.children = append(clone.children, cloneNode(child))
@@ -182,9 +188,9 @@ func cloneNode(source *Node) *Node {
 	return clone
 }
 
-func cloneMethod(method Method) Method {
-	return Method{
-		Handler:      method.Handler,
-		variableName: append([]string(nil), method.variableName...),
+func cloneEndpoint(source endpoint) endpoint {
+	return endpoint{
+		handler:       source.handler,
+		variableNames: append([]string(nil), source.variableNames...),
 	}
 }

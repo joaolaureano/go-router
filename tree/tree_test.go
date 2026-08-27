@@ -23,7 +23,7 @@ func TestCreateTree(t *testing.T) {
 	assert.NotNil(t, tree.root, "Root should not be nil")
 	assert.Empty(t, tree.root.path, "Path should begin empty")
 	assert.Empty(t, tree.root.children, "Children should begin empty")
-	assert.Zero(t, len(tree.root.Method), "Method should be empty")
+	assert.Zero(t, len(tree.root.endpoints), "Method should be empty")
 }
 
 func TestRegister_EmptyPath(t *testing.T) {
@@ -69,7 +69,7 @@ func TestRegister_OnlyRoot(t *testing.T) {
 	// Root
 	assertFound(t, &tree, _const.GET, "/")
 	assert.NotNil(t, tree.root.children, "Children should not be nil")
-	assert.NotZero(t, len(tree.root.Method), "Method should not be nil")
+	assert.NotZero(t, len(tree.root.endpoints), "Method should not be nil")
 }
 
 func TestRegister_RootPreservesRoutesAndMethods(t *testing.T) {
@@ -95,19 +95,19 @@ func TestRegister_SimpleTree(t *testing.T) {
 	firstChild := tree.root.children[0]
 	assert.NotNil(t, firstChild.children, "Children should not be nil")
 	assert.Equal(t, "path", firstChild.path, "Path should be /path")
-	assert.Zero(t, len(firstChild.Method), "Method should be nil")
+	assert.Zero(t, len(firstChild.endpoints), "Method should be nil")
 	assert.NotNil(t, firstChild.parameter, "Parameter child should not be nil")
 	// First child node
 	secondChild := firstChild.parameter
 	assert.NotNil(t, secondChild.children, "First child's children should not be nil")
 	assert.Equal(t, "{*}", secondChild.path, "Path should be {valid}")
-	assert.Zero(t, len(secondChild.Method), "Method should be nil")
+	assert.Zero(t, len(secondChild.endpoints), "Method should be nil")
 	// Second child node
 	thirdChild := secondChild.children[0]
 	assert.NotNil(t, thirdChild.children, "Second child's children should not be nil")
 	assert.Equal(t, "path", thirdChild.path, "Path should be /path")
-	assert.NotZero(t, len(thirdChild.Method), "Method should not be empty")
-	assert.NotZero(t, thirdChild.Method[_const.GET], "Method should not be nil")
+	assert.NotZero(t, len(thirdChild.endpoints), "Method should not be empty")
+	assert.NotZero(t, thirdChild.endpoints[_const.GET], "Method should not be nil")
 }
 
 func TestRegister_DuplicatedPath(t *testing.T) {
@@ -131,7 +131,7 @@ func TestRegister_MultipleBranches(t *testing.T) {
 	firstChild := tree.root.children[0]
 	assert.NotNil(t, firstChild.children, "Children should not be nil")
 	assert.Equal(t, "path", firstChild.path, "Path should be /path")
-	assert.Zero(t, len(firstChild.Method), "Method should be nil")
+	assert.Zero(t, len(firstChild.endpoints), "Method should be nil")
 
 	// Second child
 	secondChild := firstChild.parameter
@@ -139,7 +139,7 @@ func TestRegister_MultipleBranches(t *testing.T) {
 	assert.NotNil(t, secondChild.children, "First child's children should not be nil")
 	assert.Len(t, firstChild.children, 0, "First child should contain static children only")
 	assert.Equal(t, "{*}", firstChild.parameter.path, "Path should be {valid}")
-	assert.Zero(t, len(firstChild.parameter.Method), "Method should be nil")
+	assert.Zero(t, len(firstChild.parameter.endpoints), "Method should be nil")
 	//
 	//// Third child node - branching paths
 	branch1 := firstChild.parameter.children[0]
@@ -148,10 +148,10 @@ func TestRegister_MultipleBranches(t *testing.T) {
 	assert.NotNil(t, branch2.children, "Second child's children should not be nil")
 	assert.Equal(t, "path1", branch1.path, "Path should be /path1")
 	assert.Equal(t, "path2", branch2.path, "Path should be /path2")
-	assert.NotNil(t, branch1.Method, "Method should not be nil")
-	assert.NotNil(t, branch2.Method, "Method should not be nil")
-	assert.NotZero(t, len(branch1.Method), "Method should be 1")
-	assert.NotZero(t, len(branch2.Method), "Method should be 1")
+	assert.NotNil(t, branch1.endpoints, "Method should not be nil")
+	assert.NotNil(t, branch2.endpoints, "Method should not be nil")
+	assert.NotZero(t, len(branch1.endpoints), "Method should be 1")
+	assert.NotZero(t, len(branch2.endpoints), "Method should be 1")
 }
 
 func TestValidatePath_ValidPaths(t *testing.T) {

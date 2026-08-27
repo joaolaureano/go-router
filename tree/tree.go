@@ -8,8 +8,10 @@ import (
 	_const "github.com/joaolaureano/go-router/const"
 )
 
+// Tree is the aggregate root. Nothing outside this package holds a node, so
+// registration and lookup are the only ways the routing table can change shape.
 type Tree struct {
-	root *Node
+	root *node
 }
 
 // Status says how a lookup ended. Carrying "the path exists under other
@@ -77,7 +79,7 @@ func (t *Tree) register(httpMethod _const.HTTPMethods, path string, method http.
 		}
 		currNode = nextNode
 	}
-	if _, exists := currNode.Method[httpMethod]; exists {
+	if currNode.hasMethod(httpMethod) {
 		panic(fmt.Sprintf("Duplicated path: %s", path))
 	}
 	currNode.setEndpoint(httpMethod, method, pathVariablesName)
@@ -86,18 +88,18 @@ func (t *Tree) register(httpMethod _const.HTTPMethods, path string, method http.
 // Lookup resolves a path against the tree in a single walk.
 func (t *Tree) Lookup(httpMethod _const.HTTPMethods, path string) (Match, Status) {
 	search := lookup{httpMethod: httpMethod}
-	node := t.root.match(splitSegments(path), 0, &search)
-	if node == nil {
+	matched := t.root.match(splitSegments(path), 0, &search)
+	if matched == nil {
 		if allowed := search.allowedMethods(); allowed != nil {
 			return Match{AllowedMethods: allowed}, StatusMethodNotAllowed
 		}
 		return Match{}, StatusNotFound
 	}
 
-	endpoint := node.Method[httpMethod]
+	resolved := matched.endpoints[httpMethod]
 	return Match{
-		Handler: endpoint.Handler,
-		Params:  zipParams(endpoint.variableName, search.values),
+		Handler: resolved.handler,
+		Params:  zipParams(resolved.variableNames, search.values),
 	}, StatusFound
 }
 
