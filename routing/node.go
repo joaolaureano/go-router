@@ -119,6 +119,22 @@ type lookup struct {
 	allowed map[Method]struct{}
 }
 
+// typicalCaptureCount sizes the slice on first capture. Growing from nothing
+// costs an allocation per variable; starting at two spares that for the routes
+// people actually write, and costs a route with a single variable nothing but a
+// slot it does not use. Anything wider only pays off on patterns rare enough
+// not to size for.
+const typicalCaptureCount = 2
+
+// capture records a value the walk matched against a parameter or catch-all.
+// The name stays blank until the matched endpoint says what it is called.
+func (search *lookup) capture(value string) {
+	if search.params == nil {
+		search.params = make([]Param, 0, typicalCaptureCount)
+	}
+	search.params = append(search.params, Param{Value: value})
+}
+
 // allowedMethods returns the recorded methods sorted, so that a caller
 // rendering them -- into an Allow header, say -- gets a stable order.
 func (search *lookup) allowedMethods() []Method {
@@ -167,7 +183,7 @@ func (n *node[E]) match(paths []string, index int, search *lookup) *node[E] {
 	}
 
 	if n.parameter != nil {
-		search.params = append(search.params, Param{Value: paths[index]})
+		search.capture(paths[index])
 		if matched := n.parameter.match(paths, index+1, search); matched != nil {
 			return matched
 		}
@@ -184,7 +200,7 @@ func (n *node[E]) matchWildcard(paths []string, index int, search *lookup) *node
 		return nil
 	}
 
-	search.params = append(search.params, Param{Value: strings.Join(paths[index:], "/")})
+	search.capture(strings.Join(paths[index:], "/"))
 	if n.wildcard.hasMethod(search.httpMethod) {
 		return n.wildcard
 	}
