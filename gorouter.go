@@ -33,6 +33,10 @@ type Router interface {
 	// set by the time it runs.
 	MethodNotAllowed(methodNotAllowedFn http.HandlerFunc)
 
+	// Mount grafts another router's routes in under a prefix, handlers and
+	// middleware intact.
+	Mount(prefix string, other *router.Router)
+
 	// Group creates a subgroup of routes with a common prefix.
 	// It takes a prefix string and a function that operates on a router.Router as parameters.
 	// This method allows organizing routes under a shared path prefix.

@@ -53,6 +53,7 @@ You can find more at folder ```.example/```
 - `NotFound(notFoundFn http.HandlerFunc)`: Sets a handler for requests on non-existent routes.
 - `MethodNotAllowed(fn http.HandlerFunc)`: Sets a handler for requests to an existing path under an unregistered method.
 - `Group(prefix string, fn func(r *router.Router)) *router.Router`: Groups routes under a specified prefix.
+- `Mount(prefix string, other *router.Router)`: Grafts another router's routes under a prefix, handlers and middleware intact.
 - `With(middleware ...func(http.Handler) http.Handler) *router.Router`: Uses middleware for a specific set of routes.
 
 ## Credits

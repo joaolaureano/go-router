@@ -25,16 +25,8 @@ const (
 	OPTIONS = tree.OPTIONS
 )
 
-// routeTree is the slice of the tree the router actually needs. Declaring it
-// here rather than beside Tree keeps the domain free to grow methods without
-// widening what the router is coupled to.
-type routeTree interface {
-	RegisterRoute(httpMethod Method, newValue string, method http.Handler)
-	Lookup(httpMethod Method, path string) (tree.Match, tree.Status)
-}
-
 type Router struct {
-	root routeTree
+	root *tree.Tree
 
 	chain chain.Middleware
 
@@ -177,6 +169,29 @@ func (router *Router) MethodNotAllowed(methodNotAllowedFn http.HandlerFunc) {
 	router.mu.Lock()
 	defer router.mu.Unlock()
 	*router.methodNotAllowed = methodNotAllowedFn
+}
+
+// Mount grafts another router's routes in under prefix. The mounted routes keep
+// the handlers they were built with, middleware included, so a router assembled
+// elsewhere can be attached without knowing anything about this one.
+//
+// Where both sides define the same method on the same path, this router wins.
+func (router *Router) Mount(prefix string, other *Router) {
+	if other == nil {
+		panic("router must not be nil")
+	}
+	// A group or a With shares the routing tree, and the mutex with it, so
+	// mounting one of those would both deadlock and graft the tree into itself.
+	if other.root == router.root {
+		panic("router must not be mounted onto one that shares its routing tree")
+	}
+
+	router.mu.Lock()
+	defer router.mu.Unlock()
+	other.mu.RLock()
+	defer other.mu.RUnlock()
+
+	router.root.MergeAt(router.prefix+prefix, other.root)
 }
 
 // Group returns a subrouter that registers under prefix and starts from a copy

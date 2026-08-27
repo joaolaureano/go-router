@@ -461,6 +461,77 @@ func TestRouter_VerbShortcuts(t *testing.T) {
 	}
 }
 
+func TestRouter_Mount(t *testing.T) {
+	api := NewRouter()
+	api.Get("/health", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok")) })
+
+	r := NewRouter()
+	r.Mount("/api", api)
+
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, httptest.NewRequest(http.MethodGet, "/api/health", nil))
+
+	assert.Equal(t, http.StatusOK, response.Code)
+	assert.Equal(t, "ok", response.Body.String())
+}
+
+func TestRouter_MountKeepsMountedMiddleware(t *testing.T) {
+	api := NewRouter()
+	api.Use(func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.Write([]byte("mounted:"))
+			next.ServeHTTP(w, r)
+		})
+	})
+	api.Get("/health", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok")) })
+
+	r := NewRouter()
+	r.Mount("/api", api)
+
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, httptest.NewRequest(http.MethodGet, "/api/health", nil))
+
+	assert.Equal(t, "mounted:ok", response.Body.String())
+}
+
+func TestRouter_MountUnderParameterisedPrefix(t *testing.T) {
+	api := NewRouter()
+	api.Get("/posts/{postID}", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(context.Param(r, "tenant") + "/" + context.Param(r, "postID")))
+	})
+
+	r := NewRouter()
+	r.Mount("/{tenant}", api)
+
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, httptest.NewRequest(http.MethodGet, "/acme/posts/7", nil))
+
+	assert.Equal(t, http.StatusOK, response.Code)
+	assert.Equal(t, "acme/7", response.Body.String(), "the prefix variable must not be paired with the mounted route's name")
+}
+
+func TestRouter_MountKeepsExistingRouteOnConflict(t *testing.T) {
+	api := NewRouter()
+	api.Get("/health", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("mounted")) })
+
+	r := NewRouter()
+	r.Get("/api/health", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("existing")) })
+	r.Mount("/api", api)
+
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, httptest.NewRequest(http.MethodGet, "/api/health", nil))
+
+	assert.Equal(t, "existing", response.Body.String())
+}
+
+func TestRouter_MountRejectsSharedTree(t *testing.T) {
+	r := NewRouter()
+
+	assert.PanicsWithValue(t, "router must not be nil", func() { r.Mount("/api", nil) })
+	assert.Panics(t, func() { r.Mount("/api", r) })
+	assert.Panics(t, func() { r.Mount("/api", r.With()) })
+}
+
 func TestRouter_RegisterPathWithQueryString(t *testing.T) {
 	r := NewRouter()
 	r.Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {

@@ -50,6 +50,7 @@ Mais exemplos no diretório ```.example/```
 - `NotFound(notFoundFn http.HandlerFunc)`: Define um handler para requisições em rotas não encontradas.
 - `MethodNotAllowed(fn http.HandlerFunc)`: Sets a handler for requests to an existing path under an unregistered method.
 - `Group(prefix string, fn func(r *router.Router)) *router.Router`: Agrupa rotas com um determinado prefixo.
+- `Mount(prefix string, other *router.Router)`: Enxerta as rotas de outro router sob um prefixo, mantendo handlers e middleware.
 - `With(middleware ...func(http.Handler) http.Handler) *router.Router`: Utiliza middleware para um conjunto específico de rotas.
 
 ## Créditos

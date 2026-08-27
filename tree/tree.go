@@ -54,7 +54,18 @@ func (t *Tree) RegisterRoute(httpMethod Method, newValue string, method http.Han
 }
 
 func (t *Tree) register(httpMethod Method, path string, method http.Handler) {
-	currNode := t.root
+	target, variableNames := t.ensurePath(path)
+	if target.hasMethod(httpMethod) {
+		panic(fmt.Sprintf("Duplicated path: %s", path))
+	}
+	target.setEndpoint(httpMethod, method, variableNames)
+}
+
+// ensurePath walks to the node addressed by path, creating any segment that is
+// missing, and reports the variable names the path declares along the way. Those
+// names are what an endpoint stored here has to be able to pair with the values
+// a lookup collects.
+func (t *Tree) ensurePath(path string) (*node, []string) {
 	if path[0] != '/' {
 		panic("Path must begin with front-slash (/)")
 	}
@@ -62,13 +73,15 @@ func (t *Tree) register(httpMethod Method, path string, method http.Handler) {
 	if err := validateSegments(path, segments); err != nil {
 		panic(err.Error())
 	}
-	var pathVariablesName []string
-	for _, pathSplitted := range segments {
-		isParameter := isParam(pathSplitted)
-		nodePath := pathSplitted
+
+	currNode := t.root
+	var variableNames []string
+	for _, segment := range segments {
+		isParameter := isParam(segment)
+		nodePath := segment
 		if isParameter {
 			nodePath = "{*}"
-			pathVariablesName = append(pathVariablesName, strings.Trim(pathSplitted, "{}"))
+			variableNames = append(variableNames, strings.Trim(segment, "{}"))
 		}
 		nextNode := currNode.childFor(nodePath, isParameter)
 		if nextNode == nil {
@@ -77,10 +90,7 @@ func (t *Tree) register(httpMethod Method, path string, method http.Handler) {
 		}
 		currNode = nextNode
 	}
-	if currNode.hasMethod(httpMethod) {
-		panic(fmt.Sprintf("Duplicated path: %s", path))
-	}
-	currNode.setEndpoint(httpMethod, method, pathVariablesName)
+	return currNode, variableNames
 }
 
 // Lookup resolves a path against the tree in a single walk.
@@ -120,7 +130,21 @@ func (t *Tree) Merge(source *Tree) {
 	if t.root == source.root {
 		return
 	}
-	mergeNodes(t.root, source.root)
+	mergeNodes(t.root, source.root, nil)
+}
+
+// MergeAt copies source's routes in under prefix.
+//
+// The prefix may itself declare variables. A grafted endpoint recorded its own
+// names against its own depth, so those of the prefix are prepended: without
+// that, a lookup would pair the prefix's captured value with the first name the
+// grafted route declared.
+func (t *Tree) MergeAt(prefix string, source *Tree) {
+	target, prefixVariables := t.ensurePath(prefix)
+	if target == source.root {
+		return
+	}
+	mergeNodes(target, source.root, prefixVariables)
 }
 
 // splitSegments breaks a path into the segments the tree is keyed by.

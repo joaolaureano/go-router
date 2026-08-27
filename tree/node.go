@@ -146,49 +146,54 @@ func (n *node) match(paths []string, index int, search *lookup) *node {
 	return nil
 }
 
-func mergeNodes(target, source *node) {
+// mergeNodes copies source into target. prefixVariables names the variables
+// that target already sits below, which every grafted endpoint has to inherit.
+func mergeNodes(target, source *node, prefixVariables []string) {
 	for httpMethod, sourceEndpoint := range source.endpoints {
 		if !target.hasMethod(httpMethod) {
-			target.endpoints[httpMethod] = cloneEndpoint(sourceEndpoint)
+			target.endpoints[httpMethod] = cloneEndpoint(sourceEndpoint, prefixVariables)
 		}
 	}
 
 	for _, sourceChild := range source.children {
 		targetChild := target.staticChild(sourceChild.path)
 		if targetChild == nil {
-			target.children = append(target.children, cloneNode(sourceChild))
+			target.children = append(target.children, cloneNode(sourceChild, prefixVariables))
 			continue
 		}
-		mergeNodes(targetChild, sourceChild)
+		mergeNodes(targetChild, sourceChild, prefixVariables)
 	}
 
 	if source.parameter == nil {
 		return
 	}
 	if target.parameter == nil {
-		target.parameter = cloneNode(source.parameter)
+		target.parameter = cloneNode(source.parameter, prefixVariables)
 		return
 	}
-	mergeNodes(target.parameter, source.parameter)
+	mergeNodes(target.parameter, source.parameter, prefixVariables)
 }
 
-func cloneNode(source *node) *node {
+func cloneNode(source *node, prefixVariables []string) *node {
 	clone := newNode(source.path)
 	for httpMethod, sourceEndpoint := range source.endpoints {
-		clone.endpoints[httpMethod] = cloneEndpoint(sourceEndpoint)
+		clone.endpoints[httpMethod] = cloneEndpoint(sourceEndpoint, prefixVariables)
 	}
 	for _, child := range source.children {
-		clone.children = append(clone.children, cloneNode(child))
+		clone.children = append(clone.children, cloneNode(child, prefixVariables))
 	}
 	if source.parameter != nil {
-		clone.parameter = cloneNode(source.parameter)
+		clone.parameter = cloneNode(source.parameter, prefixVariables)
 	}
 	return clone
 }
 
-func cloneEndpoint(source endpoint) endpoint {
+func cloneEndpoint(source endpoint, prefixVariables []string) endpoint {
+	variableNames := make([]string, 0, len(prefixVariables)+len(source.variableNames))
+	variableNames = append(variableNames, prefixVariables...)
+	variableNames = append(variableNames, source.variableNames...)
 	return endpoint{
 		handler:       source.handler,
-		variableNames: append([]string(nil), source.variableNames...),
+		variableNames: variableNames,
 	}
 }
