@@ -231,11 +231,12 @@ func (search *lookup) allowedMethods() []Method {
 	return search.allowed
 }
 
-// typicalMethodCount sizes the allowed slice on first use. A resource answers
-// four or so verbs, and growing from nothing costs an allocation per verb
-// recorded -- three of them on an ordinary CRUD path, where sizing once costs
-// one.
-const typicalMethodCount = 4
+// typicalMethodCount sizes the allowed slice on first use. Growing from nothing
+// costs an allocation per verb recorded -- three of them on an ordinary CRUD
+// path, where sizing once costs one. Six, not four, because the caller most
+// likely to read this list is rendering an Allow header, and it appends the two
+// verbs answered on the route's behalf before doing so.
+const typicalMethodCount = 6
 
 // recordAllowed notes the methods this node answers under. More than one node
 // can reach here in a single walk -- a parameter branch and the catch-all below

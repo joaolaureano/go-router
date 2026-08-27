@@ -129,8 +129,10 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 // advertisedMethods renders an Allow header from the methods a path was
 // registered under, plus the two this router answers on their behalf: OPTIONS,
 // which it handles when nothing else does, and HEAD wherever there is a GET.
+// It takes ownership of registered: a lookup builds that slice for one request
+// and hands it over, so the two verbs added here go into it rather than into a
+// copy of it restated as strings.
 func advertisedMethods(registered []routing.Method) string {
-	advertised := make([]string, 0, len(registered)+2)
 	var hasGet, hasHead, hasOptions bool
 	for _, httpMethod := range registered {
 		switch httpMethod {
@@ -141,16 +143,29 @@ func advertisedMethods(registered []routing.Method) string {
 		case OPTIONS:
 			hasOptions = true
 		}
-		advertised = append(advertised, string(httpMethod))
 	}
 	if hasGet && !hasHead {
-		advertised = append(advertised, string(HEAD))
+		registered = append(registered, HEAD)
 	}
 	if !hasOptions {
-		advertised = append(advertised, string(OPTIONS))
+		registered = append(registered, OPTIONS)
 	}
-	slices.Sort(advertised)
-	return strings.Join(advertised, ", ")
+	slices.Sort(registered)
+
+	const separator = ", "
+	size := len(separator) * (len(registered) - 1)
+	for _, httpMethod := range registered {
+		size += len(httpMethod)
+	}
+	var header strings.Builder
+	header.Grow(size)
+	for i, httpMethod := range registered {
+		if i > 0 {
+			header.WriteString(separator)
+		}
+		header.WriteString(string(httpMethod))
+	}
+	return header.String()
 }
 
 func (router *Router) Register(httpMethod Method, path string, method http.HandlerFunc) {
