@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"testing"
 
-	_const "github.com/joaolaureano/go-router/const"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -44,9 +43,9 @@ func TestNodeSetEndpoint(t *testing.T) {
 	node := newNode("users")
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 
-	node.setEndpoint(_const.GET, handler, []string{"id"})
+	node.setEndpoint(GET, handler, []string{"id"})
 
-	method, exists := node.endpoints[_const.GET]
+	method, exists := node.endpoints[GET]
 	assert.True(t, exists)
 	assert.NotNil(t, method.handler)
 	assert.Equal(t, []string{"id"}, method.variableNames)

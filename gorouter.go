@@ -3,7 +3,6 @@ package gorouter
 import (
 	"net/http"
 
-	_const "github.com/joaolaureano/go-router/const"
 	"github.com/joaolaureano/go-router/router"
 )
 
@@ -16,7 +15,7 @@ type Router interface {
 	// Register is a method for adding a new route to the router.
 	// It takes an HTTP method, a path, and a handler function as parameters.
 	// The router will use these parameters to associate incoming requests with the specified handler.
-	Register(httpMethod _const.HTTPMethods, path string, method http.HandlerFunc)
+	Register(httpMethod router.Method, path string, method http.HandlerFunc)
 
 	// Use is a method for adding middleware to the router.
 	// Middleware functions can process or modify requests before reaching the route handler.
@@ -37,6 +36,20 @@ type Router interface {
 	// This method provides a way to apply middleware to a subset of routes.
 	With(middleware ...func(http.Handler) http.Handler) *router.Router
 }
+
+// The routing vocabulary, re-exported so that a caller importing only this
+// package can name a method.
+type Method = router.Method
+
+const (
+	GET     = router.GET
+	HEAD    = router.HEAD
+	POST    = router.POST
+	PUT     = router.PUT
+	PATCH   = router.PATCH
+	DELETE  = router.DELETE
+	OPTIONS = router.OPTIONS
+)
 
 func NewRouter() Router {
 	return router.NewRouter()

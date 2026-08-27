@@ -3,8 +3,6 @@ package tree
 import (
 	"net/http"
 	"sort"
-
-	_const "github.com/joaolaureano/go-router/const"
 )
 
 // node is one path segment of the tree. It is deliberately unexported: the
@@ -14,7 +12,7 @@ type node struct {
 	path      string
 	children  []*node
 	parameter *node
-	endpoints map[_const.HTTPMethods]endpoint
+	endpoints map[Method]endpoint
 }
 
 // endpoint is what a single method registered on a node resolves to. The
@@ -29,7 +27,7 @@ func newNode(path string) *node {
 	return &node{
 		path:      path,
 		children:  make([]*node, 0),
-		endpoints: make(map[_const.HTTPMethods]endpoint),
+		endpoints: make(map[Method]endpoint),
 	}
 }
 
@@ -66,14 +64,14 @@ func (n *node) addChild(child *node, parameter bool) {
 	n.children = append(n.children, child)
 }
 
-func (n *node) setEndpoint(httpMethod _const.HTTPMethods, handler http.Handler, variableNames []string) {
+func (n *node) setEndpoint(httpMethod Method, handler http.Handler, variableNames []string) {
 	n.endpoints[httpMethod] = endpoint{
 		handler:       handler,
 		variableNames: variableNames,
 	}
 }
 
-func (n *node) hasMethod(httpMethod _const.HTTPMethods) bool {
+func (n *node) hasMethod(httpMethod Method) bool {
 	_, exists := n.endpoints[httpMethod]
 	return exists
 }
@@ -88,9 +86,9 @@ func (n *node) hasAnyMethod() bool {
 // recorded on the way, which lets a single walk answer both "which handler"
 // and "which methods would have worked".
 type lookup struct {
-	httpMethod _const.HTTPMethods
+	httpMethod Method
 	values     []string
-	allowed    map[_const.HTTPMethods]struct{}
+	allowed    map[Method]struct{}
 }
 
 func (search *lookup) recordAllowed(n *node) {
@@ -98,24 +96,24 @@ func (search *lookup) recordAllowed(n *node) {
 		return
 	}
 	if search.allowed == nil {
-		search.allowed = make(map[_const.HTTPMethods]struct{}, len(n.endpoints))
+		search.allowed = make(map[Method]struct{}, len(n.endpoints))
 	}
 	for httpMethod := range n.endpoints {
 		search.allowed[httpMethod] = struct{}{}
 	}
 }
 
-// allowedMethods returns the recorded methods sorted, so that the Allow header
-// of a 405 stays stable across responses.
-func (search *lookup) allowedMethods() []string {
+// allowedMethods returns the recorded methods sorted, so that a caller
+// rendering them -- into an Allow header, say -- gets a stable order.
+func (search *lookup) allowedMethods() []Method {
 	if len(search.allowed) == 0 {
 		return nil
 	}
-	methods := make([]string, 0, len(search.allowed))
+	methods := make([]Method, 0, len(search.allowed))
 	for httpMethod := range search.allowed {
-		methods = append(methods, string(httpMethod))
+		methods = append(methods, httpMethod)
 	}
-	sort.Strings(methods)
+	sort.Slice(methods, func(i, j int) bool { return methods[i] < methods[j] })
 	return methods
 }
 

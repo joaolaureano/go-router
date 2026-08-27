@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-
-	_const "github.com/joaolaureano/go-router/const"
 )
 
 // Tree is the aggregate root. Nothing outside this package holds a node, so
@@ -36,7 +34,7 @@ type Param struct {
 type Match struct {
 	Handler        http.Handler
 	Params         []Param
-	AllowedMethods []string
+	AllowedMethods []Method
 }
 
 func CreateTree() Tree {
@@ -45,7 +43,7 @@ func CreateTree() Tree {
 	}
 }
 
-func (t *Tree) RegisterRoute(httpMethod _const.HTTPMethods, newValue string, method http.Handler) {
+func (t *Tree) RegisterRoute(httpMethod Method, newValue string, method http.Handler) {
 	if newValue == "" {
 		panic("path must not be empty")
 	}
@@ -55,7 +53,7 @@ func (t *Tree) RegisterRoute(httpMethod _const.HTTPMethods, newValue string, met
 	t.register(httpMethod, newValue, method)
 }
 
-func (t *Tree) register(httpMethod _const.HTTPMethods, path string, method http.Handler) {
+func (t *Tree) register(httpMethod Method, path string, method http.Handler) {
 	currNode := t.root
 	if path[0] != '/' {
 		panic("Path must begin with front-slash (/)")
@@ -86,7 +84,7 @@ func (t *Tree) register(httpMethod _const.HTTPMethods, path string, method http.
 }
 
 // Lookup resolves a path against the tree in a single walk.
-func (t *Tree) Lookup(httpMethod _const.HTTPMethods, path string) (Match, Status) {
+func (t *Tree) Lookup(httpMethod Method, path string) (Match, Status) {
 	search := lookup{httpMethod: httpMethod}
 	matched := t.root.match(splitSegments(path), 0, &search)
 	if matched == nil {

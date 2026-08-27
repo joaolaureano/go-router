@@ -7,17 +7,30 @@ import (
 	"sync"
 
 	"github.com/joaolaureano/go-router/chain"
-	_const "github.com/joaolaureano/go-router/const"
 	"github.com/joaolaureano/go-router/router/context"
 	"github.com/joaolaureano/go-router/tree"
+)
+
+// Method and the verbs below re-export the routing vocabulary, so that naming
+// a method does not force callers to import the tree package.
+type Method = tree.Method
+
+const (
+	GET     = tree.GET
+	HEAD    = tree.HEAD
+	POST    = tree.POST
+	PUT     = tree.PUT
+	PATCH   = tree.PATCH
+	DELETE  = tree.DELETE
+	OPTIONS = tree.OPTIONS
 )
 
 // routeTree is the slice of the tree the router actually needs. Declaring it
 // here rather than beside Tree keeps the domain free to grow methods without
 // widening what the router is coupled to.
 type routeTree interface {
-	RegisterRoute(httpMethod _const.HTTPMethods, newValue string, method http.Handler)
-	Lookup(httpMethod _const.HTTPMethods, path string) (tree.Match, tree.Status)
+	RegisterRoute(httpMethod Method, newValue string, method http.Handler)
+	Lookup(httpMethod Method, path string) (tree.Match, tree.Status)
 }
 
 type Router struct {
@@ -64,7 +77,7 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	r = routerCtx.WithRequest(r)
 
 	router.mu.RLock()
-	match, status := router.root.Lookup(_const.HTTPMethods(r.Method), r.URL.Path)
+	match, status := router.root.Lookup(tree.Method(r.Method), r.URL.Path)
 	notFound := *router.notFound
 	router.mu.RUnlock()
 
@@ -75,14 +88,18 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		match.Handler.ServeHTTP(w, r)
 	case tree.StatusMethodNotAllowed:
-		w.Header().Set("Allow", strings.Join(match.AllowedMethods, ", "))
+		allowed := make([]string, len(match.AllowedMethods))
+		for i, httpMethod := range match.AllowedMethods {
+			allowed[i] = string(httpMethod)
+		}
+		w.Header().Set("Allow", strings.Join(allowed, ", "))
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 	default:
 		notFound(w, r)
 	}
 }
 
-func (router *Router) Register(httpMethod _const.HTTPMethods, path string, method http.HandlerFunc) {
+func (router *Router) Register(httpMethod Method, path string, method http.HandlerFunc) {
 	if method == nil {
 		panic("handler must not be nil")
 	}

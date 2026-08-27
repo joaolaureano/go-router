@@ -19,7 +19,6 @@ The project was developed for the purpose of learning and experimenting with the
         "fmt"
         "net/http"
         
-	    _const "github.com/joaolaureano/go-router/const"
         "github.com/joaolaureano/go-router/router"
         "github.com/joaolaureano/go-router/router/context"
     )
@@ -27,7 +26,7 @@ The project was developed for the purpose of learning and experimenting with the
     func main() {
     r := router.NewRouter()
     
-        r.Register(_const.GET, "/ping", func(writer http.ResponseWriter, request *http.Request) {
+        r.Register(router.GET, "/ping", func(writer http.ResponseWriter, request *http.Request) {
             writer.Write([]byte("pong"))
         })
         r.Group("/{id}", func(r router.Router) {
@@ -40,7 +39,7 @@ The project was developed for the purpose of learning and experimenting with the
                     writer.Write([]byte(message))
                 })
             })
-            r.Register(_const.GET, "/pong", func(writer http.ResponseWriter, request *http.Request) {
+            r.Register(router.GET, "/pong", func(writer http.ResponseWriter, request *http.Request) {
                 writer.Write([]byte("ping"))
             })
         })
@@ -50,7 +49,7 @@ The project was developed for the purpose of learning and experimenting with the
 You can find more at folder ```.example/```
 
 ## Interface
-- `Register(httpMethod _const.HTTPMethods, path string, method http.HandlerFunc)`: Registers an HTTP method for a specific path.
+- `Register(httpMethod router.Method, path string, method http.HandlerFunc)`: Registers an HTTP method for a specific path.
 - `Use(middleware func(http.Handler) http.Handler)`: Uses middleware to handle HTTP requests.
 - `NotFound(notFoundFn http.HandlerFunc)`: Sets a handler for requests on non-existent routes.
 - `Group(prefix string, fn func(r router.Router)) router.Router`: Groups routes under a specified prefix.

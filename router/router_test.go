@@ -8,7 +8,6 @@ import (
 	"sync"
 	"testing"
 
-	_const "github.com/joaolaureano/go-router/const"
 	"github.com/joaolaureano/go-router/router/context"
 
 	"github.com/stretchr/testify/assert"
@@ -35,7 +34,7 @@ func TestRouter_RegisterSimplePath(t *testing.T) {
 	method := func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("hello_world"))
 	}
-	r.Register(_const.GET, path, method)
+	r.Register(GET, path, method)
 	s := setup(r)
 	defer s.Close()
 
@@ -49,7 +48,7 @@ func TestRouter_RegisterNilHandler(t *testing.T) {
 	r := NewRouter()
 
 	assert.PanicsWithValue(t, "handler must not be nil", func() {
-		r.Register(_const.GET, "/path", nil)
+		r.Register(GET, "/path", nil)
 	})
 }
 func TestRouter_NotFound(t *testing.T) {
@@ -80,7 +79,7 @@ func TestRouter_RegisterWithMiddleware(t *testing.T) {
 		})
 	}
 	r.Use(middleware)
-	r.Register(_const.GET, path, method)
+	r.Register(GET, path, method)
 	s := setup(r)
 	defer s.Close()
 
@@ -102,7 +101,7 @@ func TestRouter_RegisterBeforeMiddleware(t *testing.T) {
 			next.ServeHTTP(w, r)
 		})
 	}
-	r.Register(_const.GET, path, method)
+	r.Register(GET, path, method)
 
 	assert.Panics(t, func() { r.Use(middleware) }, "Use should panic after declaring first route")
 
@@ -115,7 +114,7 @@ func TestRouter_RegisterCapturePathVariable(t *testing.T) {
 		rp := r.Context().Value("RouterContext").(*context.RouterContext)
 		w.Write([]byte(rp.Value("test")))
 	}
-	r.Register(_const.GET, path, method)
+	r.Register(GET, path, method)
 	s := setup(r)
 	defer s.Close()
 
@@ -132,7 +131,7 @@ func TestRouter_RegisterCaptureMultiplePathVariable(t *testing.T) {
 		rp := r.Context().Value("RouterContext").(*context.RouterContext)
 		w.Write([]byte(fmt.Sprintf("%s_%s", rp.Value("test"), rp.Value("test2"))))
 	}
-	r.Register(_const.GET, path, method)
+	r.Register(GET, path, method)
 	s := setup(r)
 	defer s.Close()
 
@@ -151,8 +150,8 @@ func TestRouter_RegisterMultiplePath(t *testing.T) {
 	method2 := func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("hello_world_2"))
 	}
-	r.Register(_const.GET, path1, method1)
-	r.Register(_const.GET, path2, method2)
+	r.Register(GET, path1, method1)
+	r.Register(GET, path2, method2)
 	s := setup(r)
 	defer s.Close()
 
@@ -177,7 +176,7 @@ func TestRouter_Group(t *testing.T) {
 		})
 	}
 	router.Use(fn)
-	router.Register(_const.GET, path1, method)
+	router.Register(GET, path1, method)
 	router.Group(group, func(r Router) {
 		r.Use(func(next http.Handler) http.Handler {
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -185,7 +184,7 @@ func TestRouter_Group(t *testing.T) {
 				w.Write([]byte(fmt.Sprintf("Hello World Middleware 2")))
 			})
 		})
-		r.Register(_const.GET, path2, method)
+		r.Register(GET, path2, method)
 	})
 	s := setup(router)
 	defer s.Close()
@@ -202,7 +201,7 @@ func TestRouter_NestedGroupsComposePrefixes(t *testing.T) {
 	r := NewRouter()
 	r.Group("/api", func(api Router) {
 		api.Group("/v1", func(version Router) {
-			version.Register(_const.GET, "/users", func(w http.ResponseWriter, r *http.Request) {
+			version.Register(GET, "/users", func(w http.ResponseWriter, r *http.Request) {
 				w.Write([]byte("users"))
 			})
 		})
@@ -218,7 +217,7 @@ func TestRouter_NestedGroupsComposePrefixes(t *testing.T) {
 
 func TestRouter_WithPreservesPrefix(t *testing.T) {
 	r := NewPrefixRouter("/api")
-	r.With().Register(_const.GET, "/health", func(w http.ResponseWriter, r *http.Request) {
+	r.With().Register(GET, "/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("ok"))
 	})
 
@@ -232,14 +231,14 @@ func TestRouter_WithPreservesPrefix(t *testing.T) {
 
 func TestRouter_SupportsConcurrentRegistrationAndServing(t *testing.T) {
 	r := NewRouter()
-	r.Register(_const.GET, "/stable", func(w http.ResponseWriter, r *http.Request) {})
+	r.Register(GET, "/stable", func(w http.ResponseWriter, r *http.Request) {})
 
 	var waitGroup sync.WaitGroup
 	waitGroup.Add(2)
 	go func() {
 		defer waitGroup.Done()
 		for i := 0; i < 100; i++ {
-			r.Register(_const.GET, fmt.Sprintf("/dynamic/%d", i), func(w http.ResponseWriter, r *http.Request) {})
+			r.Register(GET, fmt.Sprintf("/dynamic/%d", i), func(w http.ResponseWriter, r *http.Request) {})
 		}
 	}()
 	go func() {
@@ -264,11 +263,11 @@ func TestRouter_With(t *testing.T) {
 			next.ServeHTTP(w, r)
 		})
 	}
-	r.Register(_const.GET, path, method)
+	r.Register(GET, path, method)
 	s := setup(r)
 	defer s.Close()
 
-	r.With(methodWith).Register(_const.GET, "/path_with", method)
+	r.With(methodWith).Register(GET, "/path_with", method)
 	res, _ := http.Get(fmt.Sprintf("%s%s", s.URL, path))
 	body, _ := io.ReadAll(res.Body)
 	assert.Equal(t, "hello_world", string(body))
@@ -288,7 +287,7 @@ func TestRouter_WithInheritsParentMiddleware(t *testing.T) {
 		}
 	}
 	r.Use(tag("parent"))
-	r.With(tag("with")).Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {
+	r.With(tag("with")).Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("handler"))
 	})
 
@@ -302,7 +301,7 @@ func TestRouter_WithInheritsParentMiddleware(t *testing.T) {
 func TestRouter_GroupRejectsMiddlewareAfterItsFirstRoute(t *testing.T) {
 	r := NewRouter()
 	group := r.Group("/group", func(subrouter Router) {
-		subrouter.Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {})
+		subrouter.Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {})
 	})
 
 	assert.Panics(t, func() {
@@ -312,12 +311,12 @@ func TestRouter_GroupRejectsMiddlewareAfterItsFirstRoute(t *testing.T) {
 
 func TestRouter_GroupAcceptsMiddlewareAfterSiblingRoute(t *testing.T) {
 	r := NewRouter()
-	r.Register(_const.GET, "/ping", func(w http.ResponseWriter, r *http.Request) {})
+	r.Register(GET, "/ping", func(w http.ResponseWriter, r *http.Request) {})
 
 	assert.NotPanics(t, func() {
 		r.Group("/group", func(subrouter Router) {
 			subrouter.Use(func(next http.Handler) http.Handler { return next })
-			subrouter.Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {})
+			subrouter.Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {})
 		})
 	})
 }
@@ -329,7 +328,7 @@ func TestRouter_GroupNotFoundReachesServingRouter(t *testing.T) {
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte("custom"))
 		})
-		subrouter.Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {})
+		subrouter.Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {})
 	})
 
 	request := httptest.NewRequest(http.MethodGet, "/group/missing", nil)
@@ -348,7 +347,7 @@ func TestRouter_NotFoundNilHandler(t *testing.T) {
 
 func TestRouter_TreatsParameterSyntaxInRequestPathAsLiteral(t *testing.T) {
 	r := NewRouter()
-	r.Register(_const.GET, "/{id}", func(w http.ResponseWriter, r *http.Request) {
+	r.Register(GET, "/{id}", func(w http.ResponseWriter, r *http.Request) {
 		routerCtx, _ := context.FromRequest(r)
 		w.Write([]byte(routerCtx.Value("id")))
 	})
@@ -363,7 +362,7 @@ func TestRouter_TreatsParameterSyntaxInRequestPathAsLiteral(t *testing.T) {
 
 func TestRouter_RegisterPathWithQueryString(t *testing.T) {
 	r := NewRouter()
-	r.Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {
+	r.Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("hello_world"))
 	})
 
@@ -377,10 +376,10 @@ func TestRouter_RegisterPathWithQueryString(t *testing.T) {
 
 func TestRouter_RegisterRootPreservesExistingRoutes(t *testing.T) {
 	r := NewRouter()
-	r.Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {
+	r.Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("path"))
 	})
-	r.Register(_const.GET, "/", func(w http.ResponseWriter, r *http.Request) {
+	r.Register(GET, "/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("root"))
 	})
 
@@ -394,7 +393,7 @@ func TestRouter_RegisterRootPreservesExistingRoutes(t *testing.T) {
 
 func TestRouter_ReturnsMethodNotAllowed(t *testing.T) {
 	r := NewRouter()
-	r.Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {})
+	r.Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {})
 
 	request := httptest.NewRequest(http.MethodPost, "/path", nil)
 	response := httptest.NewRecorder()
@@ -406,8 +405,8 @@ func TestRouter_ReturnsMethodNotAllowed(t *testing.T) {
 
 func TestRouter_MethodNotAllowedListsEveryRegisteredMethod(t *testing.T) {
 	r := NewRouter()
-	r.Register(_const.PATCH, "/path", func(w http.ResponseWriter, r *http.Request) {})
-	r.Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {})
+	r.Register(PATCH, "/path", func(w http.ResponseWriter, r *http.Request) {})
+	r.Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {})
 
 	request := httptest.NewRequest(http.MethodDelete, "/path", nil)
 	response := httptest.NewRecorder()
@@ -419,8 +418,8 @@ func TestRouter_MethodNotAllowedListsEveryRegisteredMethod(t *testing.T) {
 
 func TestRouter_MethodNotAllowedSpansEveryMatchingBranch(t *testing.T) {
 	r := NewRouter()
-	r.Register(_const.POST, "/a/b", func(w http.ResponseWriter, r *http.Request) {})
-	r.Register(_const.PATCH, "/a/{id}", func(w http.ResponseWriter, r *http.Request) {})
+	r.Register(POST, "/a/b", func(w http.ResponseWriter, r *http.Request) {})
+	r.Register(PATCH, "/a/{id}", func(w http.ResponseWriter, r *http.Request) {})
 
 	request := httptest.NewRequest(http.MethodGet, "/a/b", nil)
 	response := httptest.NewRecorder()
@@ -432,8 +431,8 @@ func TestRouter_MethodNotAllowedSpansEveryMatchingBranch(t *testing.T) {
 
 func TestRouter_BacktracksWhenStaticMatchLacksMethod(t *testing.T) {
 	r := NewRouter()
-	r.Register(_const.POST, "/a/b", func(w http.ResponseWriter, r *http.Request) {})
-	r.Register(_const.GET, "/a/{id}", func(w http.ResponseWriter, r *http.Request) {
+	r.Register(POST, "/a/b", func(w http.ResponseWriter, r *http.Request) {})
+	r.Register(GET, "/a/{id}", func(w http.ResponseWriter, r *http.Request) {
 		routerCtx, _ := context.FromRequest(r)
 		w.Write([]byte(routerCtx.Value("id")))
 	})
@@ -448,8 +447,8 @@ func TestRouter_BacktracksWhenStaticMatchLacksMethod(t *testing.T) {
 
 func TestRouter_ReturnsMethodNotAllowedWhenNoBranchMatchesMethod(t *testing.T) {
 	r := NewRouter()
-	r.Register(_const.POST, "/a/b", func(w http.ResponseWriter, r *http.Request) {})
-	r.Register(_const.PATCH, "/a/{id}", func(w http.ResponseWriter, r *http.Request) {})
+	r.Register(POST, "/a/b", func(w http.ResponseWriter, r *http.Request) {})
+	r.Register(PATCH, "/a/{id}", func(w http.ResponseWriter, r *http.Request) {})
 
 	request := httptest.NewRequest(http.MethodGet, "/a/b", nil)
 	response := httptest.NewRecorder()
@@ -471,7 +470,7 @@ func TestRouter_MiddlewareOrder(t *testing.T) {
 	}
 	r.Use(appendMiddleware("first"))
 	r.Use(appendMiddleware("second"))
-	r.Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {
+	r.Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {
 		order = append(order, "handler")
 	})
 

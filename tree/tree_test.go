@@ -5,14 +5,12 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	_const "github.com/joaolaureano/go-router/const"
-
 	"github.com/stretchr/testify/assert"
 )
 
 var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 
-func assertFound(t *testing.T, tree *Tree, httpMethod _const.HTTPMethods, path string) {
+func assertFound(t *testing.T, tree *Tree, httpMethod Method, path string) {
 	t.Helper()
 	_, status := tree.Lookup(httpMethod, path)
 	assert.Equal(t, StatusFound, status, path)
@@ -31,7 +29,7 @@ func TestRegister_EmptyPath(t *testing.T) {
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 
 	assert.PanicsWithValue(t, "path must not be empty", func() {
-		tree.RegisterRoute(_const.GET, "", handler)
+		tree.RegisterRoute(GET, "", handler)
 	})
 	assert.Empty(t, tree.root.children, "Invalid registration should not create children")
 }
@@ -40,7 +38,7 @@ func TestRegister_NilHandler(t *testing.T) {
 	tree := CreateTree()
 
 	assert.PanicsWithValue(t, "handler must not be nil", func() {
-		tree.RegisterRoute(_const.GET, "/path", nil)
+		tree.RegisterRoute(GET, "/path", nil)
 	})
 	assert.Empty(t, tree.root.children, "Invalid registration should not create children")
 }
@@ -49,7 +47,7 @@ func TestRegister_DuplicatedPathVariable(t *testing.T) {
 	tree := CreateTree()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 
-	assert.Panics(t, func() { tree.RegisterRoute(_const.GET, "/test/{test}/{test}", handler) }, "Insert should panic for an invalid path")
+	assert.Panics(t, func() { tree.RegisterRoute(GET, "/test/{test}/{test}", handler) }, "Insert should panic for an invalid path")
 }
 
 func TestRegister_PanicInvalidPath(t *testing.T) {
@@ -57,17 +55,17 @@ func TestRegister_PanicInvalidPath(t *testing.T) {
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 	invalidPath := "invalidPath"
 
-	assert.PanicsWithValue(t, "Path must begin with front-slash (/)", func() { tree.RegisterRoute(_const.GET, invalidPath, handler) }, "Insert should panic for an invalid path")
+	assert.PanicsWithValue(t, "Path must begin with front-slash (/)", func() { tree.RegisterRoute(GET, invalidPath, handler) }, "Insert should panic for an invalid path")
 }
 
 func TestRegister_OnlyRoot(t *testing.T) {
 	tree := CreateTree()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 
-	tree.RegisterRoute(_const.GET, "/", handler)
+	tree.RegisterRoute(GET, "/", handler)
 
 	// Root
-	assertFound(t, &tree, _const.GET, "/")
+	assertFound(t, &tree, GET, "/")
 	assert.NotNil(t, tree.root.children, "Children should not be nil")
 	assert.NotZero(t, len(tree.root.endpoints), "Method should not be nil")
 }
@@ -76,20 +74,20 @@ func TestRegister_RootPreservesRoutesAndMethods(t *testing.T) {
 	tree := CreateTree()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 
-	tree.RegisterRoute(_const.GET, "/path", handler)
-	tree.RegisterRoute(_const.GET, "/", handler)
-	tree.RegisterRoute(_const.POST, "/", handler)
+	tree.RegisterRoute(GET, "/path", handler)
+	tree.RegisterRoute(GET, "/", handler)
+	tree.RegisterRoute(POST, "/", handler)
 
-	assertFound(t, &tree, _const.GET, "/path")
-	assertFound(t, &tree, _const.GET, "/")
-	assertFound(t, &tree, _const.POST, "/")
+	assertFound(t, &tree, GET, "/path")
+	assertFound(t, &tree, GET, "/")
+	assertFound(t, &tree, POST, "/")
 }
 
 func TestRegister_SimpleTree(t *testing.T) {
 	tree := CreateTree()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 
-	tree.RegisterRoute(_const.GET, "/path/{valid}/path", handler)
+	tree.RegisterRoute(GET, "/path/{valid}/path", handler)
 
 	// Root
 	firstChild := tree.root.children[0]
@@ -107,7 +105,7 @@ func TestRegister_SimpleTree(t *testing.T) {
 	assert.NotNil(t, thirdChild.children, "Second child's children should not be nil")
 	assert.Equal(t, "path", thirdChild.path, "Path should be /path")
 	assert.NotZero(t, len(thirdChild.endpoints), "Method should not be empty")
-	assert.NotZero(t, thirdChild.endpoints[_const.GET], "Method should not be nil")
+	assert.NotZero(t, thirdChild.endpoints[GET], "Method should not be nil")
 }
 
 func TestRegister_DuplicatedPath(t *testing.T) {
@@ -116,16 +114,16 @@ func TestRegister_DuplicatedPath(t *testing.T) {
 
 	assert.Panics(t,
 		func() {
-			tree.RegisterRoute(_const.GET, "/path/{valid}/path", handler)
-			tree.RegisterRoute(_const.GET, "/path/{valid}/path", handler)
+			tree.RegisterRoute(GET, "/path/{valid}/path", handler)
+			tree.RegisterRoute(GET, "/path/{valid}/path", handler)
 		}, "Should panic when creating same route multiple times")
 }
 
 func TestRegister_MultipleBranches(t *testing.T) {
 	tree := CreateTree()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
-	tree.RegisterRoute(_const.GET, "/path/{valid}/path1", handler)
-	tree.RegisterRoute(_const.GET, "/path/{valid}/path2", handler)
+	tree.RegisterRoute(GET, "/path/{valid}/path1", handler)
+	tree.RegisterRoute(GET, "/path/{valid}/path2", handler)
 
 	// First Child
 	firstChild := tree.root.children[0]
@@ -177,9 +175,9 @@ func TestValidatePath_InvalidPaths(t *testing.T) {
 
 func TestLookup(t *testing.T) {
 	tree := CreateTree()
-	tree.RegisterRoute(_const.GET, "/path", handler)
+	tree.RegisterRoute(GET, "/path", handler)
 
-	match, status := tree.Lookup(_const.GET, "/path")
+	match, status := tree.Lookup(GET, "/path")
 
 	assert.Equal(t, StatusFound, status)
 	assert.NotNil(t, match.Handler)
@@ -188,10 +186,10 @@ func TestLookup(t *testing.T) {
 
 func TestLookup_Root(t *testing.T) {
 	tree := CreateTree()
-	tree.RegisterRoute(_const.GET, "/", handler)
+	tree.RegisterRoute(GET, "/", handler)
 
 	for _, path := range []string{"/", ""} {
-		match, status := tree.Lookup(_const.GET, path)
+		match, status := tree.Lookup(GET, path)
 
 		assert.Equal(t, StatusFound, status, path)
 		assert.NotNil(t, match.Handler, path)
@@ -201,27 +199,27 @@ func TestLookup_Root(t *testing.T) {
 func TestLookup_UnregisteredRoot(t *testing.T) {
 	tree := CreateTree()
 
-	_, status := tree.Lookup(_const.GET, "/")
+	_, status := tree.Lookup(GET, "/")
 
 	assert.Equal(t, StatusNotFound, status)
 }
 
 func TestLookup_RootRegisteredUnderAnotherMethod(t *testing.T) {
 	tree := CreateTree()
-	tree.RegisterRoute(_const.POST, "/", handler)
+	tree.RegisterRoute(POST, "/", handler)
 
-	match, status := tree.Lookup(_const.GET, "/")
+	match, status := tree.Lookup(GET, "/")
 
 	assert.Equal(t, StatusMethodNotAllowed, status)
-	assert.Equal(t, []string{_const.POST}, match.AllowedMethods)
+	assert.Equal(t, []Method{POST}, match.AllowedMethods)
 }
 
 func TestLookup_UnknownPath(t *testing.T) {
 	tree := CreateTree()
-	tree.RegisterRoute(_const.GET, "/path", handler)
+	tree.RegisterRoute(GET, "/path", handler)
 
 	for _, path := range []string{"/other", "/path/deeper", "/"} {
-		match, status := tree.Lookup(_const.GET, path)
+		match, status := tree.Lookup(GET, path)
 
 		assert.Equal(t, StatusNotFound, status, path)
 		assert.Nil(t, match.Handler, path)
@@ -231,29 +229,29 @@ func TestLookup_UnknownPath(t *testing.T) {
 
 func TestLookup_PathRegisteredUnderAnotherMethod(t *testing.T) {
 	tree := CreateTree()
-	tree.RegisterRoute(_const.POST, "/path", handler)
+	tree.RegisterRoute(POST, "/path", handler)
 
-	match, status := tree.Lookup(_const.GET, "/path")
+	match, status := tree.Lookup(GET, "/path")
 
 	assert.Equal(t, StatusMethodNotAllowed, status)
 	assert.Nil(t, match.Handler)
-	assert.Equal(t, []string{_const.POST}, match.AllowedMethods)
+	assert.Equal(t, []Method{POST}, match.AllowedMethods)
 }
 
 func TestLookup_IntermediateNodeIsNotAnEndpoint(t *testing.T) {
 	tree := CreateTree()
-	tree.RegisterRoute(_const.GET, "/path/leaf", handler)
+	tree.RegisterRoute(GET, "/path/leaf", handler)
 
-	_, status := tree.Lookup(_const.GET, "/path")
+	_, status := tree.Lookup(GET, "/path")
 
 	assert.Equal(t, StatusNotFound, status)
 }
 
 func TestLookup_CapturesParameters(t *testing.T) {
 	tree := CreateTree()
-	tree.RegisterRoute(_const.GET, "/users/{userID}/posts/{postID}", handler)
+	tree.RegisterRoute(GET, "/users/{userID}/posts/{postID}", handler)
 
-	match, status := tree.Lookup(_const.GET, "/users/7/posts/42")
+	match, status := tree.Lookup(GET, "/users/7/posts/42")
 
 	assert.Equal(t, StatusFound, status)
 	assert.Equal(t, []Param{{Name: "userID", Value: "7"}, {Name: "postID", Value: "42"}}, match.Params)
@@ -261,10 +259,10 @@ func TestLookup_CapturesParameters(t *testing.T) {
 
 func TestLookup_FallsBackToParameterAfterStaticBranchFails(t *testing.T) {
 	tree := CreateTree()
-	tree.RegisterRoute(_const.GET, "/static/leaf", handler)
-	tree.RegisterRoute(_const.GET, "/{id}/other", handler)
+	tree.RegisterRoute(GET, "/static/leaf", handler)
+	tree.RegisterRoute(GET, "/{id}/other", handler)
 
-	match, status := tree.Lookup(_const.GET, "/static/other")
+	match, status := tree.Lookup(GET, "/static/other")
 
 	assert.Equal(t, StatusFound, status)
 	assert.Equal(t, []Param{{Name: "id", Value: "static"}}, match.Params)
@@ -272,10 +270,10 @@ func TestLookup_FallsBackToParameterAfterStaticBranchFails(t *testing.T) {
 
 func TestLookup_DiscardsValuesFromAbandonedBranches(t *testing.T) {
 	tree := CreateTree()
-	tree.RegisterRoute(_const.GET, "/{first}/dead-end/leaf", handler)
-	tree.RegisterRoute(_const.GET, "/{only}/other", handler)
+	tree.RegisterRoute(GET, "/{first}/dead-end/leaf", handler)
+	tree.RegisterRoute(GET, "/{only}/other", handler)
 
-	match, status := tree.Lookup(_const.GET, "/value/other")
+	match, status := tree.Lookup(GET, "/value/other")
 
 	assert.Equal(t, StatusFound, status)
 	assert.Equal(t, []Param{{Name: "only", Value: "value"}}, match.Params)
@@ -283,20 +281,20 @@ func TestLookup_DiscardsValuesFromAbandonedBranches(t *testing.T) {
 
 func TestLookup_AllowCollectsEveryBranchThatEndsThePath(t *testing.T) {
 	tree := CreateTree()
-	tree.RegisterRoute(_const.POST, "/a/b", handler)
-	tree.RegisterRoute(_const.PATCH, "/a/{id}", handler)
+	tree.RegisterRoute(POST, "/a/b", handler)
+	tree.RegisterRoute(PATCH, "/a/{id}", handler)
 
-	match, status := tree.Lookup(_const.GET, "/a/b")
+	match, status := tree.Lookup(GET, "/a/b")
 
 	assert.Equal(t, StatusMethodNotAllowed, status)
-	assert.Equal(t, []string{_const.PATCH, _const.POST}, match.AllowedMethods)
+	assert.Equal(t, []Method{PATCH, POST}, match.AllowedMethods)
 }
 
 func TestLookup_EmptyTree(t *testing.T) {
 	tree := CreateTree()
 
 	for _, path := range []string{"/", "", "/path"} {
-		_, status := tree.Lookup(_const.GET, path)
+		_, status := tree.Lookup(GET, path)
 
 		assert.Equal(t, StatusNotFound, status, path)
 	}
@@ -312,37 +310,37 @@ func TestTree_Merge(t *testing.T) {
 	tree := CreateTree()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 
-	tree.RegisterRoute(_const.GET, "/path/", handler)
+	tree.RegisterRoute(GET, "/path/", handler)
 
-	tree.RegisterRoute(_const.GET, "/path/test", handler)
+	tree.RegisterRoute(GET, "/path/test", handler)
 
 	tree2 := CreateTree()
 
-	tree2.RegisterRoute(_const.GET, "/pathz/", handler)
+	tree2.RegisterRoute(GET, "/pathz/", handler)
 
-	tree2.RegisterRoute(_const.GET, "/pathz/test", handler)
+	tree2.RegisterRoute(GET, "/pathz/test", handler)
 
 	tree.Merge(&tree2)
 
-	assertFound(t, &tree, _const.GET, "/pathz")
-	assertFound(t, &tree, _const.GET, "/pathz/test")
-	assertFound(t, &tree2, _const.GET, "/pathz")
-	assertFound(t, &tree2, _const.GET, "/pathz/test")
+	assertFound(t, &tree, GET, "/pathz")
+	assertFound(t, &tree, GET, "/pathz/test")
+	assertFound(t, &tree2, GET, "/pathz")
+	assertFound(t, &tree2, GET, "/pathz/test")
 }
 
 func TestTree_MergeKeepsExistingRoute(t *testing.T) {
 	target := CreateTree()
-	target.RegisterRoute(_const.GET, "/users/{id}", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	target.RegisterRoute(GET, "/users/{id}", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("target"))
 	}))
 
 	source := CreateTree()
-	source.RegisterRoute(_const.GET, "/users/{userID}", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	source.RegisterRoute(GET, "/users/{userID}", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("source"))
 	}))
 
 	target.Merge(&source)
-	matched, status := target.Lookup(_const.GET, "/users/42")
+	matched, status := target.Lookup(GET, "/users/42")
 	assert.Equal(t, StatusFound, status)
 
 	response := httptest.NewRecorder()
@@ -353,26 +351,26 @@ func TestTree_MergeKeepsExistingRoute(t *testing.T) {
 func TestTree_MergeCopiesRoutesWithoutRebuildingPaths(t *testing.T) {
 	target := CreateTree()
 	source := CreateTree()
-	source.RegisterRoute(_const.GET, "/users/{id}/posts/{postID}", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	source.RegisterRoute(GET, "/users/{id}/posts/{postID}", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("source"))
 	}))
-	source.RegisterRoute(_const.POST, "/users/{id}/posts/{postID}", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	source.RegisterRoute(POST, "/users/{id}/posts/{postID}", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("created"))
 	}))
 
 	target.Merge(&source)
-	matched, status := target.Lookup(_const.GET, "/users/42/posts/7")
+	matched, status := target.Lookup(GET, "/users/42/posts/7")
 
 	assert.Equal(t, StatusFound, status)
 	assert.Equal(t, []Param{{Name: "id", Value: "42"}, {Name: "postID", Value: "7"}}, matched.Params)
-	assertFound(t, &target, _const.POST, "/users/42/posts/7")
+	assertFound(t, &target, POST, "/users/42/posts/7")
 }
 
 func TestTree_MergeWithItselfIsNoOp(t *testing.T) {
 	tree := CreateTree()
-	tree.RegisterRoute(_const.GET, "/health", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
+	tree.RegisterRoute(GET, "/health", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
 
 	tree.Merge(&tree)
 
-	assertFound(t, &tree, _const.GET, "/health")
+	assertFound(t, &tree, GET, "/health")
 }

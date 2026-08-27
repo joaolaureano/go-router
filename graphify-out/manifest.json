@@ -17,12 +17,6 @@
     "ast_hash": "eec742ddd3bf428c123b3ffc46875f1a",
     "semantic_hash": ""
   },
-  "const/const.go": {
-    "mtime": 1787796509.46484,
-    "seen": 1787796660.369447,
-    "ast_hash": "1c06d0166bc7a0bc0da7c62748daf6f6",
-    "semantic_hash": "1c06d0166bc7a0bc0da7c62748daf6f6"
-  },
   "go.mod": {
     "mtime": 1787796509.464945,
     "seen": 1787796660.369448,
@@ -30,9 +24,9 @@
     "semantic_hash": "e16c16d7005090c6ec9fe44639bc12f3"
   },
   "gorouter.go": {
-    "mtime": 1787803892.4669218,
-    "seen": 1787803904.798503,
-    "ast_hash": "a28c9d5b7c4f446baaa8a8175d82f5f5",
+    "mtime": 1787805626.2218184,
+    "seen": 1787805649.179153,
+    "ast_hash": "5ef8dc0a7d8339a428c1df7ecb1cf3a6",
     "semantic_hash": ""
   },
   "router/context/context.go": {
@@ -48,51 +42,57 @@
     "semantic_hash": ""
   },
   "router/router.go": {
-    "mtime": 1787805395.4694352,
-    "seen": 1787805404.841434,
-    "ast_hash": "1fe2c69edba7fd39790dc19f4961d523",
+    "mtime": 1787805626.2212303,
+    "seen": 1787805649.179156,
+    "ast_hash": "0dfe1ffe6731639581236a1b5b190470",
     "semantic_hash": ""
   },
   "router/router_test.go": {
-    "mtime": 1787805117.743718,
-    "seen": 1787805358.398112,
-    "ast_hash": "4b4e788c8913becb677e86411c009d72",
+    "mtime": 1787805626.2215042,
+    "seen": 1787805649.179157,
+    "ast_hash": "e5fd70d0a329efb318a650233bb039fe",
     "semantic_hash": ""
   },
   "tree/tree.go": {
-    "mtime": 1787805505.4184437,
-    "seen": 1787805536.505455,
-    "ast_hash": "4112b784bcc303694e05c61e350bcf2b",
+    "mtime": 1787805605.1811411,
+    "seen": 1787805649.179161,
+    "ast_hash": "cb998a91c742627ea4490ac94d191b35",
     "semantic_hash": ""
   },
   "tree/tree_test.go": {
-    "mtime": 1787805517.612906,
-    "seen": 1787805536.5054562,
-    "ast_hash": "b1c386e85548e20988486acf1912c452",
+    "mtime": 1787805610.9096735,
+    "seen": 1787805649.179161,
+    "ast_hash": "689415ae672523520fbfe3b65be33ea7",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1787796509.4642422,
-    "seen": 1787797727.441122,
-    "ast_hash": "5d35fa2241fdf8af9def8af2cf51dd2a",
+    "mtime": 1787805641.3145747,
+    "seen": 1787805649.179162,
+    "ast_hash": "1fa26bc49cade7181415d828aade8c24",
     "semantic_hash": ""
   },
   "README.pt-PT.md": {
-    "mtime": 1787796509.4643693,
-    "seen": 1787797727.441123,
-    "ast_hash": "920ec6a65b54fce86409e958a9aad15a",
+    "mtime": 1787805641.3148384,
+    "seen": 1787805649.179163,
+    "ast_hash": "9456d3b10f0c419fadb282956ac9c92e",
     "semantic_hash": ""
   },
   "tree/node.go": {
-    "mtime": 1787805494.4907596,
-    "seen": 1787805536.505453,
-    "ast_hash": "ffabee7f49eade11b8ee7d4bfe01f667",
+    "mtime": 1787805605.1809158,
+    "seen": 1787805649.179159,
+    "ast_hash": "4294fb58523da1ed424b82b34d3a0696",
     "semantic_hash": ""
   },
   "tree/node_test.go": {
-    "mtime": 1787805524.4735196,
-    "seen": 1787805536.505454,
-    "ast_hash": "837854706d585ab751edf1fbf3697208",
+    "mtime": 1787805591.4653618,
+    "seen": 1787805649.17916,
+    "ast_hash": "4f192516e8bb46d9b033bb559b9da985",
+    "semantic_hash": ""
+  },
+  "tree/method.go": {
+    "mtime": 1787805591.4108942,
+    "seen": 1787805649.179158,
+    "ast_hash": "63730ab7cdcceb0d9cb86c160c2460f6",
     "semantic_hash": ""
   }
 }
