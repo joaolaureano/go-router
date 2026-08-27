@@ -118,11 +118,7 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		// request costs an allocation, so only routes that captured something
 		// pay for the context.
 		if len(match.Params) > 0 {
-			routerCtx := context.NewContext()
-			for _, param := range match.Params {
-				routerCtx.Set(param.Name, param.Value)
-			}
-			r = routerCtx.WithRequest(r)
+			r = context.FromParams(match.Params).WithRequest(r)
 		}
 		match.Handler.ServeHTTP(w, r)
 	case tree.StatusMethodNotAllowed:
