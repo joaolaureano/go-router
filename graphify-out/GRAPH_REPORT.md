@@ -1,16 +1,16 @@
 # Graph Report - go-router  (2026-08-27)
 
 ## Corpus Check
-- 19 files · ~10,763 words
+- 19 files · ~11,051 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 262 nodes · 615 edges · 34 communities (11 shown, 23 thin omitted)
-- Extraction: 83% EXTRACTED · 17% INFERRED · 0% AMBIGUOUS · INFERRED: 107 edges (avg confidence: 0.85)
+- 265 nodes · 617 edges · 35 communities (11 shown, 24 thin omitted)
+- Extraction: 82% EXTRACTED · 18% INFERRED · 0% AMBIGUOUS · INFERRED: 108 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `0f5bf36f`
+- Built from commit: `3e1f28fa`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -32,7 +32,7 @@
 - github.com/joaolaureano/go-router/tree.RouterTree
 - Go-Router
 - github.com/joaolaureano/go-router/router.Router
-- routing.go
+- E
 - E
 - node
 - E
@@ -44,38 +44,39 @@
 - github.com/joaolaureano/go-router/tree.Param
 - Method
 - segmentKind
+- Param
 - E
 - tree.Param
 - Method
 
 ## God Nodes (most connected - your core abstractions)
-1. `NewRouter()` - 54 edges
+1. `NewRouter()` - 55 edges
 2. `CreateTree()` - 38 edges
 3. `Router` - 24 edges
-4. `node` - 19 edges
+4. `node` - 20 edges
 5. `Param()` - 13 edges
-6. `state` - 13 edges
-7. `assertFound()` - 11 edges
-8. `setup()` - 11 edges
+6. `state` - 12 edges
+7. `setup()` - 11 edges
+8. `assertFound()` - 11 edges
 9. `FromRequest()` - 11 edges
 10. `node[E]` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Router` --references--> `Middleware`  [EXTRACTED]
   router/router.go → chain/chain.go
-- `NewPrefixRouter()` --calls--> `NewPrefixRouter()`  [EXTRACTED]
-  gorouter.go → router/router.go
 - `NewRouter()` --calls--> `NewRouter()`  [EXTRACTED]
+  gorouter.go → router/router.go
+- `NewPrefixRouter()` --calls--> `NewPrefixRouter()`  [EXTRACTED]
   gorouter.go → router/router.go
 - `NewPrefixRouter()` --calls--> `CreateTree()`  [EXTRACTED]
   router/router.go → routing/routing.go
-- `TestParam()` --calls--> `Param()`  [INFERRED]
-  router/context/context_test.go → router/context/context.go
+- `TestNewRouterWithPrefix()` --calls--> `NewPrefixRouter()`  [INFERRED]
+  router/router_test.go → router/router.go
 
 ## Import Cycles
 - None detected.
 
-## Communities (34 total, 23 thin omitted)
+## Communities (35 total, 24 thin omitted)
 
 ### Community 0 - "routing_test.go"
 Cohesion: 0.10
@@ -86,12 +87,12 @@ Cohesion: 0.10
 Nodes (58): net/http/httptest.Server, testing.T, Param(), NewRouter(), setup(), TestNewRouter(), TestNewRouterWithPrefix(), TestRouter_AnswersOptionsAutomatically() (+50 more)
 
 ### Community 3 - "FromRequest"
-Cohesion: 0.22
-Nodes (13): contextKey, RouterContext, FromParams(), FromRequest(), NewContext(), setup(), TestContext_InvalidKey(), TestContext_SetOverwritesExistingKey() (+5 more)
+Cohesion: 0.19
+Nodes (14): contextKey, RouterContext, net/http.Request, FromParams(), FromRequest(), NewContext(), setup(), TestContext_InvalidKey() (+6 more)
 
 ### Community 6 - "Router"
 Cohesion: 0.11
-Nodes (17): net/http.HandlerFunc, net/http.Request, net/http.ResponseWriter, sync/atomic.Bool, sync/atomic.Pointer, sync.Mutex, Router, advertisedMethods() (+9 more)
+Nodes (16): net/http.HandlerFunc, net/http.ResponseWriter, sync/atomic.Bool, sync/atomic.Pointer, sync.Mutex, Router, advertisedMethods(), defaultMethodNotAllowed() (+8 more)
 
 ### Community 7 - "Repository"
 Cohesion: 0.39
@@ -101,13 +102,13 @@ Nodes (3): Article, Repository, New()
 Cohesion: 0.12
 Nodes (13): Chain, Middleware, NewChain(), TestChain_MiddlewareRunsInRegistrationOrder(), TestChain_MultipleMiddleware(), TestChain_NoMiddleware(), TestChain_SingleMiddleware(), TestNewChain() (+5 more)
 
-### Community 17 - "routing.go"
+### Community 17 - "E"
 Cohesion: 0.20
 Nodes (15): Match, Param, classify(), E, Method, isParam(), nameParams(), splitSegments() (+7 more)
 
 ### Community 20 - "node"
 Cohesion: 0.24
-Nodes (13): E, Method, Param, endpoint, lookup, node, cloneEndpoint(), cloneNode() (+5 more)
+Nodes (13): endpoint, lookup, node, cloneEndpoint(), cloneNode(), node[E], E, Method (+5 more)
 
 ### Community 23 - "node_test.go"
 Cohesion: 0.40
@@ -116,19 +117,19 @@ Nodes (4): TestNewNodeInitializesInvariantState(), TestNodeAddChildRejectsNil(),
 ## Knowledge Gaps
 - **4 isolated node(s):** `Install`, `Instalação`, `contextKey`, `github.com/joaolaureano/go-router`
   These have ≤1 connection - possible missing edges or undocumented components.
-- **23 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **24 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Router` connect `Router` to `testing.T`, `Chain`?**
+- **Why does `CreateTree()` connect `routing_test.go` to `E`, `Router`?**
   _High betweenness centrality (0.163) - this node is a cross-community bridge._
-- **Why does `CreateTree()` connect `routing_test.go` to `routing.go`, `Router`?**
-  _High betweenness centrality (0.146) - this node is a cross-community bridge._
-- **Why does `Tree` connect `routing.go` to `routing_test.go`, `node`?**
+- **Why does `Router` connect `Router` to `testing.T`, `Chain`?**
   _High betweenness centrality (0.143) - this node is a cross-community bridge._
-- **Are the 51 inferred relationships involving `NewRouter()` (e.g. with `TestNewRouter()` and `TestRouter_AnswersOptionsAutomatically()`) actually correct?**
-  _`NewRouter()` has 51 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `Tree` connect `E` to `routing_test.go`, `node`?**
+  _High betweenness centrality (0.143) - this node is a cross-community bridge._
+- **Are the 52 inferred relationships involving `NewRouter()` (e.g. with `TestNewRouter()` and `TestRouter_AnswersOptionsAutomatically()`) actually correct?**
+  _`NewRouter()` has 52 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 34 inferred relationships involving `CreateTree()` (e.g. with `TestCreateTree()` and `TestLookup()`) actually correct?**
   _`CreateTree()` has 34 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `Install`, `Instalação`, `contextKey` to the rest of the system?**

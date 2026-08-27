@@ -58,26 +58,20 @@ func NewPrefixRouter(prefix string) *Router {
 	}
 }
 
-// requestSegments splits the request path and decodes each segment on its own.
+// decodeSegment undoes percent-escaping on one path segment.
 //
-// URL.Path is the whole path already decoded, which is too late: a %2F a client
-// escaped precisely so that it would stay inside one segment has become a
-// separator by then, and no route variable could ever hold a slash. Splitting
-// the escaped form first and decoding after keeps the boundary where the client
-// put it.
-func requestSegments(r *http.Request) []string {
-	segments := routing.SplitPath(r.URL.EscapedPath())
-	for i, segment := range segments {
-		decoded, err := url.PathUnescape(segment)
-		if err != nil {
-			// Malformed escaping is not something to guess at; matching the
-			// segment literally simply fails to route, which is the honest
-			// outcome.
-			continue
-		}
-		segments[i] = decoded
+// It is applied per segment rather than to the whole path because URL.Path --
+// the path already decoded -- comes too late: a %2F a client escaped precisely
+// so it would stay inside one segment has become a separator by then, and no
+// route variable could ever hold a slash.
+func decodeSegment(segment string) string {
+	decoded, err := url.PathUnescape(segment)
+	if err != nil {
+		// Malformed escaping is not something to guess at; matching the segment
+		// literally simply fails to route, which is the honest outcome.
+		return segment
 	}
-	return segments
+	return decoded
 }
 
 func defaultMethodNotAllowed(w http.ResponseWriter, r *http.Request) {
@@ -86,16 +80,23 @@ func defaultMethodNotAllowed(w http.ResponseWriter, r *http.Request) {
 
 func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	httpMethod := routing.Method(r.Method)
-	segments := requestSegments(r)
+
+	// Walking the escaped path directly keeps an ordinary request allocation
+	// free; only one carrying an escape pays to have its segments decoded.
+	path := r.URL.EscapedPath()
+	var decode func(string) string
+	if strings.IndexByte(path, '%') >= 0 {
+		decode = decodeSegment
+	}
 
 	// Atomic loads and no lock: see the comment on state.
 	router.state.markServed()
 	tree := router.state.tree.Load()
-	match, status := tree.LookupSegments(httpMethod, segments)
+	match, status := tree.LookupDecoded(httpMethod, path, decode)
 	// RFC 9110: HEAD is GET without content, and net/http already suppresses
 	// the body, so a GET route answers HEAD unless one was registered for it.
 	if status != routing.StatusFound && httpMethod == HEAD {
-		if getMatch, getStatus := tree.LookupSegments(GET, segments); getStatus == routing.StatusFound {
+		if getMatch, getStatus := tree.LookupDecoded(GET, path, decode); getStatus == routing.StatusFound {
 			match, status = getMatch, getStatus
 		}
 	}

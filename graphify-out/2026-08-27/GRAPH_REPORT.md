@@ -1,16 +1,16 @@
 # Graph Report - go-router  (2026-08-27)
 
 ## Corpus Check
-- 19 files · ~10,657 words
+- 19 files · ~10,763 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 260 nodes · 612 edges · 34 communities (11 shown, 23 thin omitted)
+- 262 nodes · 615 edges · 34 communities (11 shown, 23 thin omitted)
 - Extraction: 83% EXTRACTED · 17% INFERRED · 0% AMBIGUOUS · INFERRED: 107 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `3ff710fc`
+- Built from commit: `0f5bf36f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -69,8 +69,8 @@
   gorouter.go → router/router.go
 - `NewPrefixRouter()` --calls--> `CreateTree()`  [EXTRACTED]
   router/router.go → routing/routing.go
-- `requestSegments()` --calls--> `SplitPath()`  [EXTRACTED]
-  router/router.go → routing/routing.go
+- `TestParam()` --calls--> `Param()`  [INFERRED]
+  router/context/context_test.go → router/context/context.go
 
 ## Import Cycles
 - None detected.
@@ -83,15 +83,15 @@ Nodes (39): CreateTree(), assertFound(), assertPanicsWith(), Method, TestCreateT
 
 ### Community 2 - "testing.T"
 Cohesion: 0.10
-Nodes (57): net/http/httptest.Server, testing.T, Param(), NewRouter(), setup(), TestNewRouter(), TestNewRouterWithPrefix(), TestRouter_AnswersOptionsAutomatically() (+49 more)
+Nodes (58): net/http/httptest.Server, testing.T, Param(), NewRouter(), setup(), TestNewRouter(), TestNewRouterWithPrefix(), TestRouter_AnswersOptionsAutomatically() (+50 more)
 
 ### Community 3 - "FromRequest"
-Cohesion: 0.14
-Nodes (20): contextKey, RouterContext, net/http.Request, net/http.ResponseWriter, FromParams(), FromRequest(), NewContext(), setup() (+12 more)
+Cohesion: 0.22
+Nodes (13): contextKey, RouterContext, FromParams(), FromRequest(), NewContext(), setup(), TestContext_InvalidKey(), TestContext_SetOverwritesExistingKey() (+5 more)
 
 ### Community 6 - "Router"
-Cohesion: 0.15
-Nodes (11): net/http.HandlerFunc, sync/atomic.Bool, sync/atomic.Pointer, sync.Mutex, Router, Method, NewPrefixRouter(), TestRouter_WithPreservesPrefix() (+3 more)
+Cohesion: 0.11
+Nodes (17): net/http.HandlerFunc, net/http.Request, net/http.ResponseWriter, sync/atomic.Bool, sync/atomic.Pointer, sync.Mutex, Router, advertisedMethods() (+9 more)
 
 ### Community 7 - "Repository"
 Cohesion: 0.39
@@ -106,8 +106,8 @@ Cohesion: 0.20
 Nodes (15): Match, Param, classify(), E, Method, isParam(), nameParams(), splitSegments() (+7 more)
 
 ### Community 20 - "node"
-Cohesion: 0.27
-Nodes (12): endpoint, lookup, node, cloneEndpoint(), cloneNode(), node[E], E, Method (+4 more)
+Cohesion: 0.24
+Nodes (13): E, Method, Param, endpoint, lookup, node, cloneEndpoint(), cloneNode() (+5 more)
 
 ### Community 23 - "node_test.go"
 Cohesion: 0.40
@@ -121,12 +121,12 @@ Nodes (4): TestNewNodeInitializesInvariantState(), TestNodeAddChildRejectsNil(),
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Router` connect `Router` to `FromRequest`, `testing.T`, `Chain`?**
-  _High betweenness centrality (0.164) - this node is a cross-community bridge._
+- **Why does `Router` connect `Router` to `testing.T`, `Chain`?**
+  _High betweenness centrality (0.163) - this node is a cross-community bridge._
 - **Why does `CreateTree()` connect `routing_test.go` to `routing.go`, `Router`?**
-  _High betweenness centrality (0.143) - this node is a cross-community bridge._
+  _High betweenness centrality (0.146) - this node is a cross-community bridge._
 - **Why does `Tree` connect `routing.go` to `routing_test.go`, `node`?**
-  _High betweenness centrality (0.129) - this node is a cross-community bridge._
+  _High betweenness centrality (0.143) - this node is a cross-community bridge._
 - **Are the 51 inferred relationships involving `NewRouter()` (e.g. with `TestNewRouter()` and `TestRouter_AnswersOptionsAutomatically()`) actually correct?**
   _`NewRouter()` has 51 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 34 inferred relationships involving `CreateTree()` (e.g. with `TestCreateTree()` and `TestLookup()`) actually correct?**

@@ -102,17 +102,19 @@ func (t *Tree[E]) ensurePath(path string) (*node[E], []string) {
 	return currNode, variableNames
 }
 
-// Lookup resolves a path against the tree in a single walk.
+// Lookup resolves a path against the tree in a single walk, allocating nothing
+// unless the route captures variables.
 func (t *Tree[E]) Lookup(httpMethod Method, path string) (Match[E], Status) {
-	return t.LookupSegments(httpMethod, splitSegments(path))
+	return t.LookupDecoded(httpMethod, path, nil)
 }
 
-// LookupSegments is Lookup for a caller that has already split the path, which
-// is what one has to do to transform segments first -- decoding percent escapes
-// being the reason that exists.
-func (t *Tree[E]) LookupSegments(httpMethod Method, segments []string) (Match[E], Status) {
-	search := lookup{httpMethod: httpMethod}
-	matched := t.root.match(segments, 0, &search)
+// LookupDecoded is Lookup for a path whose segments still need transforming --
+// percent-decoding being the reason it exists. decode runs on each segment as
+// the walk reaches it, so nothing has to be materialised up front and a path
+// with nothing to decode passes nil and pays nothing.
+func (t *Tree[E]) LookupDecoded(httpMethod Method, path string, decode func(string) string) (Match[E], Status) {
+	search := lookup{httpMethod: httpMethod, decode: decode}
+	matched := t.root.match(strings.Trim(path, "/"), &search)
 	if matched == nil {
 		if allowed := search.allowedMethods(); allowed != nil {
 			return Match[E]{AllowedMethods: allowed}, StatusMethodNotAllowed
@@ -169,19 +171,14 @@ func (t *Tree[E]) MergeAt(prefix string, source *Tree[E]) {
 	mergeNodes(target, source.root, prefixVariables)
 }
 
-// splitSegments breaks a path into the segments the tree is keyed by.
-// Registration and lookup have to agree on this normalisation, otherwise a
-// route can be stored under a shape that no request will ever reach.
+// splitSegments breaks a path into the segments the tree is keyed by. Only
+// registration uses it: a lookup walks the path with a cursor instead, since
+// materialising the segments is the one allocation a static route would
+// otherwise pay. Both sides have to agree on this normalisation, or a route
+// gets stored under a shape no request will ever reach.
 //
 // The root carries no segments, so it needs no special case on either side:
 // an empty segment list simply leaves the walk standing on the root node.
-// SplitPath breaks a path into the segments the tree is keyed by. A caller that
-// must transform segments before matching them splits with this and then calls
-// LookupSegments, so that both sides stay on one normalisation.
-func SplitPath(path string) []string {
-	return splitSegments(path)
-}
-
 func splitSegments(path string) []string {
 	trimmed := strings.Trim(path, "/")
 	if trimmed == "" {

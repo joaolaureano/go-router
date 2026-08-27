@@ -116,7 +116,21 @@ type lookup struct {
 	// slice of values and a second one to pair it with.
 	params []Param
 
+	// decode transforms each segment as the walk reaches it, or is nil when the
+	// path needs nothing done to it -- which is the usual case, and the reason
+	// the walk can run straight off the request path without splitting it.
+	decode func(string) string
+
 	allowed map[Method]struct{}
+}
+
+// splitFirst peels the leading segment off a path, returning it and whatever
+// follows the separator. A path with no separator left is its own last segment.
+func splitFirst(path string) (segment, rest string) {
+	if separator := strings.IndexByte(path, '/'); separator >= 0 {
+		return path[:separator], path[separator+1:]
+	}
+	return path, ""
 }
 
 // typicalCaptureCount sizes the slice on first capture. Growing from nothing
@@ -133,6 +147,12 @@ func (search *lookup) capture(value string) {
 		search.params = make([]Param, 0, typicalCaptureCount)
 	}
 	search.params = append(search.params, Param{Value: value})
+}
+
+// uncapture drops the value a branch recorded before it turned out not to
+// match, so only the surviving route's variables remain.
+func (search *lookup) uncapture() {
+	search.params = search.params[:len(search.params)-1]
 }
 
 // allowedMethods returns the recorded methods sorted, so that a caller
@@ -161,51 +181,67 @@ func (n *node[E]) recordAllowed(search *lookup) {
 	}
 }
 
-// match walks the remaining segments, preferring the static child, then the
+// match walks what is left of the path, preferring the static child, then the
 // parameter branch, and only then the catch-all, and returns the first node
 // answering the method being searched for.
 //
-// The catch-all is also tried once the path runs out, so that "/files/*" covers
+// It reads the path with a cursor rather than a list of segments, so an
+// ordinary lookup allocates nothing at all. An empty path means the walk has
+// arrived: the caller trims the separators off the ends, so only the root
+// reaches this with nothing left on the first call.
+//
+// The catch-all is tried once the path runs out too, so that "/files/*" covers
 // "/files" itself with an empty remainder.
-func (n *node[E]) match(paths []string, index int, search *lookup) *node[E] {
-	if index == len(paths) {
+func (n *node[E]) match(path string, search *lookup) *node[E] {
+	if path == "" {
 		if n.hasMethod(search.httpMethod) {
 			return n
 		}
 		n.recordAllowed(search)
-		return n.matchWildcard(paths, index, search)
+		return n.matchWildcard(path, search)
 	}
 
-	if child := n.staticChild(paths[index]); child != nil {
-		if matched := child.match(paths, index+1, search); matched != nil {
+	segment, rest := splitFirst(path)
+	if search.decode != nil {
+		segment = search.decode(segment)
+	}
+
+	if child := n.staticChild(segment); child != nil {
+		if matched := child.match(rest, search); matched != nil {
 			return matched
 		}
 	}
 
 	if n.parameter != nil {
-		search.capture(paths[index])
-		if matched := n.parameter.match(paths, index+1, search); matched != nil {
+		search.capture(segment)
+		if matched := n.parameter.match(rest, search); matched != nil {
 			return matched
 		}
-		search.params = search.params[:len(search.params)-1]
+		search.uncapture()
 	}
 
-	return n.matchWildcard(paths, index, search)
+	return n.matchWildcard(path, search)
 }
 
 // matchWildcard consumes whatever is left of the path in one value. A catch-all
-// node is always terminal, so there is nothing further to walk.
-func (n *node[E]) matchWildcard(paths []string, index int, search *lookup) *node[E] {
+// node is always terminal, so there is nothing further to walk -- and since the
+// remainder is a slice of the path already, taking it costs nothing.
+func (n *node[E]) matchWildcard(path string, search *lookup) *node[E] {
 	if n.wildcard == nil {
 		return nil
 	}
 
-	search.capture(strings.Join(paths[index:], "/"))
+	remainder := path
+	if search.decode != nil {
+		remainder = search.decode(remainder)
+	}
+
+	search.capture(remainder)
 	if n.wildcard.hasMethod(search.httpMethod) {
 		return n.wildcard
 	}
 	n.wildcard.recordAllowed(search)
-	search.params = search.params[:len(search.params)-1]
+	search.uncapture()
 	return nil
 }
 

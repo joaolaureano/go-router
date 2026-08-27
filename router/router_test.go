@@ -735,6 +735,19 @@ func TestRouter_MountWhileServing(t *testing.T) {
 	assert.Equal(t, "ok", response.Body.String())
 }
 
+func TestRouter_StaticRouteAllocatesNothing(t *testing.T) {
+	r := NewRouter()
+	r.Get("/api/v1/users/list", func(w http.ResponseWriter, r *http.Request) {})
+	request := httptest.NewRequest(http.MethodGet, "/api/v1/users/list", nil)
+	response := httptest.NewRecorder()
+
+	allocations := testing.AllocsPerRun(200, func() {
+		r.ServeHTTP(response, request)
+	})
+
+	assert.Zero(t, allocations, "a route with no variables should not allocate on the way to its handler")
+}
+
 func TestRouter_RegisterPathWithQueryString(t *testing.T) {
 	r := NewRouter()
 	r.Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {
