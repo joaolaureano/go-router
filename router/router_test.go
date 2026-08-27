@@ -322,6 +322,30 @@ func TestRouter_GroupAcceptsMiddlewareAfterSiblingRoute(t *testing.T) {
 	})
 }
 
+func TestRouter_GroupNotFoundReachesServingRouter(t *testing.T) {
+	r := NewRouter()
+	r.Group("/group", func(subrouter Router) {
+		subrouter.NotFound(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusNotFound)
+			w.Write([]byte("custom"))
+		})
+		subrouter.Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {})
+	})
+
+	request := httptest.NewRequest(http.MethodGet, "/group/missing", nil)
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, request)
+
+	assert.Equal(t, http.StatusNotFound, response.Code)
+	assert.Equal(t, "custom", response.Body.String())
+}
+
+func TestRouter_NotFoundNilHandler(t *testing.T) {
+	r := NewRouter()
+
+	assert.PanicsWithValue(t, "handler must not be nil", func() { r.NotFound(nil) })
+}
+
 func TestRouter_RegisterPathWithQueryString(t *testing.T) {
 	r := NewRouter()
 	r.Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {

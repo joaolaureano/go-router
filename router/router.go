@@ -17,7 +17,9 @@ type Router struct {
 
 	chain chain.Middleware
 
-	notFound http.HandlerFunc
+	// notFound is shared by reference across the router family, like root and
+	// mu, so a handler installed on a group reaches the router that serves.
+	notFound *http.HandlerFunc
 
 	prefix string
 
@@ -26,22 +28,24 @@ type Router struct {
 
 func NewRouter() *Router {
 	tree := tree.CreateTree()
+	notFound := http.HandlerFunc(http.NotFound)
 
 	return &Router{
 		root:     &tree,
 		chain:    &chain.Chain{},
-		notFound: http.NotFound,
+		notFound: &notFound,
 		mu:       &sync.RWMutex{},
 	}
 }
 
 func NewPrefixRouter(prefix string) *Router {
 	tree := tree.CreateTree()
+	notFound := http.HandlerFunc(http.NotFound)
 
 	return &Router{
 		root:     &tree,
 		chain:    &chain.Chain{},
-		notFound: http.NotFound,
+		notFound: &notFound,
 		prefix:   prefix,
 		mu:       &sync.RWMutex{},
 	}
@@ -61,7 +65,7 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	} else if pathNode := router.root.FindPath(uri); pathNode != nil {
 		allowedMethods = pathNode.AllowedMethods()
 	}
-	notFound := router.notFound
+	notFound := *router.notFound
 	router.mu.RUnlock()
 	if routeHandler != nil {
 		routeHandler.ServeHTTP(w, r)
@@ -97,23 +101,25 @@ func (router *Router) Use(middleware func(http.Handler) http.Handler) {
 }
 
 func (router *Router) NotFound(notFoundFn http.HandlerFunc) {
+	if notFoundFn == nil {
+		panic("handler must not be nil")
+	}
 	router.mu.Lock()
 	defer router.mu.Unlock()
-	router.notFound = notFoundFn
+	*router.notFound = notFoundFn
 }
 
 func (router *Router) Group(prefix string, fn func(r Router)) Router {
 	router.mu.RLock()
 	middlewares := append([]func(http.Handler) http.Handler(nil), router.chain.Middlewares()...)
 	fullPrefix := router.prefix + prefix
-	notFound := router.notFound
 	mu := router.mu
 	router.mu.RUnlock()
 	chain := chain.NewChain(middlewares...)
 	subrouter := &Router{
 		root:     router.root,
 		chain:    chain,
-		notFound: notFound,
+		notFound: router.notFound,
 		prefix:   fullPrefix,
 		mu:       mu,
 	}

@@ -60,15 +60,15 @@
     "semantic_hash": ""
   },
   "tree/tree.go": {
-    "mtime": 1787803950.1965547,
-    "seen": 1787803984.316406,
-    "ast_hash": "54a2df03b46338c2f09c6fc51370eef2",
+    "mtime": 1787804299.2428071,
+    "seen": 1787804322.895932,
+    "ast_hash": "105a6dc84bff9846ccca02206223279d",
     "semantic_hash": ""
   },
   "tree/tree_test.go": {
-    "mtime": 1787804190.8903284,
-    "seen": 1787804197.918294,
-    "ast_hash": "bf09a93facf9e8327366c0616fae74e4",
+    "mtime": 1787804315.9613414,
+    "seen": 1787804322.895933,
+    "ast_hash": "7ad23f54d2f7dd4cec382811353816d4",
     "semantic_hash": ""
   },
   "README.md": {
