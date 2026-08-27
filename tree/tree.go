@@ -160,50 +160,71 @@ func matchPath(node *Node, paths []string, index int, values []string) (*Node, [
 }
 
 func (t *Tree) Merge(tree RouterTree) {
-	type entry struct {
-		node *Node
-		path string
+	sourceRoot := tree.Root()
+	if t.root == sourceRoot {
+		return
 	}
-	root := tree.Root()
-	stack := []entry{{node: root, path: "/"}}
-	for len(stack) > 0 {
-		currentEntry := stack[len(stack)-1]
-		stack = stack[:len(stack)-1]
-		current := currentEntry.node
-		for httpMethod, method := range current.Method {
-			t.RegisterRoute(httpMethod, namedPath(currentEntry.path, method.variableName), method.Handler)
-		}
-		for _, child := range current.children {
-			childPath := currentEntry.path + "/" + child.path
-			if currentEntry.path == "/" {
-				childPath = "/" + child.path
-			}
-			childPath = strings.TrimRight(childPath, "/")
-			stack = append(stack, entry{node: child, path: childPath})
-		}
-		if current.parameter != nil {
-			childPath := currentEntry.path + "/" + current.parameter.path
-			if currentEntry.path == "/" {
-				childPath = "/" + current.parameter.path
-			}
-			stack = append(stack, entry{node: current.parameter, path: strings.TrimRight(childPath, "/")})
-		}
-	}
+	mergeNodes(t.root, sourceRoot)
 }
 
-func namedPath(path string, variableNames []string) string {
-	if path == "/" {
-		return path
-	}
-	parts := strings.Split(strings.Trim(path, "/"), "/")
-	variableIndex := 0
-	for i, part := range parts {
-		if part == "{*}" && variableIndex < len(variableNames) {
-			parts[i] = "{" + variableNames[variableIndex] + "}"
-			variableIndex++
+func mergeNodes(target, source *Node) {
+	for httpMethod, method := range source.Method {
+		if _, exists := target.Method[httpMethod]; !exists {
+			target.Method[httpMethod] = cloneMethod(method)
 		}
 	}
-	return "/" + strings.Join(parts, "/")
+
+	for _, sourceChild := range source.children {
+		targetChild := staticChild(target, sourceChild.path)
+		if targetChild == nil {
+			target.children = append(target.children, cloneNode(sourceChild))
+			continue
+		}
+		mergeNodes(targetChild, sourceChild)
+	}
+
+	if source.parameter == nil {
+		return
+	}
+	if target.parameter == nil {
+		target.parameter = cloneNode(source.parameter)
+		return
+	}
+	mergeNodes(target.parameter, source.parameter)
+}
+
+func staticChild(node *Node, path string) *Node {
+	for _, child := range node.children {
+		if child.path == path {
+			return child
+		}
+	}
+	return nil
+}
+
+func cloneNode(source *Node) *Node {
+	clone := &Node{
+		path:     source.path,
+		children: make([]*Node, 0, len(source.children)),
+		Method:   make(map[_const.HTTPMethods]Method, len(source.Method)),
+	}
+	for httpMethod, method := range source.Method {
+		clone.Method[httpMethod] = cloneMethod(method)
+	}
+	for _, child := range source.children {
+		clone.children = append(clone.children, cloneNode(child))
+	}
+	if source.parameter != nil {
+		clone.parameter = cloneNode(source.parameter)
+	}
+	return clone
+}
+
+func cloneMethod(method Method) Method {
+	return Method{
+		Handler:      method.Handler,
+		variableName: append([]string(nil), method.variableName...),
+	}
 }
 
 func (t *Tree) Root() *Node {

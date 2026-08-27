@@ -2,6 +2,7 @@ package tree
 
 import (
 	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	_const "github.com/joaolaureano/go-router/const"
@@ -306,4 +307,53 @@ func TestTree_Merge(t *testing.T) {
 	assert.NotNil(t, tree.FindRoute(&context.RouterContext{}, _const.GET, "/pathz/test"))
 	assert.NotNil(t, tree2.FindRoute(&context.RouterContext{}, _const.GET, "/pathz"))
 	assert.NotNil(t, tree2.FindRoute(&context.RouterContext{}, _const.GET, "/pathz/test"))
+}
+
+func TestTree_MergeKeepsExistingRoute(t *testing.T) {
+	target := CreateTree()
+	target.RegisterRoute(_const.GET, "/users/{id}", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("target"))
+	}))
+
+	source := CreateTree()
+	source.RegisterRoute(_const.GET, "/users/{userID}", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("source"))
+	}))
+
+	target.Merge(&source)
+	matched := target.FindRoute(context.NewContext(), _const.GET, "/users/42")
+	assert.NotNil(t, matched)
+
+	response := httptest.NewRecorder()
+	matched.Method[_const.GET].Handler.ServeHTTP(response, httptest.NewRequest(http.MethodGet, "/users/42", nil))
+	assert.Equal(t, "target", response.Body.String())
+}
+
+func TestTree_MergeCopiesRoutesWithoutRebuildingPaths(t *testing.T) {
+	target := CreateTree()
+	source := CreateTree()
+	source.RegisterRoute(_const.GET, "/users/{id}/posts/{postID}", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("source"))
+	}))
+	source.RegisterRoute(_const.POST, "/users/{id}/posts/{postID}", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("created"))
+	}))
+
+	target.Merge(&source)
+	ctx := context.NewContext()
+	matched := target.FindRoute(ctx, _const.GET, "/users/42/posts/7")
+
+	assert.NotNil(t, matched)
+	assert.Equal(t, "42", ctx.Value("id"))
+	assert.Equal(t, "7", ctx.Value("postID"))
+	assert.NotNil(t, target.FindRoute(context.NewContext(), _const.POST, "/users/42/posts/7"))
+}
+
+func TestTree_MergeWithItselfIsNoOp(t *testing.T) {
+	tree := CreateTree()
+	tree.RegisterRoute(_const.GET, "/health", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
+
+	tree.Merge(&tree)
+
+	assert.NotNil(t, tree.FindRoute(context.NewContext(), _const.GET, "/health"))
 }

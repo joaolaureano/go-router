@@ -60,9 +60,9 @@
     "semantic_hash": ""
   },
   "tree/tree.go": {
-    "mtime": 1787801685.2397208,
-    "seen": 1787801716.2388139,
-    "ast_hash": "1a7605478951b242486d72e9f523b921",
+    "mtime": 1787801953.0240352,
+    "seen": 1787802061.531887,
+    "ast_hash": "a7eebdd0fd207eb4ed4f97ac26930606",
     "semantic_hash": ""
   },
   "tree/tree_test.go": {

@@ -1,7 +1,7 @@
 # Graph Report - go-router  (2026-08-27)
 
 ## Corpus Check
-- 14 files · ~4,801 words
+- 14 files · ~4,796 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `131d2f80`
+- Built from commit: `fad06ebb`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
