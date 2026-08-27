@@ -27,6 +27,14 @@ func TestContext_InvalidKey(t *testing.T) {
 	assert.Equal(t, "", value)
 }
 
+func TestContext_SetOverwritesExistingKey(t *testing.T) {
+	ctx := setup()
+	ctx.Set("id", "first")
+	ctx.Set("id", "second")
+
+	assert.Equal(t, "second", ctx.Value("id"))
+}
+
 func TestInjectIntoRequest(t *testing.T) {
 	routerCtx := &RouterContext{
 		// Initialize RouterContext properties for testing if needed

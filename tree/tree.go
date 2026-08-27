@@ -30,6 +30,7 @@ type Tree struct {
 type RouterTree interface {
 	RegisterRoute(httpMethod _const.HTTPMethods, newValue string, method http.Handler)
 	FindRoute(ctx *context.RouterContext, httpMethods _const.HTTPMethods, value string) *Node
+	FindPath(value string) *Node
 	Merge(tree RouterTree)
 	Root() *Node
 }
@@ -56,11 +57,11 @@ func (t *Tree) register(httpMethod _const.HTTPMethods, path string, method http.
 		panic("Path must begin with front-slash (/)")
 	}
 	if path == "/" {
-		*currNode = &Node{
-			path:     "/",
-			children: []*Node{},
-			Method:   map[_const.HTTPMethods]Method{httpMethod: {Handler: method, variableName: nil}},
+		if !reflect.ValueOf((*currNode).Method[httpMethod]).IsZero() {
+			panic(fmt.Sprintf("Duplicated path: %s", path))
 		}
+		(*currNode).path = "/"
+		(*currNode).Method[httpMethod] = Method{Handler: method}
 		return
 	}
 	path = strings.Trim(path, "/")
@@ -96,13 +97,20 @@ func (t *Tree) FindRoute(ctx *context.RouterContext, httpMethods _const.HTTPMeth
 	if len(value) == 0 {
 		return nil
 	}
-	return t.findRoute(ctx, httpMethods, value)
+	node := t.FindPath(value)
+	if node == nil || reflect.ValueOf(node.Method[httpMethods]).IsZero() {
+		return nil
+	}
+	if ctx != nil {
+		setPathVariableValues(ctx, node.Method[httpMethods].variableName, pathVariables(t.root, value))
+	}
+	return node
 }
 
-func (t *Tree) findRoute(ctx *context.RouterContext, httpMethod _const.HTTPMethods, path string) *Node {
+func (t *Tree) FindPath(path string) *Node {
 	currNode := t.root
 	if path == "/" || path == "" {
-		if reflect.ValueOf(currNode.Method[httpMethod]).IsZero() {
+		if currNode.path != "/" && len(currNode.Method) == 0 {
 			return nil
 		}
 		return currNode
@@ -123,16 +131,29 @@ func (t *Tree) findRoute(ctx *context.RouterContext, httpMethod _const.HTTPMetho
 		}
 		idx++
 		if idx == len(paths) {
-			if reflect.ValueOf(nextNode.Method[httpMethod]).IsZero() {
-				return nil
-			}
-			setPathVariableValues(ctx, nextNode.Method[httpMethod].variableName, pathVariableValues)
 			return nextNode
 
 		}
 		currNode = nextNode
 		nextNode = (*currNode).getChild(paths[idx])
 	}
+}
+
+func pathVariables(root *Node, path string) []string {
+	paths := strings.Split(strings.Trim(path, "/"), "/")
+	values := make([]string, 0)
+	current := root
+	for _, pathPart := range paths {
+		next := current.getChild(pathPart)
+		if next == nil {
+			return values
+		}
+		if isParam(next.path) {
+			values = append(values, pathPart)
+		}
+		current = next
+	}
+	return values
 }
 
 func (t *Tree) Merge(tree RouterTree) {

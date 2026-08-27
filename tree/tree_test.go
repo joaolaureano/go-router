@@ -55,6 +55,19 @@ func TestRegister_OnlyRoot(t *testing.T) {
 	assert.NotZero(t, len(tree.root.Method), "Method should not be nil")
 }
 
+func TestRegister_RootPreservesRoutesAndMethods(t *testing.T) {
+	tree := CreateTree()
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
+
+	tree.RegisterRoute(_const.GET, "/path", handler)
+	tree.RegisterRoute(_const.GET, "/", handler)
+	tree.RegisterRoute(_const.POST, "/", handler)
+
+	assert.NotNil(t, tree.FindRoute(&context.RouterContext{}, _const.GET, "/path"))
+	assert.NotNil(t, tree.FindRoute(&context.RouterContext{}, _const.GET, "/"))
+	assert.NotNil(t, tree.FindRoute(&context.RouterContext{}, _const.POST, "/"))
+}
+
 func TestRegister_SimpleTree(t *testing.T) {
 	tree := CreateTree()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
@@ -251,4 +264,6 @@ func TestTree_Merge(t *testing.T) {
 
 	tree.Merge(&tree2)
 
+	assert.NotNil(t, tree.FindRoute(&context.RouterContext{}, _const.GET, "/pathz"))
+	assert.NotNil(t, tree.FindRoute(&context.RouterContext{}, _const.GET, "/pathz/test"))
 }

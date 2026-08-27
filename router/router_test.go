@@ -186,7 +186,39 @@ func TestRouter_Group(t *testing.T) {
 	assert.Equal(t, "Hello World Middleware 1", string(body))
 	res, _ = http.Get(fmt.Sprintf("%s%s", s.URL, group+path2))
 	body, _ = io.ReadAll(res.Body)
-	assert.Equal(t, "Hello World Middleware 1Hello World Middleware 2", string(body))
+	assert.Equal(t, "Hello World Middleware 2Hello World Middleware 1", string(body))
+}
+
+func TestRouter_NestedGroupsComposePrefixes(t *testing.T) {
+	r := NewRouter()
+	r.Group("/api", func(api Router) {
+		api.Group("/v1", func(version Router) {
+			version.Register(_const.GET, "/users", func(w http.ResponseWriter, r *http.Request) {
+				w.Write([]byte("users"))
+			})
+		})
+	})
+
+	request := httptest.NewRequest(http.MethodGet, "/api/v1/users", nil)
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, request)
+
+	assert.Equal(t, http.StatusOK, response.Code)
+	assert.Equal(t, "users", response.Body.String())
+}
+
+func TestRouter_WithPreservesPrefix(t *testing.T) {
+	r := NewPrefixRouter("/api")
+	r.With().Register(_const.GET, "/health", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("ok"))
+	})
+
+	request := httptest.NewRequest(http.MethodGet, "/api/health", nil)
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, request)
+
+	assert.Equal(t, http.StatusOK, response.Code)
+	assert.Equal(t, "ok", response.Body.String())
 }
 func TestRouter_With(t *testing.T) {
 	r := NewRouter()
@@ -212,6 +244,72 @@ func TestRouter_With(t *testing.T) {
 	body, _ = io.ReadAll(res.Body)
 	assert.Equal(t, "test_withhello_world", string(body))
 }
+
+func TestRouter_RegisterPathWithQueryString(t *testing.T) {
+	r := NewRouter()
+	r.Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("hello_world"))
+	})
+
+	request := httptest.NewRequest(http.MethodGet, "/path?query=value", nil)
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, request)
+
+	assert.Equal(t, http.StatusOK, response.Code)
+	assert.Equal(t, "hello_world", response.Body.String())
+}
+
+func TestRouter_RegisterRootPreservesExistingRoutes(t *testing.T) {
+	r := NewRouter()
+	r.Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("path"))
+	})
+	r.Register(_const.GET, "/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("root"))
+	})
+
+	request := httptest.NewRequest(http.MethodGet, "/path", nil)
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, request)
+
+	assert.Equal(t, http.StatusOK, response.Code)
+	assert.Equal(t, "path", response.Body.String())
+}
+
+func TestRouter_ReturnsMethodNotAllowed(t *testing.T) {
+	r := NewRouter()
+	r.Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {})
+
+	request := httptest.NewRequest(http.MethodPost, "/path", nil)
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, request)
+
+	assert.Equal(t, http.StatusMethodNotAllowed, response.Code)
+}
+
+func TestRouter_MiddlewareOrder(t *testing.T) {
+	r := NewRouter()
+	order := make([]string, 0, 3)
+	appendMiddleware := func(name string) func(http.Handler) http.Handler {
+		return func(next http.Handler) http.Handler {
+			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				order = append(order, name)
+				next.ServeHTTP(w, r)
+			})
+		}
+	}
+	r.Use(appendMiddleware("first"))
+	r.Use(appendMiddleware("second"))
+	r.Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {
+		order = append(order, "handler")
+	})
+
+	request := httptest.NewRequest(http.MethodGet, "/path", nil)
+	r.ServeHTTP(httptest.NewRecorder(), request)
+
+	assert.Equal(t, []string{"first", "second", "handler"}, order)
+}
+
 func setup(r http.Handler) *httptest.Server {
 
 	return httptest.NewServer(r)

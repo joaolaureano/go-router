@@ -21,7 +21,7 @@ func (chain *Chain) BuildHandler(endpoint http.Handler) http.Handler {
 		return endpoint
 	}
 	handler := endpoint
-	for i := 0; i < len(chain.middlewares); i++ {
+	for i := len(chain.middlewares) - 1; i >= 0; i-- {
 		handler = chain.middlewares[i](handler)
 	}
 

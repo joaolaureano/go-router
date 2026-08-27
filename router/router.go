@@ -43,7 +43,7 @@ func NewPrefixRouter(prefix string) *Router {
 }
 
 func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	uri := r.RequestURI
+	uri := r.URL.Path
 	method := r.Method
 	ctx := context.NewContext()
 	ctx.InjectIntoRequest(r)
@@ -51,6 +51,8 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if route != nil {
 		routeHandler := route.Method[_const.HTTPMethods(r.Method)].Handler
 		routeHandler.ServeHTTP(w, r)
+	} else if router.root.FindPath(uri) != nil {
+		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 	} else {
 		router.notFound(w, r)
 	}
@@ -83,8 +85,8 @@ func (router *Router) Group(prefix string, fn func(r Router)) Router {
 	subrouter := &Router{
 		root:     router.root,
 		chain:    chain,
-		notFound: http.NotFound,
-		prefix:   prefix,
+		notFound: router.notFound,
+		prefix:   router.prefix + prefix,
 	}
 
 	fn(*subrouter)
@@ -97,6 +99,8 @@ func (router *Router) Group(prefix string, fn func(r Router)) Router {
 func (router *Router) With(middleware ...func(http.Handler) http.Handler) *Router {
 	r := NewRouter()
 	r.root = router.root
+	r.notFound = router.notFound
+	r.prefix = router.prefix
 
 	for _, m := range middleware {
 		r.Use(m)

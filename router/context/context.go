@@ -22,6 +22,11 @@ func (routerCtx *RouterContext) Value(key string) string {
 }
 
 func (routerCtx *RouterContext) Set(key string, value string) {
+	idx := slices.Index(routerCtx.paramNames, key)
+	if idx > -1 {
+		routerCtx.paramValue[idx] = value
+		return
+	}
 	routerCtx.paramNames = append(routerCtx.paramNames, key)
 	routerCtx.paramValue = append(routerCtx.paramValue, value)
 }

@@ -48,7 +48,7 @@ func TestChain_SingleMiddleware(t *testing.T) {
 func TestChain_MultipleMiddleware(t *testing.T) {
 	// Create a new Chain
 	c := &Chain{}
-	expectedOutput := "hello world 1hello world 2hello world 3"
+	expectedOutput := "hello world 3hello world 2hello world 1"
 
 	// Define a sample handler
 	sampleHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -91,16 +91,41 @@ func TestChain_MultipleMiddleware(t *testing.T) {
 
 	// Make a request to the test server
 	res, err := http.Get(ts.URL)
-	defer res.Body.Close()
-
 	// Assert the response status code
-	body, _ := io.ReadAll(res.Body)
 	assert.NoError(t, err)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	body, _ := io.ReadAll(res.Body)
 	assert.Equal(t, http.StatusOK, res.StatusCode)
 	assert.Equal(t, expectedOutput, string(body))
 	assert.Equal(t, "HIT-1", res.Header.Get("Middleware-1"))
 	assert.Equal(t, "HIT-2", res.Header.Get("Middleware-2"))
 	assert.Equal(t, "HIT-3", res.Header.Get("Middleware-3"))
+}
+
+func TestChain_MiddlewareRunsInRegistrationOrder(t *testing.T) {
+	chain := NewChain()
+	order := make([]string, 0, 3)
+	addMiddleware := func(name string) func(http.Handler) http.Handler {
+		return func(next http.Handler) http.Handler {
+			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				order = append(order, name)
+				next.ServeHTTP(w, r)
+			})
+		}
+	}
+
+	chain.Add(addMiddleware("first"))
+	chain.Add(addMiddleware("second"))
+	handler := chain.BuildHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		order = append(order, "handler")
+	}))
+
+	handler.ServeHTTP(httptest.NewRecorder(), httptest.NewRequest(http.MethodGet, "/", nil))
+
+	assert.Equal(t, []string{"first", "second", "handler"}, order)
 }
 
 func TestChain_NoMiddleware(t *testing.T) {
