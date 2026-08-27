@@ -2265,6 +2265,17 @@
       "source_location": ""
     },
     {
+      "id": "go_type_github_com_joaolaureano_go_router_routing_param",
+      "label": "github.com/joaolaureano/go-router/routing.Param",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "FromRequest",
+      "file_type": "code",
+      "norm_label": "github.com/joaolaureano/go-router/routing.param",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "go_type_net_http_request",
       "label": "net/http.Request",
       "_origin": "ast",
@@ -2272,17 +2283,6 @@
       "community_name": "FromRequest",
       "file_type": "code",
       "norm_label": "net/http.request",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "go_type_net_http_responsewriter",
-      "label": "net/http.ResponseWriter",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "FromRequest",
-      "file_type": "code",
-      "norm_label": "net/http.responsewriter",
       "source_file": "",
       "source_location": ""
     },
@@ -2463,50 +2463,6 @@
       "source_location": "L85"
     },
     {
-      "id": "router_router_advertisedmethods",
-      "label": "advertisedMethods()",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "FromRequest",
-      "file_type": "code",
-      "norm_label": "advertisedmethods()",
-      "source_file": "router/router.go",
-      "source_location": "L132"
-    },
-    {
-      "id": "router_router_defaultmethodnotallowed",
-      "label": "defaultMethodNotAllowed()",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "FromRequest",
-      "file_type": "code",
-      "norm_label": "defaultmethodnotallowed()",
-      "source_file": "router/router.go",
-      "source_location": "L77"
-    },
-    {
-      "id": "router_router_servehttp",
-      "label": ".ServeHTTP()",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "FromRequest",
-      "file_type": "code",
-      "norm_label": ".servehttp()",
-      "source_file": "router/router.go",
-      "source_location": "L81"
-    },
-    {
-      "id": "routing_method_go_routing_method",
-      "label": "Method",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "FromRequest",
-      "file_type": "code",
-      "norm_label": "method",
-      "source_file": "routing/method.go",
-      "source_location": "L9"
-    },
-    {
       "id": "routing_errors",
       "label": "routing/errors.go",
       "_origin": "ast",
@@ -2595,6 +2551,17 @@
       "source_location": ""
     },
     {
+      "id": "go_type_net_http_responsewriter",
+      "label": "net/http.ResponseWriter",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "Router",
+      "file_type": "code",
+      "norm_label": "net/http.responsewriter",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "go_type_sync_atomic_bool",
       "label": "sync/atomic.Bool",
       "_origin": "ast",
@@ -2650,6 +2617,17 @@
       "source_location": "L36"
     },
     {
+      "id": "router_router_advertisedmethods",
+      "label": "advertisedMethods()",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "Router",
+      "file_type": "code",
+      "norm_label": "advertisedmethods()",
+      "source_file": "router/router.go",
+      "source_location": "L132"
+    },
+    {
       "id": "router_router_decodesegment",
       "label": "decodeSegment()",
       "_origin": "ast",
@@ -2659,6 +2637,17 @@
       "norm_label": "decodesegment()",
       "source_file": "router/router.go",
       "source_location": "L67"
+    },
+    {
+      "id": "router_router_defaultmethodnotallowed",
+      "label": "defaultMethodNotAllowed()",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "Router",
+      "file_type": "code",
+      "norm_label": "defaultmethodnotallowed()",
+      "source_file": "router/router.go",
+      "source_location": "L77"
     },
     {
       "id": "router_router_delete",
@@ -2793,6 +2782,17 @@
       "source_location": "L156"
     },
     {
+      "id": "router_router_servehttp",
+      "label": ".ServeHTTP()",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "Router",
+      "file_type": "code",
+      "norm_label": ".servehttp()",
+      "source_file": "router/router.go",
+      "source_location": "L81"
+    },
+    {
       "id": "router_state",
       "label": "state",
       "_origin": "ast",
@@ -2868,6 +2868,17 @@
       "norm_label": "routes",
       "source_file": "",
       "source_location": ""
+    },
+    {
+      "id": "routing_method_go_routing_method",
+      "label": "Method",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "Router",
+      "file_type": "code",
+      "norm_label": "method",
+      "source_file": "routing/method.go",
+      "source_location": "L9"
     },
     {
       "id": "state",
@@ -3968,7 +3979,7 @@
     },
     {
       "source": "context_routercontext",
-      "target": "routing_param",
+      "target": "go_type_github_com_joaolaureano_go_router_routing_param",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -4496,7 +4507,7 @@
     },
     {
       "source": "router_context_context_fromparams",
-      "target": "routing_param",
+      "target": "go_type_github_com_joaolaureano_go_router_routing_param",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -4640,7 +4651,7 @@
     },
     {
       "source": "router_context_context_withparams",
-      "target": "routing_param",
+      "target": "go_type_github_com_joaolaureano_go_router_routing_param",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -10385,5 +10396,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "39331693d2f83689e080b72fc80030491021bc96"
+  "built_at_commit": "9de3428f19b36ea994ef963b25875e8268c849cb"
 }

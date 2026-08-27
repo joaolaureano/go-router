@@ -122,7 +122,7 @@ func (t *Tree[E]) LookupDecoded(httpMethod Method, path string, decode func(stri
 		return Match[E]{}, StatusNotFound
 	}
 
-	resolved := matched.endpoints[httpMethod]
+	resolved := matched.find(httpMethod)
 	return Match[E]{
 		Handler: resolved.handler,
 		Params:  nameParams(search.params, resolved.variableNames),

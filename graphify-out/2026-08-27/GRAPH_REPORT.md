@@ -5,12 +5,12 @@
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 271 nodes · 634 edges · 35 communities (11 shown, 24 thin omitted)
+- 272 nodes · 634 edges · 35 communities (11 shown, 24 thin omitted)
 - Extraction: 82% EXTRACTED · 18% INFERRED · 0% AMBIGUOUS · INFERRED: 112 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `39331693`
+- Built from commit: `9de3428f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -87,12 +87,12 @@ Cohesion: 0.10
 Nodes (59): net/http/httptest.Server, testing.T, Param(), NewRouter(), setup(), TestNewRouter(), TestNewRouterWithPrefix(), TestRouter_AnswersOptionsAutomatically() (+51 more)
 
 ### Community 3 - "FromRequest"
-Cohesion: 0.12
-Nodes (23): contextKey, routeContext, RouterContext, context.Context, net/http.Request, net/http.ResponseWriter, FromParams(), FromRequest() (+15 more)
+Cohesion: 0.14
+Nodes (20): contextKey, routeContext, RouterContext, context.Context, github.com/joaolaureano/go-router/routing.Param, net/http.Request, FromParams(), FromRequest() (+12 more)
 
 ### Community 6 - "Router"
-Cohesion: 0.14
-Nodes (11): net/http.HandlerFunc, sync/atomic.Bool, sync/atomic.Pointer, sync.Mutex, Method, Router, NewPrefixRouter(), state (+3 more)
+Cohesion: 0.12
+Nodes (15): net/http.HandlerFunc, net/http.ResponseWriter, sync/atomic.Bool, sync/atomic.Pointer, sync.Mutex, Method, Router, advertisedMethods() (+7 more)
 
 ### Community 7 - "Repository"
 Cohesion: 0.39
@@ -123,11 +123,11 @@ Nodes (4): TestNewNodeInitializesInvariantState(), TestNodeAddChildRejectsNil(),
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `CreateTree()` connect `routing_test.go` to `E`, `Router`?**
-  _High betweenness centrality (0.138) - this node is a cross-community bridge._
-- **Why does `Router` connect `Router` to `FromRequest`, `testing.T`, `Chain`?**
-  _High betweenness centrality (0.130) - this node is a cross-community bridge._
+  _High betweenness centrality (0.154) - this node is a cross-community bridge._
 - **Why does `Tree` connect `E` to `routing_test.go`, `node`?**
-  _High betweenness centrality (0.114) - this node is a cross-community bridge._
+  _High betweenness centrality (0.141) - this node is a cross-community bridge._
+- **Why does `Router` connect `Router` to `testing.T`, `Chain`?**
+  _High betweenness centrality (0.135) - this node is a cross-community bridge._
 - **Are the 52 inferred relationships involving `NewRouter()` (e.g. with `TestNewRouter()` and `TestRouter_AnswersOptionsAutomatically()`) actually correct?**
   _`NewRouter()` has 52 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 34 inferred relationships involving `CreateTree()` (e.g. with `TestCreateTree()` and `TestLookup()`) actually correct?**

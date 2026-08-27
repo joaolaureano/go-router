@@ -13,7 +13,7 @@ type node[E any] struct {
 	children  []*node[E]
 	parameter *node[E]
 	wildcard  *node[E]
-	endpoints map[Method]endpoint[E]
+	endpoints []endpoint[E]
 }
 
 // segmentKind tells the three shapes a pattern segment can take apart. Only the
@@ -29,16 +29,32 @@ const (
 // endpoint is what a single method registered on a node resolves to. The
 // variable names live here rather than on the node because two methods on the
 // same path may have been written with different parameter names.
+//
+// Nodes hold these in a slice, not a map keyed by method. A path answers one or
+// two methods in practice, and at that size scanning a contiguous slice beats
+// hashing a string. It also means an intermediate node -- most of the tree --
+// allocates nothing at all, where a map header cost every node 48 bytes whether
+// or not a route ever ended there.
 type endpoint[E any] struct {
+	method        Method
 	handler       E
 	variableNames []string
 }
 
+// find returns the endpoint registered for this method, or nil.
+func (n *node[E]) find(httpMethod Method) *endpoint[E] {
+	for i := range n.endpoints {
+		if n.endpoints[i].method == httpMethod {
+			return &n.endpoints[i]
+		}
+	}
+	return nil
+}
+
 func newNode[E any](path string) *node[E] {
 	return &node[E]{
-		path:      path,
-		children:  make([]*node[E], 0),
-		endpoints: make(map[Method]endpoint[E]),
+		path:     path,
+		children: make([]*node[E], 0),
 	}
 }
 
@@ -83,15 +99,20 @@ func (n *node[E]) addChild(child *node[E], kind segmentKind) {
 }
 
 func (n *node[E]) setEndpoint(httpMethod Method, handler E, variableNames []string) {
-	n.endpoints[httpMethod] = endpoint[E]{
+	if existing := n.find(httpMethod); existing != nil {
+		existing.handler = handler
+		existing.variableNames = variableNames
+		return
+	}
+	n.endpoints = append(n.endpoints, endpoint[E]{
+		method:        httpMethod,
 		handler:       handler,
 		variableNames: variableNames,
-	}
+	})
 }
 
 func (n *node[E]) hasMethod(httpMethod Method) bool {
-	_, exists := n.endpoints[httpMethod]
-	return exists
+	return n.find(httpMethod) != nil
 }
 
 func (n *node[E]) hasAnyMethod() bool {
@@ -124,13 +145,17 @@ type lookup struct {
 	allowed map[Method]struct{}
 }
 
-// splitFirst peels the leading segment off a path, returning it and whatever
-// follows the separator. A path with no separator left is its own last segment.
-func splitFirst(path string) (segment, rest string) {
+// segmentEnd reports where the leading segment ends: at the next separator, or
+// at the end of the path when there is none left.
+//
+// It returns an index rather than the two substrings so that it stays inside
+// the inliner's budget -- constructing the strings here costs enough to push it
+// over, and this runs once per segment of every request.
+func segmentEnd(path string) int {
 	if separator := strings.IndexByte(path, '/'); separator >= 0 {
-		return path[:separator], path[separator+1:]
+		return separator
 	}
-	return path, ""
+	return len(path)
 }
 
 // typicalCaptureCount sizes the slice on first capture. Growing from nothing
@@ -176,8 +201,8 @@ func (n *node[E]) recordAllowed(search *lookup) {
 	if search.allowed == nil {
 		search.allowed = make(map[Method]struct{}, len(n.endpoints))
 	}
-	for httpMethod := range n.endpoints {
-		search.allowed[httpMethod] = struct{}{}
+	for i := range n.endpoints {
+		search.allowed[n.endpoints[i].method] = struct{}{}
 	}
 }
 
@@ -201,7 +226,13 @@ func (n *node[E]) match(path string, search *lookup) *node[E] {
 		return n.matchWildcard(path, search)
 	}
 
-	segment, rest := splitFirst(path)
+	// IndexByte is called here rather than behind a helper: it costs enough on
+	// its own that any wrapper around it exceeds the inliner's budget, and this
+	// runs once per segment of every request.
+	segment, rest := path, ""
+	if separator := strings.IndexByte(path, '/'); separator >= 0 {
+		segment, rest = path[:separator], path[separator+1:]
+	}
 	if search.decode != nil {
 		segment = search.decode(segment)
 	}
@@ -248,9 +279,9 @@ func (n *node[E]) matchWildcard(path string, search *lookup) *node[E] {
 // mergeNodes copies source into target. prefixVariables names the variables
 // that target already sits below, which every grafted endpoint has to inherit.
 func mergeNodes[E any](target, source *node[E], prefixVariables []string) {
-	for httpMethod, sourceEndpoint := range source.endpoints {
-		if !target.hasMethod(httpMethod) {
-			target.endpoints[httpMethod] = cloneEndpoint(sourceEndpoint, prefixVariables)
+	for i := range source.endpoints {
+		if !target.hasMethod(source.endpoints[i].method) {
+			target.endpoints = append(target.endpoints, cloneEndpoint(source.endpoints[i], prefixVariables))
 		}
 	}
 
@@ -282,8 +313,8 @@ func mergeBranch[E any](target **node[E], source *node[E], prefixVariables []str
 
 func cloneNode[E any](source *node[E], prefixVariables []string) *node[E] {
 	clone := newNode[E](source.path)
-	for httpMethod, sourceEndpoint := range source.endpoints {
-		clone.endpoints[httpMethod] = cloneEndpoint(sourceEndpoint, prefixVariables)
+	for i := range source.endpoints {
+		clone.endpoints = append(clone.endpoints, cloneEndpoint(source.endpoints[i], prefixVariables))
 	}
 	for _, child := range source.children {
 		clone.children = append(clone.children, cloneNode(child, prefixVariables))
@@ -302,6 +333,7 @@ func cloneEndpoint[E any](source endpoint[E], prefixVariables []string) endpoint
 	variableNames = append(variableNames, prefixVariables...)
 	variableNames = append(variableNames, source.variableNames...)
 	return endpoint[E]{
+		method:        source.method,
 		handler:       source.handler,
 		variableNames: variableNames,
 	}

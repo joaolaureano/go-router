@@ -50,8 +50,9 @@ func TestNodeSetEndpoint(t *testing.T) {
 
 	node.setEndpoint(GET, handler, []string{"id"})
 
-	method, exists := node.endpoints[GET]
-	assert.True(t, exists)
-	assert.NotNil(t, method.handler)
-	assert.Equal(t, []string{"id"}, method.variableNames)
+	registered := node.find(GET)
+	assert.NotNil(t, registered)
+	assert.NotNil(t, registered.handler)
+	assert.Equal(t, []string{"id"}, registered.variableNames)
+	assert.Nil(t, node.find(POST), "an unregistered method finds nothing")
 }

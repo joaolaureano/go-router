@@ -117,7 +117,7 @@ func TestRegister_SimpleTree(t *testing.T) {
 	assert.NotNil(t, thirdChild.children, "Second child's children should not be nil")
 	assert.Equal(t, "path", thirdChild.path, "Path should be /path")
 	assert.NotZero(t, len(thirdChild.endpoints), "Method should not be empty")
-	assert.NotZero(t, thirdChild.endpoints[GET], "Method should not be nil")
+	assert.NotNil(t, thirdChild.find(GET), "the endpoint should be registered under GET")
 }
 
 func TestRegister_DuplicatedPath(t *testing.T) {
