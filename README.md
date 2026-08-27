@@ -58,6 +58,10 @@ r.Get("/files/*", func(w http.ResponseWriter, r *http.Request) {
 
 Static and parameter routes take precedence, so `/files/readme` still reaches a route registered for it. `*` is only a catch-all as a whole segment, and only as the last one.
 
+
+### Method handling
+`HEAD` falls back to the `GET` route unless one is registered for it, and `OPTIONS` on a known path answers `204` with an `Allow` header unless a route claims it. Registering either explicitly always wins. `Allow` advertises the registered methods plus the two the router answers on their behalf.
+
 ## Interface
 - `Register(httpMethod router.Method, path string, method http.HandlerFunc)`: Registers an HTTP method for a specific path.
 - `Get/Head/Post/Put/Patch/Delete/Options(path string, handler http.HandlerFunc)`: Shortcuts for `Register` with the verb spelled into the name.

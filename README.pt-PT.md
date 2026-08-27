@@ -55,6 +55,10 @@ r.Get("/files/*", func(w http.ResponseWriter, r *http.Request) {
 
 Rotas estáticas e com parâmetro têm precedência, portanto `/files/readme` continua a chegar à rota registada para tal. `*` só é catch-all como segmento inteiro, e apenas como o último.
 
+
+### Tratamento de métodos
+`HEAD` recorre à rota `GET` a não ser que exista uma registada para ele, e `OPTIONS` num caminho conhecido responde `204` com cabeçalho `Allow` a não ser que uma rota o reclame. Registar qualquer um deles explicitamente tem sempre precedência. O `Allow` anuncia os métodos registados mais os dois que o router responde por conta deles.
+
 ## Interface
 - `Register(httpMethod router.Method, path string, method http.HandlerFunc)`: Registra um método HTTP para um determinado caminho.
 - `Get/Head/Post/Put/Patch/Delete/Options(path string, handler http.HandlerFunc)`: Atalhos para `Register` com o verbo no nome.

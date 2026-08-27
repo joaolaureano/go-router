@@ -3,6 +3,7 @@ package router
 import (
 	"net/http"
 	"net/url"
+	"sort"
 	"strings"
 	"sync"
 
@@ -95,8 +96,18 @@ func defaultMethodNotAllowed(w http.ResponseWriter, r *http.Request) {
 }
 
 func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	httpMethod := tree.Method(r.Method)
+	segments := requestSegments(r)
+
 	router.mu.RLock()
-	match, status := router.root.LookupSegments(tree.Method(r.Method), requestSegments(r))
+	match, status := router.root.LookupSegments(httpMethod, segments)
+	// RFC 9110: HEAD is GET without content, and net/http already suppresses
+	// the body, so a GET route answers HEAD unless one was registered for it.
+	if status != tree.StatusFound && httpMethod == HEAD {
+		if getMatch, getStatus := router.root.LookupSegments(GET, segments); getStatus == tree.StatusFound {
+			match, status = getMatch, getStatus
+		}
+	}
 	notFound := *router.notFound
 	methodNotAllowed := *router.methodNotAllowed
 	router.mu.RUnlock()
@@ -115,17 +126,46 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		match.Handler.ServeHTTP(w, r)
 	case tree.StatusMethodNotAllowed:
-		allowed := make([]string, len(match.AllowedMethods))
-		for i, httpMethod := range match.AllowedMethods {
-			allowed[i] = string(httpMethod)
-		}
 		// Allow is set before the handler runs, so a custom one inherits it and
 		// can still override it.
-		w.Header().Set("Allow", strings.Join(allowed, ", "))
+		w.Header().Set("Allow", advertisedMethods(match.AllowedMethods))
+		if httpMethod == OPTIONS {
+			// Nothing was registered for OPTIONS, but the path exists and the
+			// header just described it. Answering beats refusing.
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
 		methodNotAllowed(w, r)
 	default:
 		notFound(w, r)
 	}
+}
+
+// advertisedMethods renders an Allow header from the methods a path was
+// registered under, plus the two this router answers on their behalf: OPTIONS,
+// which it handles when nothing else does, and HEAD wherever there is a GET.
+func advertisedMethods(registered []tree.Method) string {
+	advertised := make([]string, 0, len(registered)+2)
+	var hasGet, hasHead, hasOptions bool
+	for _, httpMethod := range registered {
+		switch httpMethod {
+		case GET:
+			hasGet = true
+		case HEAD:
+			hasHead = true
+		case OPTIONS:
+			hasOptions = true
+		}
+		advertised = append(advertised, string(httpMethod))
+	}
+	if hasGet && !hasHead {
+		advertised = append(advertised, string(HEAD))
+	}
+	if !hasOptions {
+		advertised = append(advertised, string(OPTIONS))
+	}
+	sort.Strings(advertised)
+	return strings.Join(advertised, ", ")
 }
 
 func (router *Router) Register(httpMethod Method, path string, method http.HandlerFunc) {

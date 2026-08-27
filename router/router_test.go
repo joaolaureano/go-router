@@ -406,7 +406,7 @@ func TestRouter_MethodNotAllowedHandlerIsConfigurable(t *testing.T) {
 
 	assert.Equal(t, http.StatusTeapot, response.Code)
 	assert.Equal(t, "custom", response.Body.String())
-	assert.Equal(t, "GET", response.Header().Get("Allow"), "Allow is set before the handler runs")
+	assert.Equal(t, "GET, HEAD, OPTIONS", response.Header().Get("Allow"), "Allow is set before the handler runs")
 }
 
 func TestRouter_GroupMethodNotAllowedReachesServingRouter(t *testing.T) {
@@ -614,6 +614,77 @@ func TestRouter_MalformedEscapeDoesNotRoute(t *testing.T) {
 	assert.NotPanics(t, func() { r.ServeHTTP(httptest.NewRecorder(), request) })
 }
 
+func TestRouter_HeadFallsBackToGet(t *testing.T) {
+	r := NewRouter()
+	r.Get("/path", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("X-Served", "get")
+		w.Write([]byte("body"))
+	})
+
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, httptest.NewRequest(http.MethodHead, "/path", nil))
+
+	assert.Equal(t, http.StatusOK, response.Code)
+	assert.Equal(t, "get", response.Header().Get("X-Served"))
+}
+
+func TestRouter_HeadPrefersItsOwnRoute(t *testing.T) {
+	r := NewRouter()
+	r.Get("/path", func(w http.ResponseWriter, r *http.Request) { w.Header().Set("X-Served", "get") })
+	r.Head("/path", func(w http.ResponseWriter, r *http.Request) { w.Header().Set("X-Served", "head") })
+
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, httptest.NewRequest(http.MethodHead, "/path", nil))
+
+	assert.Equal(t, "head", response.Header().Get("X-Served"))
+}
+
+func TestRouter_HeadWithoutGetIsStillMethodNotAllowed(t *testing.T) {
+	r := NewRouter()
+	r.Post("/path", func(w http.ResponseWriter, r *http.Request) {})
+
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, httptest.NewRequest(http.MethodHead, "/path", nil))
+
+	assert.Equal(t, http.StatusMethodNotAllowed, response.Code)
+	assert.Equal(t, "OPTIONS, POST", response.Header().Get("Allow"))
+}
+
+func TestRouter_AnswersOptionsAutomatically(t *testing.T) {
+	r := NewRouter()
+	r.Get("/path", func(w http.ResponseWriter, r *http.Request) {})
+	r.Delete("/path", func(w http.ResponseWriter, r *http.Request) {})
+
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, httptest.NewRequest(http.MethodOptions, "/path", nil))
+
+	assert.Equal(t, http.StatusNoContent, response.Code)
+	assert.Equal(t, "DELETE, GET, HEAD, OPTIONS", response.Header().Get("Allow"))
+}
+
+func TestRouter_OptionsPrefersItsOwnRoute(t *testing.T) {
+	r := NewRouter()
+	r.Get("/path", func(w http.ResponseWriter, r *http.Request) {})
+	r.Options("/path", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusTeapot)
+	})
+
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, httptest.NewRequest(http.MethodOptions, "/path", nil))
+
+	assert.Equal(t, http.StatusTeapot, response.Code)
+}
+
+func TestRouter_OptionsOnUnknownPathIsStillNotFound(t *testing.T) {
+	r := NewRouter()
+	r.Get("/path", func(w http.ResponseWriter, r *http.Request) {})
+
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, httptest.NewRequest(http.MethodOptions, "/other", nil))
+
+	assert.Equal(t, http.StatusNotFound, response.Code)
+}
+
 func TestRouter_RegisterPathWithQueryString(t *testing.T) {
 	r := NewRouter()
 	r.Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {
@@ -654,7 +725,7 @@ func TestRouter_ReturnsMethodNotAllowed(t *testing.T) {
 	r.ServeHTTP(response, request)
 
 	assert.Equal(t, http.StatusMethodNotAllowed, response.Code)
-	assert.Equal(t, "GET", response.Header().Get("Allow"))
+	assert.Equal(t, "GET, HEAD, OPTIONS", response.Header().Get("Allow"), "HEAD and OPTIONS are answered on the route's behalf")
 }
 
 func TestRouter_MethodNotAllowedListsEveryRegisteredMethod(t *testing.T) {
@@ -667,7 +738,7 @@ func TestRouter_MethodNotAllowedListsEveryRegisteredMethod(t *testing.T) {
 	r.ServeHTTP(response, request)
 
 	assert.Equal(t, http.StatusMethodNotAllowed, response.Code)
-	assert.Equal(t, "GET, PATCH", response.Header().Get("Allow"))
+	assert.Equal(t, "GET, HEAD, OPTIONS, PATCH", response.Header().Get("Allow"))
 }
 
 func TestRouter_MethodNotAllowedSpansEveryMatchingBranch(t *testing.T) {
@@ -680,7 +751,7 @@ func TestRouter_MethodNotAllowedSpansEveryMatchingBranch(t *testing.T) {
 	r.ServeHTTP(response, request)
 
 	assert.Equal(t, http.StatusMethodNotAllowed, response.Code)
-	assert.Equal(t, "PATCH, POST", response.Header().Get("Allow"))
+	assert.Equal(t, "OPTIONS, PATCH, POST", response.Header().Get("Allow"), "no GET on this path, so no HEAD is advertised")
 }
 
 func TestRouter_BacktracksWhenStaticMatchLacksMethod(t *testing.T) {
