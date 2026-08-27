@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"sync"
 	"testing"
 
 	_const "github.com/joaolaureano/go-router/const"
@@ -219,6 +220,29 @@ func TestRouter_WithPreservesPrefix(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, response.Code)
 	assert.Equal(t, "ok", response.Body.String())
+}
+
+func TestRouter_SupportsConcurrentRegistrationAndServing(t *testing.T) {
+	r := NewRouter()
+	r.Register(_const.GET, "/stable", func(w http.ResponseWriter, r *http.Request) {})
+
+	var waitGroup sync.WaitGroup
+	waitGroup.Add(2)
+	go func() {
+		defer waitGroup.Done()
+		for i := 0; i < 100; i++ {
+			r.Register(_const.GET, fmt.Sprintf("/dynamic/%d", i), func(w http.ResponseWriter, r *http.Request) {})
+		}
+	}()
+	go func() {
+		defer waitGroup.Done()
+		for i := 0; i < 100; i++ {
+			request := httptest.NewRequest(http.MethodGet, "/stable", nil)
+			r.ServeHTTP(httptest.NewRecorder(), request)
+		}
+	}()
+
+	waitGroup.Wait()
 }
 func TestRouter_With(t *testing.T) {
 	r := NewRouter()
