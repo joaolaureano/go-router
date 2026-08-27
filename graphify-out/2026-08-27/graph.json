@@ -45,6 +45,17 @@
       "file_type": "code",
       "norm_label": "assertfound()",
       "source_file": "tree/tree_test.go",
+      "source_location": "L25"
+    },
+    {
+      "id": "tree_tree_test_assertpanicswith",
+      "label": "assertPanicsWith()",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "assertpanicswith()",
+      "source_file": "tree/tree_test.go",
       "source_location": "L13"
     },
     {
@@ -67,7 +78,7 @@
       "file_type": "code",
       "norm_label": "testcreatetree()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L19"
+      "source_location": "L31"
     },
     {
       "id": "tree_tree_test_testisparam",
@@ -78,7 +89,7 @@
       "file_type": "code",
       "norm_label": "testisparam()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L370"
+      "source_location": "L405"
     },
     {
       "id": "tree_tree_test_testlookup",
@@ -89,7 +100,7 @@
       "file_type": "code",
       "norm_label": "testlookup()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L176"
+      "source_location": "L211"
     },
     {
       "id": "tree_tree_test_testlookup_allowcollectseverybranchthatendsthepath",
@@ -100,7 +111,7 @@
       "file_type": "code",
       "norm_label": "testlookup_allowcollectseverybranchthatendsthepath()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L282"
+      "source_location": "L317"
     },
     {
       "id": "tree_tree_test_testlookup_capturesparameters",
@@ -111,7 +122,7 @@
       "file_type": "code",
       "norm_label": "testlookup_capturesparameters()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L250"
+      "source_location": "L285"
     },
     {
       "id": "tree_tree_test_testlookup_catchall",
@@ -122,7 +133,7 @@
       "file_type": "code",
       "norm_label": "testlookup_catchall()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L293"
+      "source_location": "L328"
     },
     {
       "id": "tree_tree_test_testlookup_catchallafterparameters",
@@ -133,7 +144,7 @@
       "file_type": "code",
       "norm_label": "testlookup_catchallafterparameters()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L329"
+      "source_location": "L364"
     },
     {
       "id": "tree_tree_test_testlookup_catchallismethodaware",
@@ -144,7 +155,7 @@
       "file_type": "code",
       "norm_label": "testlookup_catchallismethodaware()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L339"
+      "source_location": "L374"
     },
     {
       "id": "tree_tree_test_testlookup_catchallyieldstostaticandparameter",
@@ -155,7 +166,7 @@
       "file_type": "code",
       "norm_label": "testlookup_catchallyieldstostaticandparameter()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L310"
+      "source_location": "L345"
     },
     {
       "id": "tree_tree_test_testlookup_discardsvaluesfromabandonedbranches",
@@ -166,7 +177,7 @@
       "file_type": "code",
       "norm_label": "testlookup_discardsvaluesfromabandonedbranches()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L271"
+      "source_location": "L306"
     },
     {
       "id": "tree_tree_test_testlookup_emptytree",
@@ -177,7 +188,7 @@
       "file_type": "code",
       "norm_label": "testlookup_emptytree()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L361"
+      "source_location": "L396"
     },
     {
       "id": "tree_tree_test_testlookup_fallsbacktoparameterafterstaticbranchfails",
@@ -188,7 +199,7 @@
       "file_type": "code",
       "norm_label": "testlookup_fallsbacktoparameterafterstaticbranchfails()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L260"
+      "source_location": "L295"
     },
     {
       "id": "tree_tree_test_testlookup_intermediatenodeisnotanendpoint",
@@ -199,7 +210,7 @@
       "file_type": "code",
       "norm_label": "testlookup_intermediatenodeisnotanendpoint()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L241"
+      "source_location": "L276"
     },
     {
       "id": "tree_tree_test_testlookup_pathregisteredunderanothermethod",
@@ -210,7 +221,7 @@
       "file_type": "code",
       "norm_label": "testlookup_pathregisteredunderanothermethod()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L230"
+      "source_location": "L265"
     },
     {
       "id": "tree_tree_test_testlookup_root",
@@ -221,7 +232,7 @@
       "file_type": "code",
       "norm_label": "testlookup_root()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L187"
+      "source_location": "L222"
     },
     {
       "id": "tree_tree_test_testlookup_rootregisteredunderanothermethod",
@@ -232,7 +243,7 @@
       "file_type": "code",
       "norm_label": "testlookup_rootregisteredunderanothermethod()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L207"
+      "source_location": "L242"
     },
     {
       "id": "tree_tree_test_testlookup_unknownpath",
@@ -243,7 +254,7 @@
       "file_type": "code",
       "norm_label": "testlookup_unknownpath()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L217"
+      "source_location": "L252"
     },
     {
       "id": "tree_tree_test_testlookup_unregisteredroot",
@@ -254,7 +265,7 @@
       "file_type": "code",
       "norm_label": "testlookup_unregisteredroot()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L199"
+      "source_location": "L234"
     },
     {
       "id": "tree_tree_test_testregister_catchallmustbelast",
@@ -265,7 +276,7 @@
       "file_type": "code",
       "norm_label": "testregister_catchallmustbelast()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L349"
+      "source_location": "L384"
     },
     {
       "id": "tree_tree_test_testregister_duplicatedpath",
@@ -276,7 +287,7 @@
       "file_type": "code",
       "norm_label": "testregister_duplicatedpath()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L111"
+      "source_location": "L123"
     },
     {
       "id": "tree_tree_test_testregister_duplicatedpathvariable",
@@ -287,7 +298,7 @@
       "file_type": "code",
       "norm_label": "testregister_duplicatedpathvariable()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L46"
+      "source_location": "L58"
     },
     {
       "id": "tree_tree_test_testregister_emptypath",
@@ -298,7 +309,7 @@
       "file_type": "code",
       "norm_label": "testregister_emptypath()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L27"
+      "source_location": "L39"
     },
     {
       "id": "tree_tree_test_testregister_multiplebranches",
@@ -309,7 +320,7 @@
       "file_type": "code",
       "norm_label": "testregister_multiplebranches()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L122"
+      "source_location": "L134"
     },
     {
       "id": "tree_tree_test_testregister_nilhandler",
@@ -320,7 +331,7 @@
       "file_type": "code",
       "norm_label": "testregister_nilhandler()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L37"
+      "source_location": "L49"
     },
     {
       "id": "tree_tree_test_testregister_onlyroot",
@@ -331,7 +342,7 @@
       "file_type": "code",
       "norm_label": "testregister_onlyroot()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L61"
+      "source_location": "L73"
     },
     {
       "id": "tree_tree_test_testregister_panicinvalidpath",
@@ -342,7 +353,18 @@
       "file_type": "code",
       "norm_label": "testregister_panicinvalidpath()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L53"
+      "source_location": "L65"
+    },
+    {
+      "id": "tree_tree_test_testregister_panicscarrydistinguishableerrors",
+      "label": "TestRegister_PanicsCarryDistinguishableErrors()",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testregister_panicscarrydistinguishableerrors()",
+      "source_file": "tree/tree_test.go",
+      "source_location": "L188"
     },
     {
       "id": "tree_tree_test_testregister_rootpreservesroutesandmethods",
@@ -353,7 +375,7 @@
       "file_type": "code",
       "norm_label": "testregister_rootpreservesroutesandmethods()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L73"
+      "source_location": "L85"
     },
     {
       "id": "tree_tree_test_testregister_simpletree",
@@ -364,7 +386,7 @@
       "file_type": "code",
       "norm_label": "testregister_simpletree()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L86"
+      "source_location": "L98"
     },
     {
       "id": "tree_tree_test_testregister_wildcardnameisreserved",
@@ -375,7 +397,7 @@
       "file_type": "code",
       "norm_label": "testregister_wildcardnameisreserved()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L355"
+      "source_location": "L390"
     },
     {
       "id": "tree_tree_test_testtree_merge",
@@ -386,7 +408,7 @@
       "file_type": "code",
       "norm_label": "testtree_merge()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L377"
+      "source_location": "L412"
     },
     {
       "id": "tree_tree_test_testtree_mergecopiesrouteswithoutrebuildingpaths",
@@ -397,7 +419,7 @@
       "file_type": "code",
       "norm_label": "testtree_mergecopiesrouteswithoutrebuildingpaths()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L419"
+      "source_location": "L454"
     },
     {
       "id": "tree_tree_test_testtree_mergekeepsexistingroute",
@@ -408,7 +430,7 @@
       "file_type": "code",
       "norm_label": "testtree_mergekeepsexistingroute()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L399"
+      "source_location": "L434"
     },
     {
       "id": "tree_tree_test_testtree_mergewithitselfisnoop",
@@ -419,7 +441,7 @@
       "file_type": "code",
       "norm_label": "testtree_mergewithitselfisnoop()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L437"
+      "source_location": "L472"
     },
     {
       "id": "tree_endpoint",
@@ -598,6 +620,17 @@
       "source_location": "L187"
     },
     {
+      "id": "tree_node_newnode",
+      "label": "newNode()",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "node",
+      "file_type": "code",
+      "norm_label": "newnode()",
+      "source_file": "tree/node.go",
+      "source_location": "L38"
+    },
+    {
       "id": "tree_node_setendpoint",
       "label": ".setEndpoint()",
       "_origin": "ast",
@@ -618,6 +651,61 @@
       "norm_label": ".staticchild()",
       "source_file": "tree/node.go",
       "source_location": "L49"
+    },
+    {
+      "id": "tree_node_test",
+      "label": "node_test.go",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "node",
+      "file_type": "code",
+      "norm_label": "node_test.go",
+      "source_file": "tree/node_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "tree_node_test_testnewnodeinitializesinvariantstate",
+      "label": "TestNewNodeInitializesInvariantState()",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "node",
+      "file_type": "code",
+      "norm_label": "testnewnodeinitializesinvariantstate()",
+      "source_file": "tree/node_test.go",
+      "source_location": "L10"
+    },
+    {
+      "id": "tree_node_test_testnodeaddchildrejectsnil",
+      "label": "TestNodeAddChildRejectsNil()",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "node",
+      "file_type": "code",
+      "norm_label": "testnodeaddchildrejectsnil()",
+      "source_file": "tree/node_test.go",
+      "source_location": "L39"
+    },
+    {
+      "id": "tree_node_test_testnodeaddchildseparatesthethreeslots",
+      "label": "TestNodeAddChildSeparatesTheThreeSlots()",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "node",
+      "file_type": "code",
+      "norm_label": "testnodeaddchildseparatesthethreeslots()",
+      "source_file": "tree/node_test.go",
+      "source_location": "L19"
+    },
+    {
+      "id": "tree_node_test_testnodesetendpoint",
+      "label": "TestNodeSetEndpoint()",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "node",
+      "file_type": "code",
+      "norm_label": "testnodesetendpoint()",
+      "source_file": "tree/node_test.go",
+      "source_location": "L47"
     },
     {
       "id": "tree_segmentkind",
@@ -678,22 +766,11 @@
       "source_location": "L10"
     },
     {
-      "id": "node",
-      "label": "Node",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Node",
-      "file_type": "code",
-      "norm_label": "node",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "chain_chain",
       "label": "Chain",
       "_origin": "ast",
-      "community": 12,
-      "community_name": "Tree",
+      "community": 11,
+      "community_name": "net/http.Handler",
       "file_type": "code",
       "norm_label": "chain",
       "source_file": "chain/chain.go",
@@ -703,8 +780,8 @@
       "id": "chain_chain_add",
       "label": ".Add()",
       "_origin": "ast",
-      "community": 12,
-      "community_name": "Tree",
+      "community": 11,
+      "community_name": "net/http.Handler",
       "file_type": "code",
       "norm_label": ".add()",
       "source_file": "chain/chain.go",
@@ -714,8 +791,8 @@
       "id": "chain_chain_buildhandler",
       "label": ".BuildHandler()",
       "_origin": "ast",
-      "community": 12,
-      "community_name": "Tree",
+      "community": 11,
+      "community_name": "net/http.Handler",
       "file_type": "code",
       "norm_label": ".buildhandler()",
       "source_file": "chain/chain.go",
@@ -725,8 +802,8 @@
       "id": "chain_chain_go_chain_middleware",
       "label": "Middleware",
       "_origin": "ast",
-      "community": 12,
-      "community_name": "Tree",
+      "community": 11,
+      "community_name": "net/http.Handler",
       "file_type": "code",
       "norm_label": "middleware",
       "source_file": "chain/chain.go",
@@ -736,8 +813,8 @@
       "id": "chain_chain_middlewares",
       "label": ".Middlewares()",
       "_origin": "ast",
-      "community": 12,
-      "community_name": "Tree",
+      "community": 11,
+      "community_name": "net/http.Handler",
       "file_type": "code",
       "norm_label": ".middlewares()",
       "source_file": "chain/chain.go",
@@ -747,34 +824,133 @@
       "id": "chain_chain_sealed",
       "label": ".Sealed()",
       "_origin": "ast",
-      "community": 12,
-      "community_name": "Tree",
+      "community": 11,
+      "community_name": "net/http.Handler",
       "file_type": "code",
       "norm_label": ".sealed()",
       "source_file": "chain/chain.go",
       "source_location": "L24"
     },
     {
+      "id": "go_router_router",
+      "label": "Router",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "net/http.Handler",
+      "file_type": "code",
+      "norm_label": "router",
+      "source_file": "gorouter.go",
+      "source_location": "L14"
+    },
+    {
       "id": "go_type_net_http_handler",
       "label": "net/http.Handler",
       "_origin": "ast",
-      "community": 12,
-      "community_name": "Tree",
+      "community": 11,
+      "community_name": "net/http.Handler",
       "file_type": "code",
       "norm_label": "net/http.handler",
       "source_file": "",
       "source_location": ""
     },
     {
+      "id": "gorouter",
+      "label": "gorouter.go",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "net/http.Handler",
+      "file_type": "code",
+      "norm_label": "gorouter.go",
+      "source_file": "gorouter.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "gorouter_newprefixrouter",
+      "label": "NewPrefixRouter()",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "net/http.Handler",
+      "file_type": "code",
+      "norm_label": "newprefixrouter()",
+      "source_file": "gorouter.go",
+      "source_location": "L77"
+    },
+    {
+      "id": "gorouter_newrouter",
+      "label": "NewRouter()",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "net/http.Handler",
+      "file_type": "code",
+      "norm_label": "newrouter()",
+      "source_file": "gorouter.go",
+      "source_location": "L72"
+    },
+    {
+      "id": "router_router_newprefixrouter",
+      "label": "NewPrefixRouter()",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "net/http.Handler",
+      "file_type": "code",
+      "norm_label": "newprefixrouter()",
+      "source_file": "router/router.go",
+      "source_location": "L52"
+    },
+    {
+      "id": "router_router_test_testnewrouterwithprefix",
+      "label": "TestNewRouterWithPrefix()",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "net/http.Handler",
+      "file_type": "code",
+      "norm_label": "testnewrouterwithprefix()",
+      "source_file": "router/router_test.go",
+      "source_location": "L23"
+    },
+    {
+      "id": "router_router_test_testrouter_withpreservesprefix",
+      "label": "TestRouter_WithPreservesPrefix()",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "net/http.Handler",
+      "file_type": "code",
+      "norm_label": "testrouter_withpreservesprefix()",
+      "source_file": "router/router_test.go",
+      "source_location": "L216"
+    },
+    {
       "id": "router_router_use",
       "label": ".Use()",
       "_origin": "ast",
-      "community": 12,
-      "community_name": "Tree",
+      "community": 11,
+      "community_name": "net/http.Handler",
       "file_type": "code",
       "norm_label": ".use()",
       "source_file": "router/router.go",
       "source_location": "L149"
+    },
+    {
+      "id": "node",
+      "label": "node",
+      "_origin": "ast",
+      "community": 12,
+      "community_name": "Tree",
+      "file_type": "code",
+      "norm_label": "node",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "segmentkind",
+      "label": "segmentKind",
+      "_origin": "ast",
+      "community": 12,
+      "community_name": "Tree",
+      "file_type": "code",
+      "norm_label": "segmentkind",
+      "source_file": "",
+      "source_location": ""
     },
     {
       "id": "tree_match",
@@ -928,7 +1104,7 @@
       "file_type": "code",
       "norm_label": "testvalidatepath_invalidpaths()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L162"
+      "source_location": "L174"
     },
     {
       "id": "tree_tree_test_testvalidatepath_validpaths",
@@ -939,7 +1115,7 @@
       "file_type": "code",
       "norm_label": "testvalidatepath_validpaths()",
       "source_file": "tree/tree_test.go",
-      "source_location": "L155"
+      "source_location": "L167"
     },
     {
       "id": "tree_tree_validatesegments",
@@ -1154,70 +1330,15 @@
       "source_location": "L225"
     },
     {
-      "id": "tree_node_newnode",
-      "label": "newNode()",
+      "id": "router_errors",
+      "label": "router/errors.go",
       "_origin": "ast",
       "community": 19,
-      "community_name": "newNode",
+      "community_name": "router/errors.go",
       "file_type": "code",
-      "norm_label": "newnode()",
-      "source_file": "tree/node.go",
-      "source_location": "L38"
-    },
-    {
-      "id": "tree_node_test",
-      "label": "node_test.go",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "newNode",
-      "file_type": "code",
-      "norm_label": "node_test.go",
-      "source_file": "tree/node_test.go",
+      "norm_label": "router/errors.go",
+      "source_file": "router/errors.go",
       "source_location": "L1"
-    },
-    {
-      "id": "tree_node_test_testnewnodeinitializesinvariantstate",
-      "label": "TestNewNodeInitializesInvariantState()",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "newNode",
-      "file_type": "code",
-      "norm_label": "testnewnodeinitializesinvariantstate()",
-      "source_file": "tree/node_test.go",
-      "source_location": "L10"
-    },
-    {
-      "id": "tree_node_test_testnodeaddchildrejectsnil",
-      "label": "TestNodeAddChildRejectsNil()",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "newNode",
-      "file_type": "code",
-      "norm_label": "testnodeaddchildrejectsnil()",
-      "source_file": "tree/node_test.go",
-      "source_location": "L39"
-    },
-    {
-      "id": "tree_node_test_testnodeaddchildseparatesthethreeslots",
-      "label": "TestNodeAddChildSeparatesTheThreeSlots()",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "newNode",
-      "file_type": "code",
-      "norm_label": "testnodeaddchildseparatesthethreeslots()",
-      "source_file": "tree/node_test.go",
-      "source_location": "L19"
-    },
-    {
-      "id": "tree_node_test_testnodesetendpoint",
-      "label": "TestNodeSetEndpoint()",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "newNode",
-      "file_type": "code",
-      "norm_label": "testnodesetendpoint()",
-      "source_file": "tree/node_test.go",
-      "source_location": "L47"
     },
     {
       "id": "go_type_net_http_httptest_server",
@@ -1682,6 +1803,17 @@
       "source_location": "L277"
     },
     {
+      "id": "tree_errors",
+      "label": "tree/errors.go",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "tree/errors.go",
+      "file_type": "code",
+      "norm_label": "tree/errors.go",
+      "source_file": "tree/errors.go",
+      "source_location": "L1"
+    },
+    {
       "id": "context_contextkey",
       "label": "contextKey",
       "_origin": "ast",
@@ -1755,17 +1887,6 @@
       "community_name": "FromRequest",
       "file_type": "code",
       "norm_label": "net/http.request",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "go_type_net_http_responsewriter",
-      "label": "net/http.ResponseWriter",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "FromRequest",
-      "file_type": "code",
-      "norm_label": "net/http.responsewriter",
       "source_file": "",
       "source_location": ""
     },
@@ -1902,28 +2023,6 @@
       "source_location": "L38"
     },
     {
-      "id": "router_router_defaultmethodnotallowed",
-      "label": "defaultMethodNotAllowed()",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "FromRequest",
-      "file_type": "code",
-      "norm_label": "defaultmethodnotallowed()",
-      "source_file": "router/router.go",
-      "source_location": "L67"
-    },
-    {
-      "id": "router_router_servehttp",
-      "label": ".ServeHTTP()",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "FromRequest",
-      "file_type": "code",
-      "norm_label": ".servehttp()",
-      "source_file": "router/router.go",
-      "source_location": "L71"
-    },
-    {
       "id": "router_router_test_testrouter_backtrackswhenstaticmatchlacksmethod",
       "label": "TestRouter_BacktracksWhenStaticMatchLacksMethod()",
       "_origin": "ast",
@@ -1957,17 +2056,6 @@
       "source_location": "L346"
     },
     {
-      "id": "tree_method",
-      "label": "Method",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "FromRequest",
-      "file_type": "code",
-      "norm_label": "method",
-      "source_file": "tree/method.go",
-      "source_location": "L8"
-    },
-    {
       "id": "router_router_go_const_httpmethods",
       "label": "_const.HTTPMethods",
       "_origin": "ast",
@@ -1990,17 +2078,6 @@
       "source_location": ""
     },
     {
-      "id": "go_router_router",
-      "label": "Router",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Router",
-      "file_type": "code",
-      "norm_label": "router",
-      "source_file": "gorouter.go",
-      "source_location": "L14"
-    },
-    {
       "id": "go_type_net_http_handlerfunc",
       "label": "net/http.HandlerFunc",
       "_origin": "ast",
@@ -2008,6 +2085,17 @@
       "community_name": "Router",
       "file_type": "code",
       "norm_label": "net/http.handlerfunc",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "go_type_net_http_responsewriter",
+      "label": "net/http.ResponseWriter",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "Router",
+      "file_type": "code",
+      "norm_label": "net/http.responsewriter",
       "source_file": "",
       "source_location": ""
     },
@@ -2023,37 +2111,26 @@
       "source_location": ""
     },
     {
-      "id": "gorouter",
-      "label": "gorouter.go",
+      "id": "router_router",
+      "label": "Router",
       "_origin": "ast",
       "community": 6,
       "community_name": "Router",
       "file_type": "code",
-      "norm_label": "gorouter.go",
-      "source_file": "gorouter.go",
-      "source_location": "L1"
+      "norm_label": "router",
+      "source_file": "router/router.go",
+      "source_location": "L32"
     },
     {
-      "id": "gorouter_newprefixrouter",
-      "label": "NewPrefixRouter()",
+      "id": "router_router_defaultmethodnotallowed",
+      "label": "defaultMethodNotAllowed()",
       "_origin": "ast",
       "community": 6,
       "community_name": "Router",
       "file_type": "code",
-      "norm_label": "newprefixrouter()",
-      "source_file": "gorouter.go",
-      "source_location": "L77"
-    },
-    {
-      "id": "gorouter_newrouter",
-      "label": "NewRouter()",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Router",
-      "file_type": "code",
-      "norm_label": "newrouter()",
-      "source_file": "gorouter.go",
-      "source_location": "L72"
+      "norm_label": "defaultmethodnotallowed()",
+      "source_file": "router/router.go",
+      "source_location": "L67"
     },
     {
       "id": "router_router_delete",
@@ -2089,17 +2166,6 @@
       "source_location": ""
     },
     {
-      "id": "router_router_go_router_router",
-      "label": "Router",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Router",
-      "file_type": "code",
-      "norm_label": "router",
-      "source_file": "router/router.go",
-      "source_location": "L32"
-    },
-    {
       "id": "router_router_head",
       "label": ".Head()",
       "_origin": "ast",
@@ -2131,17 +2197,6 @@
       "norm_label": ".mount()",
       "source_file": "router/router.go",
       "source_location": "L183"
-    },
-    {
-      "id": "router_router_newprefixrouter",
-      "label": "NewPrefixRouter()",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Router",
-      "file_type": "code",
-      "norm_label": "newprefixrouter()",
-      "source_file": "router/router.go",
-      "source_location": "L52"
     },
     {
       "id": "router_router_notfound",
@@ -2210,26 +2265,26 @@
       "source_location": "L105"
     },
     {
-      "id": "router_router_test_testnewrouterwithprefix",
-      "label": "TestNewRouterWithPrefix()",
+      "id": "router_router_servehttp",
+      "label": ".ServeHTTP()",
       "_origin": "ast",
       "community": 6,
       "community_name": "Router",
       "file_type": "code",
-      "norm_label": "testnewrouterwithprefix()",
-      "source_file": "router/router_test.go",
-      "source_location": "L23"
+      "norm_label": ".servehttp()",
+      "source_file": "router/router.go",
+      "source_location": "L71"
     },
     {
-      "id": "router_router_test_testrouter_withpreservesprefix",
-      "label": "TestRouter_WithPreservesPrefix()",
+      "id": "tree_method",
+      "label": "Method",
       "_origin": "ast",
       "community": 6,
       "community_name": "Router",
       "file_type": "code",
-      "norm_label": "testrouter_withpreservesprefix()",
-      "source_file": "router/router_test.go",
-      "source_location": "L216"
+      "norm_label": "method",
+      "source_file": "tree/method.go",
+      "source_location": "L8"
     },
     {
       "id": "complete_article",
@@ -3098,7 +3153,31 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L68",
+      "source_location": "L80",
+      "weight": 1.0
+    },
+    {
+      "source": "tree_tree_test_testregister_panicinvalidpath",
+      "target": "tree_tree_test_assertpanicswith",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tree/tree_test.go",
+      "source_location": "L70",
+      "weight": 1.0
+    },
+    {
+      "source": "tree_tree_test_testregister_panicscarrydistinguishableerrors",
+      "target": "tree_tree_test_assertpanicswith",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tree/tree_test.go",
+      "source_location": "L206",
       "weight": 1.0
     },
     {
@@ -3110,7 +3189,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L81",
+      "source_location": "L93",
       "weight": 1.0
     },
     {
@@ -3122,7 +3201,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L393",
+      "source_location": "L428",
       "weight": 1.0
     },
     {
@@ -3134,7 +3213,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L434",
+      "source_location": "L469",
       "weight": 1.0
     },
     {
@@ -3146,7 +3225,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L443",
+      "source_location": "L478",
       "weight": 1.0
     },
     {
@@ -3186,7 +3265,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "tree_tree_go_tree_tree",
       "relation": "references",
       "_origin": "ast",
@@ -3198,7 +3277,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "chain_chain_go_chain_middleware",
       "relation": "references",
       "_origin": "ast",
@@ -3210,7 +3289,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "go_type_net_http_handlerfunc",
       "relation": "references",
       "_origin": "ast",
@@ -3222,7 +3301,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "go_type_sync_rwmutex",
       "relation": "references",
       "_origin": "ast",
@@ -3307,7 +3386,7 @@
     },
     {
       "source": "tree_tree_go_tree_tree",
-      "target": "tree_node",
+      "target": "node",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -4442,7 +4521,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L13",
+      "source_location": "L25",
       "weight": 1.0
     },
     {
@@ -4454,12 +4533,24 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L13",
+      "source_location": "L25",
       "weight": 1.0
     },
     {
       "source": "tree_tree_test_assertfound",
       "target": "tree_tree_test_go_method",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "tree/tree_test.go",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "tree_tree_test_assertpanicswith",
+      "target": "go_type_testing_t",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -4478,7 +4569,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L19",
+      "source_location": "L31",
       "weight": 1.0
     },
     {
@@ -4490,7 +4581,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L370",
+      "source_location": "L405",
       "weight": 1.0
     },
     {
@@ -4502,7 +4593,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L176",
+      "source_location": "L211",
       "weight": 1.0
     },
     {
@@ -4514,7 +4605,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L282",
+      "source_location": "L317",
       "weight": 1.0
     },
     {
@@ -4526,7 +4617,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L250",
+      "source_location": "L285",
       "weight": 1.0
     },
     {
@@ -4538,7 +4629,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L293",
+      "source_location": "L328",
       "weight": 1.0
     },
     {
@@ -4550,7 +4641,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L329",
+      "source_location": "L364",
       "weight": 1.0
     },
     {
@@ -4562,7 +4653,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L339",
+      "source_location": "L374",
       "weight": 1.0
     },
     {
@@ -4574,7 +4665,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L310",
+      "source_location": "L345",
       "weight": 1.0
     },
     {
@@ -4586,7 +4677,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L271",
+      "source_location": "L306",
       "weight": 1.0
     },
     {
@@ -4598,7 +4689,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L361",
+      "source_location": "L396",
       "weight": 1.0
     },
     {
@@ -4610,7 +4701,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L260",
+      "source_location": "L295",
       "weight": 1.0
     },
     {
@@ -4622,7 +4713,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L241",
+      "source_location": "L276",
       "weight": 1.0
     },
     {
@@ -4634,7 +4725,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L230",
+      "source_location": "L265",
       "weight": 1.0
     },
     {
@@ -4646,7 +4737,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L187",
+      "source_location": "L222",
       "weight": 1.0
     },
     {
@@ -4658,7 +4749,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L207",
+      "source_location": "L242",
       "weight": 1.0
     },
     {
@@ -4670,7 +4761,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L217",
+      "source_location": "L252",
       "weight": 1.0
     },
     {
@@ -4682,7 +4773,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L199",
+      "source_location": "L234",
       "weight": 1.0
     },
     {
@@ -4694,7 +4785,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L349",
+      "source_location": "L384",
       "weight": 1.0
     },
     {
@@ -4706,7 +4797,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L111",
+      "source_location": "L123",
       "weight": 1.0
     },
     {
@@ -4718,7 +4809,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L46",
+      "source_location": "L58",
       "weight": 1.0
     },
     {
@@ -4730,7 +4821,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L27",
+      "source_location": "L39",
       "weight": 1.0
     },
     {
@@ -4742,7 +4833,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L122",
+      "source_location": "L134",
       "weight": 1.0
     },
     {
@@ -4754,7 +4845,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L37",
+      "source_location": "L49",
       "weight": 1.0
     },
     {
@@ -4766,7 +4857,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L61",
+      "source_location": "L73",
       "weight": 1.0
     },
     {
@@ -4778,7 +4869,19 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L53",
+      "source_location": "L65",
+      "weight": 1.0
+    },
+    {
+      "source": "tree_tree_test_testregister_panicscarrydistinguishableerrors",
+      "target": "go_type_testing_t",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "tree/tree_test.go",
+      "source_location": "L188",
       "weight": 1.0
     },
     {
@@ -4790,7 +4893,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L73",
+      "source_location": "L85",
       "weight": 1.0
     },
     {
@@ -4802,7 +4905,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L86",
+      "source_location": "L98",
       "weight": 1.0
     },
     {
@@ -4814,7 +4917,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L355",
+      "source_location": "L390",
       "weight": 1.0
     },
     {
@@ -4826,7 +4929,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L377",
+      "source_location": "L412",
       "weight": 1.0
     },
     {
@@ -4838,7 +4941,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L419",
+      "source_location": "L454",
       "weight": 1.0
     },
     {
@@ -4850,7 +4953,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L399",
+      "source_location": "L434",
       "weight": 1.0
     },
     {
@@ -4862,7 +4965,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L437",
+      "source_location": "L472",
       "weight": 1.0
     },
     {
@@ -4874,7 +4977,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L162",
+      "source_location": "L174",
       "weight": 1.0
     },
     {
@@ -4886,7 +4989,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree_test.go",
-      "source_location": "L155",
+      "source_location": "L167",
       "weight": 1.0
     },
     {
@@ -4959,30 +5062,6 @@
       "context": "return_type",
       "source_file": ".example/complete/sampledb.go",
       "source_location": "L14",
-      "weight": 1.0
-    },
-    {
-      "source": "gorouter_newprefixrouter",
-      "target": "router_router_go_router_router",
-      "relation": "references",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "return_type",
-      "source_file": "gorouter.go",
-      "source_location": "L77",
-      "weight": 1.0
-    },
-    {
-      "source": "gorouter_newrouter",
-      "target": "router_router_go_router_router",
-      "relation": "references",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "return_type",
-      "source_file": "gorouter.go",
-      "source_location": "L72",
       "weight": 1.0
     },
     {
@@ -5059,7 +5138,7 @@
     },
     {
       "source": "tree_tree_classify",
-      "target": "tree_segmentkind",
+      "target": "segmentkind",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -5071,7 +5150,7 @@
     },
     {
       "source": "tree_tree_ensurepath",
-      "target": "tree_node",
+      "target": "node",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -5481,8 +5560,8 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
-      "target": "router_router_go_router_router",
+      "source": "router_router",
+      "target": "router_router",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -5492,7 +5571,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "router_router_newrouter",
       "relation": "contains",
       "_origin": "ast",
@@ -5503,7 +5582,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "router_router_newprefixrouter",
       "relation": "contains",
       "_origin": "ast",
@@ -5514,7 +5593,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "router_router_defaultmethodnotallowed",
       "relation": "contains",
       "_origin": "ast",
@@ -6258,23 +6337,12 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L111",
+      "source_location": "L123",
       "weight": 1.0
     },
     {
       "source": "tree_tree_test",
-      "target": "tree_tree_test_testregister_multiplebranches",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tree/tree_test.go",
-      "source_location": "L122",
-      "weight": 1.0
-    },
-    {
-      "source": "tree_tree_test",
-      "target": "tree_tree_test_assertfound",
+      "target": "tree_tree_test_assertpanicswith",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -6285,13 +6353,24 @@
     },
     {
       "source": "tree_tree_test",
+      "target": "tree_tree_test_testregister_multiplebranches",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tree/tree_test.go",
+      "source_location": "L134",
+      "weight": 1.0
+    },
+    {
+      "source": "tree_tree_test",
       "target": "tree_tree_test_testvalidatepath_validpaths",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L155",
+      "source_location": "L167",
       "weight": 1.0
     },
     {
@@ -6302,7 +6381,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L162",
+      "source_location": "L174",
+      "weight": 1.0
+    },
+    {
+      "source": "tree_tree_test",
+      "target": "tree_tree_test_testregister_panicscarrydistinguishableerrors",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tree/tree_test.go",
+      "source_location": "L188",
       "weight": 1.0
     },
     {
@@ -6313,7 +6403,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L176",
+      "source_location": "L211",
       "weight": 1.0
     },
     {
@@ -6324,18 +6414,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L187",
-      "weight": 1.0
-    },
-    {
-      "source": "tree_tree_test",
-      "target": "tree_tree_test_testcreatetree",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tree/tree_test.go",
-      "source_location": "L19",
+      "source_location": "L222",
       "weight": 1.0
     },
     {
@@ -6346,7 +6425,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L199",
+      "source_location": "L234",
       "weight": 1.0
     },
     {
@@ -6357,7 +6436,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L207",
+      "source_location": "L242",
+      "weight": 1.0
+    },
+    {
+      "source": "tree_tree_test",
+      "target": "tree_tree_test_assertfound",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tree/tree_test.go",
+      "source_location": "L25",
       "weight": 1.0
     },
     {
@@ -6368,7 +6458,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L217",
+      "source_location": "L252",
       "weight": 1.0
     },
     {
@@ -6379,7 +6469,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L230",
+      "source_location": "L265",
       "weight": 1.0
     },
     {
@@ -6390,7 +6480,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L241",
+      "source_location": "L276",
       "weight": 1.0
     },
     {
@@ -6401,7 +6491,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L250",
+      "source_location": "L285",
       "weight": 1.0
     },
     {
@@ -6412,18 +6502,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L260",
-      "weight": 1.0
-    },
-    {
-      "source": "tree_tree_test",
-      "target": "tree_tree_test_testregister_emptypath",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tree/tree_test.go",
-      "source_location": "L27",
+      "source_location": "L295",
       "weight": 1.0
     },
     {
@@ -6434,7 +6513,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L271",
+      "source_location": "L306",
+      "weight": 1.0
+    },
+    {
+      "source": "tree_tree_test",
+      "target": "tree_tree_test_testcreatetree",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tree/tree_test.go",
+      "source_location": "L31",
       "weight": 1.0
     },
     {
@@ -6445,7 +6535,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L282",
+      "source_location": "L317",
       "weight": 1.0
     },
     {
@@ -6456,7 +6546,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L293",
+      "source_location": "L328",
       "weight": 1.0
     },
     {
@@ -6467,7 +6557,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L310",
+      "source_location": "L345",
       "weight": 1.0
     },
     {
@@ -6478,7 +6568,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L329",
+      "source_location": "L364",
       "weight": 1.0
     },
     {
@@ -6489,7 +6579,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L339",
+      "source_location": "L374",
       "weight": 1.0
     },
     {
@@ -6500,7 +6590,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L349",
+      "source_location": "L384",
+      "weight": 1.0
+    },
+    {
+      "source": "tree_tree_test",
+      "target": "tree_tree_test_testregister_emptypath",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tree/tree_test.go",
+      "source_location": "L39",
       "weight": 1.0
     },
     {
@@ -6511,7 +6612,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L355",
+      "source_location": "L390",
       "weight": 1.0
     },
     {
@@ -6522,18 +6623,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L361",
-      "weight": 1.0
-    },
-    {
-      "source": "tree_tree_test",
-      "target": "tree_tree_test_testregister_nilhandler",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tree/tree_test.go",
-      "source_location": "L37",
+      "source_location": "L396",
       "weight": 1.0
     },
     {
@@ -6544,7 +6634,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L370",
+      "source_location": "L405",
       "weight": 1.0
     },
     {
@@ -6555,7 +6645,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L377",
+      "source_location": "L412",
       "weight": 1.0
     },
     {
@@ -6566,7 +6656,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L399",
+      "source_location": "L434",
       "weight": 1.0
     },
     {
@@ -6577,7 +6667,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L419",
+      "source_location": "L454",
       "weight": 1.0
     },
     {
@@ -6588,7 +6678,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L437",
+      "source_location": "L472",
+      "weight": 1.0
+    },
+    {
+      "source": "tree_tree_test",
+      "target": "tree_tree_test_testregister_nilhandler",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tree/tree_test.go",
+      "source_location": "L49",
       "weight": 1.0
     },
     {
@@ -6599,7 +6700,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L46",
+      "source_location": "L58",
       "weight": 1.0
     },
     {
@@ -6610,7 +6711,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L53",
+      "source_location": "L65",
       "weight": 1.0
     },
     {
@@ -6621,7 +6722,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L61",
+      "source_location": "L73",
       "weight": 1.0
     },
     {
@@ -6632,7 +6733,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L73",
+      "source_location": "L85",
       "weight": 1.0
     },
     {
@@ -6643,7 +6744,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree_test.go",
-      "source_location": "L86",
+      "source_location": "L98",
       "weight": 1.0
     },
     {
@@ -6779,7 +6880,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "router_router_register",
       "relation": "method",
       "_origin": "ast",
@@ -6790,7 +6891,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "router_router_get",
       "relation": "method",
       "_origin": "ast",
@@ -6801,7 +6902,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "router_router_head",
       "relation": "method",
       "_origin": "ast",
@@ -6812,7 +6913,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "router_router_post",
       "relation": "method",
       "_origin": "ast",
@@ -6823,7 +6924,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "router_router_put",
       "relation": "method",
       "_origin": "ast",
@@ -6834,7 +6935,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "router_router_patch",
       "relation": "method",
       "_origin": "ast",
@@ -6845,7 +6946,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "router_router_delete",
       "relation": "method",
       "_origin": "ast",
@@ -6856,7 +6957,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "router_router_options",
       "relation": "method",
       "_origin": "ast",
@@ -6867,7 +6968,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "router_router_use",
       "relation": "method",
       "_origin": "ast",
@@ -6878,7 +6979,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "router_router_notfound",
       "relation": "method",
       "_origin": "ast",
@@ -6889,7 +6990,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "router_router_methodnotallowed",
       "relation": "method",
       "_origin": "ast",
@@ -6900,7 +7001,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "router_router_mount",
       "relation": "method",
       "_origin": "ast",
@@ -6911,7 +7012,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "router_router_group",
       "relation": "method",
       "_origin": "ast",
@@ -6922,7 +7023,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "router_router_with",
       "relation": "method",
       "_origin": "ast",
@@ -6933,7 +7034,7 @@
       "weight": 1.0
     },
     {
-      "source": "router_router_go_router_router",
+      "source": "router_router",
       "target": "router_router_servehttp",
       "relation": "method",
       "_origin": "ast",
@@ -7860,7 +7961,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L20",
+      "source_location": "L32",
       "weight": 1.0
     },
     {
@@ -7872,7 +7973,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L371",
+      "source_location": "L406",
       "weight": 1.0
     },
     {
@@ -7884,7 +7985,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L177",
+      "source_location": "L212",
       "weight": 1.0
     },
     {
@@ -7896,7 +7997,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L283",
+      "source_location": "L318",
       "weight": 1.0
     },
     {
@@ -7908,7 +8009,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L251",
+      "source_location": "L286",
       "weight": 1.0
     },
     {
@@ -7920,7 +8021,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L294",
+      "source_location": "L329",
       "weight": 1.0
     },
     {
@@ -7932,7 +8033,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L330",
+      "source_location": "L365",
       "weight": 1.0
     },
     {
@@ -7944,7 +8045,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L340",
+      "source_location": "L375",
       "weight": 1.0
     },
     {
@@ -7956,7 +8057,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L311",
+      "source_location": "L346",
       "weight": 1.0
     },
     {
@@ -7968,7 +8069,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L272",
+      "source_location": "L307",
       "weight": 1.0
     },
     {
@@ -7980,7 +8081,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L362",
+      "source_location": "L397",
       "weight": 1.0
     },
     {
@@ -7992,7 +8093,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L261",
+      "source_location": "L296",
       "weight": 1.0
     },
     {
@@ -8004,7 +8105,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L242",
+      "source_location": "L277",
       "weight": 1.0
     },
     {
@@ -8016,7 +8117,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L231",
+      "source_location": "L266",
       "weight": 1.0
     },
     {
@@ -8028,7 +8129,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L188",
+      "source_location": "L223",
       "weight": 1.0
     },
     {
@@ -8040,7 +8141,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L208",
+      "source_location": "L243",
       "weight": 1.0
     },
     {
@@ -8052,7 +8153,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L218",
+      "source_location": "L253",
       "weight": 1.0
     },
     {
@@ -8064,7 +8165,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L200",
+      "source_location": "L235",
       "weight": 1.0
     },
     {
@@ -8076,7 +8177,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L350",
+      "source_location": "L385",
       "weight": 1.0
     },
     {
@@ -8088,7 +8189,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L112",
+      "source_location": "L124",
       "weight": 1.0
     },
     {
@@ -8100,7 +8201,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L47",
+      "source_location": "L59",
       "weight": 1.0
     },
     {
@@ -8112,7 +8213,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L28",
+      "source_location": "L40",
       "weight": 1.0
     },
     {
@@ -8124,7 +8225,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L123",
+      "source_location": "L135",
       "weight": 1.0
     },
     {
@@ -8136,7 +8237,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L38",
+      "source_location": "L50",
       "weight": 1.0
     },
     {
@@ -8148,7 +8249,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L62",
+      "source_location": "L74",
       "weight": 1.0
     },
     {
@@ -8160,7 +8261,19 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L54",
+      "source_location": "L66",
+      "weight": 1.0
+    },
+    {
+      "source": "tree_tree_test_testregister_panicscarrydistinguishableerrors",
+      "target": "tree_tree_createtree",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "tree/tree_test.go",
+      "source_location": "L205",
       "weight": 1.0
     },
     {
@@ -8172,7 +8285,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L74",
+      "source_location": "L86",
       "weight": 1.0
     },
     {
@@ -8184,7 +8297,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L87",
+      "source_location": "L99",
       "weight": 1.0
     },
     {
@@ -8196,7 +8309,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L356",
+      "source_location": "L391",
       "weight": 1.0
     },
     {
@@ -8208,7 +8321,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L378",
+      "source_location": "L413",
       "weight": 1.0
     },
     {
@@ -8220,7 +8333,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L420",
+      "source_location": "L455",
       "weight": 1.0
     },
     {
@@ -8232,7 +8345,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L400",
+      "source_location": "L435",
       "weight": 1.0
     },
     {
@@ -8244,7 +8357,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L438",
+      "source_location": "L473",
       "weight": 1.0
     },
     {
@@ -8256,7 +8369,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L172",
+      "source_location": "L184",
       "weight": 1.0
     },
     {
@@ -8268,7 +8381,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L172",
+      "source_location": "L184",
       "weight": 1.0
     },
     {
@@ -8280,7 +8393,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L158",
+      "source_location": "L170",
       "weight": 1.0
     },
     {
@@ -8292,10 +8405,10 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree_test.go",
-      "source_location": "L158",
+      "source_location": "L170",
       "weight": 1.0
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "50e4155aa4fd4a79f5ca62cc59b2945a62841dc4"
+  "built_at_commit": "d86bac588d878d59dcb3e38a748688a4d28294bf"
 }

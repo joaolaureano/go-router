@@ -29,8 +29,12 @@ const (
 	OPTIONS = tree.OPTIONS
 )
 
+// routes is the routing tree pinned to what this adapter resolves a route to.
+// The tree itself is agnostic; naming the endpoint type is the adapter's job.
+type routes = tree.Tree[http.Handler]
+
 type Router struct {
-	root *tree.Tree
+	root *routes
 
 	chain chain.Middleware
 
@@ -50,12 +54,12 @@ func NewRouter() *Router {
 }
 
 func NewPrefixRouter(prefix string) *Router {
-	routes := tree.CreateTree()
+	routeTree := tree.CreateTree[http.Handler]()
 	notFound := http.HandlerFunc(http.NotFound)
 	methodNotAllowed := http.HandlerFunc(defaultMethodNotAllowed)
 
 	return &Router{
-		root:             &routes,
+		root:             &routeTree,
 		chain:            &chain.Chain{},
 		notFound:         &notFound,
 		methodNotAllowed: &methodNotAllowed,

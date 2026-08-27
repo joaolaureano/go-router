@@ -8,7 +8,7 @@ import (
 )
 
 func TestNewNodeInitializesInvariantState(t *testing.T) {
-	node := newNode("users")
+	node := newNode[http.Handler]("users")
 
 	assert.Equal(t, "users", node.path)
 	assert.Empty(t, node.children)
@@ -17,10 +17,10 @@ func TestNewNodeInitializesInvariantState(t *testing.T) {
 }
 
 func TestNodeAddChildSeparatesTheThreeSlots(t *testing.T) {
-	node := newNode("users")
-	staticChild := newNode("list")
-	parameterChild := newNode(parameterNodePath)
-	wildcardChild := newNode(WildcardParam)
+	node := newNode[http.Handler]("users")
+	staticChild := newNode[http.Handler]("list")
+	parameterChild := newNode[http.Handler](parameterNodePath)
+	wildcardChild := newNode[http.Handler](WildcardParam)
 
 	node.addChild(staticChild, staticSegment)
 	node.addChild(parameterChild, parameterSegment)
@@ -37,7 +37,7 @@ func TestNodeAddChildSeparatesTheThreeSlots(t *testing.T) {
 }
 
 func TestNodeAddChildRejectsNil(t *testing.T) {
-	node := newNode("users")
+	node := newNode[http.Handler]("users")
 
 	assert.PanicsWithValue(t, "node child must not be nil", func() {
 		node.addChild(nil, staticSegment)
@@ -45,7 +45,7 @@ func TestNodeAddChildRejectsNil(t *testing.T) {
 }
 
 func TestNodeSetEndpoint(t *testing.T) {
-	node := newNode("users")
+	node := newNode[http.Handler]("users")
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 
 	node.setEndpoint(GET, handler, []string{"id"})

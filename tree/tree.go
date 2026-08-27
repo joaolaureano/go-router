@@ -2,14 +2,17 @@ package tree
 
 import (
 	"fmt"
-	"net/http"
 	"strings"
 )
 
 // Tree is the aggregate root. Nothing outside this package holds a node, so
 // registration and lookup are the only ways the routing table can change shape.
-type Tree struct {
-	root *node
+//
+// E is whatever a route resolves to. Matching a path against a pattern owes
+// nothing to HTTP, so the tree does not name http.Handler; the router pins E
+// when it builds one.
+type Tree[E any] struct {
+	root *node[E]
 }
 
 // Status says how a lookup ended. Carrying "the path exists under other
@@ -31,29 +34,32 @@ type Param struct {
 // Match is the outcome of a lookup: a plain value the caller is free to
 // interpret. The tree reports what it found and takes no part in deciding how
 // that reaches a handler.
-type Match struct {
-	Handler        http.Handler
+type Match[E any] struct {
+	Handler        E
 	Params         []Param
 	AllowedMethods []Method
 }
 
-func CreateTree() Tree {
-	return Tree{
-		root: newNode(""),
+func CreateTree[E any]() Tree[E] {
+	return Tree[E]{
+		root: newNode[E](""),
 	}
 }
 
-func (t *Tree) RegisterRoute(httpMethod Method, newValue string, method http.Handler) {
+func (t *Tree[E]) RegisterRoute(httpMethod Method, newValue string, method E) {
 	if newValue == "" {
 		panic(ErrEmptyPath)
 	}
-	if method == nil {
+	// E may be an interface, in which case a caller can hand over a nil one.
+	// Boxing to any and comparing catches exactly that, and leaves a typed nil
+	// alone: that is a handler, just a broken one.
+	if any(method) == nil {
 		panic(ErrNilHandler)
 	}
 	t.register(httpMethod, newValue, method)
 }
 
-func (t *Tree) register(httpMethod Method, path string, method http.Handler) {
+func (t *Tree[E]) register(httpMethod Method, path string, method E) {
 	target, variableNames := t.ensurePath(path)
 	if target.hasMethod(httpMethod) {
 		panic(fmt.Errorf("%w: %s %s", ErrDuplicateRoute, httpMethod, path))
@@ -65,7 +71,7 @@ func (t *Tree) register(httpMethod Method, path string, method http.Handler) {
 // missing, and reports the variable names the path declares along the way. Those
 // names are what an endpoint stored here has to be able to pair with the values
 // a lookup collects.
-func (t *Tree) ensurePath(path string) (*node, []string) {
+func (t *Tree[E]) ensurePath(path string) (*node[E], []string) {
 	if path[0] != '/' {
 		panic(fmt.Errorf("%w: %s", ErrPathNotRooted, path))
 	}
@@ -88,7 +94,7 @@ func (t *Tree) ensurePath(path string) (*node, []string) {
 		}
 		nextNode := currNode.childFor(nodePath, kind)
 		if nextNode == nil {
-			nextNode = newNode(nodePath)
+			nextNode = newNode[E](nodePath)
 			currNode.addChild(nextNode, kind)
 		}
 		currNode = nextNode
@@ -97,18 +103,18 @@ func (t *Tree) ensurePath(path string) (*node, []string) {
 }
 
 // Lookup resolves a path against the tree in a single walk.
-func (t *Tree) Lookup(httpMethod Method, path string) (Match, Status) {
+func (t *Tree[E]) Lookup(httpMethod Method, path string) (Match[E], Status) {
 	search := lookup{httpMethod: httpMethod}
 	matched := t.root.match(splitSegments(path), 0, &search)
 	if matched == nil {
 		if allowed := search.allowedMethods(); allowed != nil {
-			return Match{AllowedMethods: allowed}, StatusMethodNotAllowed
+			return Match[E]{AllowedMethods: allowed}, StatusMethodNotAllowed
 		}
-		return Match{}, StatusNotFound
+		return Match[E]{}, StatusNotFound
 	}
 
 	resolved := matched.endpoints[httpMethod]
-	return Match{
+	return Match[E]{
 		Handler: resolved.handler,
 		Params:  zipParams(resolved.variableNames, search.values),
 	}, StatusFound
@@ -129,7 +135,7 @@ func zipParams(names, values []string) []Param {
 }
 
 // Merge copies every route of source that this tree does not already define.
-func (t *Tree) Merge(source *Tree) {
+func (t *Tree[E]) Merge(source *Tree[E]) {
 	if t.root == source.root {
 		return
 	}
@@ -142,7 +148,7 @@ func (t *Tree) Merge(source *Tree) {
 // names against its own depth, so those of the prefix are prepended: without
 // that, a lookup would pair the prefix's captured value with the first name the
 // grafted route declared.
-func (t *Tree) MergeAt(prefix string, source *Tree) {
+func (t *Tree[E]) MergeAt(prefix string, source *Tree[E]) {
 	target, prefixVariables := t.ensurePath(prefix)
 	if target == source.root {
 		return
