@@ -11,8 +11,17 @@ import (
 type contextKey struct{}
 
 // RouterContext holds the route variables captured for one request.
+//
+// A slice rather than a map: a route declares a handful of variables at most,
+// and at that size a linear scan beats hashing while costing one allocation
+// instead of a map header plus buckets.
 type RouterContext struct {
-	params map[string]string
+	params []param
+}
+
+type param struct {
+	key   string
+	value string
 }
 
 // Value reads a route variable. It tolerates a nil receiver so that the common
@@ -22,18 +31,29 @@ func (routerCtx *RouterContext) Value(key string) string {
 	if routerCtx == nil {
 		return ""
 	}
-	return routerCtx.params[key]
+	for _, entry := range routerCtx.params {
+		if entry.key == key {
+			return entry.value
+		}
+	}
+	return ""
 }
 
 func (routerCtx *RouterContext) Set(key string, value string) {
-	if routerCtx.params == nil {
-		routerCtx.params = make(map[string]string)
+	for i := range routerCtx.params {
+		if routerCtx.params[i].key == key {
+			routerCtx.params[i].value = value
+			return
+		}
 	}
-	routerCtx.params[key] = value
+	if routerCtx.params == nil {
+		// Room for a typical route's variables up front, so filling the context
+		// does not regrow the slice once per variable.
+		routerCtx.params = make([]param, 0, 4)
+	}
+	routerCtx.params = append(routerCtx.params, param{key: key, value: value})
 }
 
-// NewContext leaves params nil. Reads on a nil map are legal and Set allocates
-// on demand, so a route without variables never pays for the map.
 func NewContext() *RouterContext {
 	return &RouterContext{}
 }
