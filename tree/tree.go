@@ -49,12 +49,12 @@ func (t *Tree) register(httpMethod _const.HTTPMethods, path string, method http.
 		currNode.Method[httpMethod] = Method{Handler: method}
 		return
 	}
-	path = strings.Trim(path, "/")
-	if err := validatePath(path); err != nil {
+	segments := splitSegments(path)
+	if err := validateSegments(path, segments); err != nil {
 		panic(err.Error())
 	}
 	var pathVariablesName []string
-	for _, pathSplitted := range strings.Split(path, "/") {
+	for _, pathSplitted := range segments {
 		isParameter := isParam(pathSplitted)
 		nodePath := pathSplitted
 		if isParameter {
@@ -107,8 +107,7 @@ func (t *Tree) findPath(path string, filter methodFilter) (*Node, []string) {
 	if len(t.root.children) == 0 && t.root.parameter == nil {
 		return nil, nil
 	}
-	paths := strings.Split(strings.Trim(path, "/"), "/")
-	return matchPath(t.root, paths, 0, nil, filter)
+	return matchPath(t.root, splitSegments(path), 0, nil, filter)
 }
 
 func (t *Tree) Merge(tree RouterTree) {
@@ -129,9 +128,16 @@ func setPathVariableValues(ctx *context.RouterContext, keys, values []string) {
 	}
 }
 
-func validatePath(path string) error {
+// splitSegments breaks a path into the segments the tree is keyed by.
+// Registration and lookup have to agree on this normalisation, otherwise a
+// route can be stored under a shape that no request will ever reach.
+func splitSegments(path string) []string {
+	return strings.Split(strings.Trim(path, "/"), "/")
+}
+
+func validateSegments(path string, segments []string) error {
 	paramNames := make(map[string]struct{})
-	for _, segment := range strings.Split(path, "/") {
+	for _, segment := range segments {
 		if segment == "" {
 			return fmt.Errorf("path contains an empty segment")
 		}

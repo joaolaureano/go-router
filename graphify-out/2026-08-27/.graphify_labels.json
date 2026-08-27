@@ -4,6 +4,7 @@
   "2": "NewRouter",
   "3": "NewContext",
   "4": "_const.HTTPMethods",
+  "5": "net/http.Handler",
   "6": "Router",
   "7": "Repository",
   "8": "github.com/joaolaureano/go-router",

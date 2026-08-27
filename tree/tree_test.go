@@ -150,7 +150,7 @@ func TestRegister_MultipleBranches(t *testing.T) {
 func TestValidatePath_ValidPaths(t *testing.T) {
 	validPaths := []string{"valid/{path}", "users/{userID}/posts/{postID}", "health"}
 	for _, path := range validPaths {
-		assert.NoError(t, validatePath(path), path)
+		assert.NoError(t, validateSegments(path, splitSegments(path)), path)
 	}
 }
 
@@ -164,7 +164,7 @@ func TestValidatePath_InvalidPaths(t *testing.T) {
 		"users/{id}/posts}",
 	}
 	for _, path := range invalidPaths {
-		assert.Error(t, validatePath(path), path)
+		assert.Error(t, validateSegments(path, splitSegments(path)), path)
 	}
 }
 
