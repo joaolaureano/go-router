@@ -104,8 +104,15 @@ func (t *Tree[E]) ensurePath(path string) (*node[E], []string) {
 
 // Lookup resolves a path against the tree in a single walk.
 func (t *Tree[E]) Lookup(httpMethod Method, path string) (Match[E], Status) {
+	return t.LookupSegments(httpMethod, splitSegments(path))
+}
+
+// LookupSegments is Lookup for a caller that has already split the path, which
+// is what one has to do to transform segments first -- decoding percent escapes
+// being the reason that exists.
+func (t *Tree[E]) LookupSegments(httpMethod Method, segments []string) (Match[E], Status) {
 	search := lookup{httpMethod: httpMethod}
-	matched := t.root.match(splitSegments(path), 0, &search)
+	matched := t.root.match(segments, 0, &search)
 	if matched == nil {
 		if allowed := search.allowedMethods(); allowed != nil {
 			return Match[E]{AllowedMethods: allowed}, StatusMethodNotAllowed
@@ -162,6 +169,13 @@ func (t *Tree[E]) MergeAt(prefix string, source *Tree[E]) {
 //
 // The root carries no segments, so it needs no special case on either side:
 // an empty segment list simply leaves the walk standing on the root node.
+// SplitPath breaks a path into the segments the tree is keyed by. A caller that
+// must transform segments before matching them splits with this and then calls
+// LookupSegments, so that both sides stay on one normalisation.
+func SplitPath(path string) []string {
+	return splitSegments(path)
+}
+
 func splitSegments(path string) []string {
 	trimmed := strings.Trim(path, "/")
 	if trimmed == "" {

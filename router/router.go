@@ -2,7 +2,7 @@ package router
 
 import (
 	"net/http"
-
+	"net/url"
 	"strings"
 	"sync"
 
@@ -68,13 +68,35 @@ func NewPrefixRouter(prefix string) *Router {
 	}
 }
 
+// requestSegments splits the request path and decodes each segment on its own.
+//
+// URL.Path is the whole path already decoded, which is too late: a %2F a client
+// escaped precisely so that it would stay inside one segment has become a
+// separator by then, and no route variable could ever hold a slash. Splitting
+// the escaped form first and decoding after keeps the boundary where the client
+// put it.
+func requestSegments(r *http.Request) []string {
+	segments := tree.SplitPath(r.URL.EscapedPath())
+	for i, segment := range segments {
+		decoded, err := url.PathUnescape(segment)
+		if err != nil {
+			// Malformed escaping is not something to guess at; matching the
+			// segment literally simply fails to route, which is the honest
+			// outcome.
+			continue
+		}
+		segments[i] = decoded
+	}
+	return segments
+}
+
 func defaultMethodNotAllowed(w http.ResponseWriter, r *http.Request) {
 	http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 }
 
 func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	router.mu.RLock()
-	match, status := router.root.Lookup(tree.Method(r.Method), r.URL.Path)
+	match, status := router.root.LookupSegments(tree.Method(r.Method), requestSegments(r))
 	notFound := *router.notFound
 	methodNotAllowed := *router.methodNotAllowed
 	router.mu.RUnlock()

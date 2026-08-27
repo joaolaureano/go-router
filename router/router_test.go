@@ -568,6 +568,52 @@ func TestRouter_CatchAllUnderGroup(t *testing.T) {
 	assert.Equal(t, "css/app.css", response.Body.String())
 }
 
+func TestRouter_PercentEncodedSlashStaysInsideOneVariable(t *testing.T) {
+	r := NewRouter()
+	r.Get("/files/{name}", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(context.Param(r, "name")))
+	})
+
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, httptest.NewRequest(http.MethodGet, "/files/a%2Fb", nil))
+
+	assert.Equal(t, http.StatusOK, response.Code)
+	assert.Equal(t, "a/b", response.Body.String())
+}
+
+func TestRouter_DecodesEscapesInSegments(t *testing.T) {
+	r := NewRouter()
+	r.Get("/search/{term}", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(context.Param(r, "term")))
+	})
+	r.Get("/a b", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("literal space"))
+	})
+
+	for path, want := range map[string]string{
+		"/search/hello%20world": "hello world",
+		"/search/caf%C3%A9":     "café",
+		"/a%20b":                "literal space",
+	} {
+		response := httptest.NewRecorder()
+		r.ServeHTTP(response, httptest.NewRequest(http.MethodGet, path, nil))
+
+		assert.Equal(t, http.StatusOK, response.Code, path)
+		assert.Equal(t, want, response.Body.String(), path)
+	}
+}
+
+func TestRouter_MalformedEscapeDoesNotRoute(t *testing.T) {
+	r := NewRouter()
+	r.Get("/files/{name}", func(w http.ResponseWriter, r *http.Request) {})
+
+	request := httptest.NewRequest(http.MethodGet, "/", nil)
+	request.URL.RawPath = "/files/%zz"
+	request.URL.Path = "/files/%zz"
+
+	assert.NotPanics(t, func() { r.ServeHTTP(httptest.NewRecorder(), request) })
+}
+
 func TestRouter_RegisterPathWithQueryString(t *testing.T) {
 	r := NewRouter()
 	r.Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {
