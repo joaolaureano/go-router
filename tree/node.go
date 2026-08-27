@@ -76,63 +76,70 @@ func (node *Node) hasAnyMethod() bool {
 	return len(node.Method) > 0
 }
 
-// AllowedMethods lists the methods registered on the node, sorted so that the
-// Allow header of a 405 response stays stable across requests.
-func (node *Node) AllowedMethods() []string {
-	methods := make([]string, 0, len(node.Method))
+// lookup carries the state of one walk. Parameter values accumulate as the
+// walk descends and unwind when a branch fails, so only the values on the
+// surviving route remain. Nodes that end the path under some other verb are
+// recorded on the way, which lets a single walk answer both "which handler"
+// and "which methods would have worked".
+type lookup struct {
+	httpMethod _const.HTTPMethods
+	values     []string
+	allowed    map[_const.HTTPMethods]struct{}
+}
+
+func (search *lookup) recordAllowed(node *Node) {
+	if !node.hasAnyMethod() {
+		return
+	}
+	if search.allowed == nil {
+		search.allowed = make(map[_const.HTTPMethods]struct{}, len(node.Method))
+	}
 	for httpMethod := range node.Method {
+		search.allowed[httpMethod] = struct{}{}
+	}
+}
+
+// allowedMethods returns the recorded methods sorted, so that the Allow header
+// of a 405 stays stable across responses.
+func (search *lookup) allowedMethods() []string {
+	if len(search.allowed) == 0 {
+		return nil
+	}
+	methods := make([]string, 0, len(search.allowed))
+	for httpMethod := range search.allowed {
 		methods = append(methods, string(httpMethod))
 	}
 	sort.Strings(methods)
 	return methods
 }
 
-// methodFilter decides which nodes are allowed to terminate a search. Matching
-// must be method-aware: a node that only answers POST cannot end a GET lookup,
-// otherwise the search stops there instead of backtracking into a sibling
-// parameter branch that would have matched.
-type methodFilter struct {
-	httpMethod _const.HTTPMethods
-	anyMethod  bool
-}
-
-func filterByMethod(httpMethod _const.HTTPMethods) methodFilter {
-	return methodFilter{httpMethod: httpMethod}
-}
-
-func filterByAnyMethod() methodFilter {
-	return methodFilter{anyMethod: true}
-}
-
-func (filter methodFilter) accepts(node *Node) bool {
-	if filter.anyMethod {
-		return node.hasAnyMethod()
-	}
-	return node.hasMethod(filter.httpMethod)
-}
-
-func matchPath(node *Node, paths []string, index int, values []string, filter methodFilter) (*Node, []string) {
+// match walks the remaining segments, preferring the static child and falling
+// back to the parameter branch, and returns the first node answering the
+// method being searched for.
+func (node *Node) match(paths []string, index int, search *lookup) *Node {
 	if index == len(paths) {
-		if !filter.accepts(node) {
-			return nil, nil
+		if node.hasMethod(search.httpMethod) {
+			return node
 		}
-		return node, values
+		search.recordAllowed(node)
+		return nil
 	}
 
 	if child := node.staticChild(paths[index]); child != nil {
-		if matchedNode, matchedValues := matchPath(child, paths, index+1, values, filter); matchedNode != nil {
-			return matchedNode, matchedValues
+		if matched := child.match(paths, index+1, search); matched != nil {
+			return matched
 		}
 	}
 
 	if node.parameter != nil {
-		values = append(values, paths[index])
-		if matchedNode, matchedValues := matchPath(node.parameter, paths, index+1, values, filter); matchedNode != nil {
-			return matchedNode, matchedValues
+		search.values = append(search.values, paths[index])
+		if matched := node.parameter.match(paths, index+1, search); matched != nil {
+			return matched
 		}
+		search.values = search.values[:len(search.values)-1]
 	}
 
-	return nil, nil
+	return nil
 }
 
 func mergeNodes(target, source *Node) {

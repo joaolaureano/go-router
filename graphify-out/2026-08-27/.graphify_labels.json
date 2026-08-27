@@ -4,10 +4,11 @@
   "2": "testing.T",
   "3": "NewContext",
   "4": "_const.HTTPMethods",
-  "5": "Tree",
+  "5": "methodFilter",
   "6": "Router",
   "7": "Repository",
   "8": "github.com/joaolaureano/go-router",
   "9": "_const.HTTPMethods",
-  "10": "newNode"
+  "10": "newNode",
+  "11": "Node"
 }

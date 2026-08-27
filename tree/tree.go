@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	_const "github.com/joaolaureano/go-router/const"
-	"github.com/joaolaureano/go-router/router/context"
 )
 
 type Tree struct {
@@ -15,10 +14,34 @@ type Tree struct {
 
 type RouterTree interface {
 	RegisterRoute(httpMethod _const.HTTPMethods, newValue string, method http.Handler)
-	FindRoute(ctx *context.RouterContext, httpMethods _const.HTTPMethods, value string) *Node
-	FindPath(value string) *Node
+	Lookup(httpMethod _const.HTTPMethods, path string) (Match, Status)
 	Merge(tree RouterTree)
 	Root() *Node
+}
+
+// Status says how a lookup ended. Carrying "the path exists under other
+// methods" in the result is what lets one walk answer what used to take two.
+type Status int
+
+const (
+	StatusNotFound Status = iota
+	StatusMethodNotAllowed
+	StatusFound
+)
+
+// Param is a route variable captured by a lookup.
+type Param struct {
+	Name  string
+	Value string
+}
+
+// Match is the outcome of a lookup: a plain value the caller is free to
+// interpret. The tree reports what it found and takes no part in deciding how
+// that reaches a handler.
+type Match struct {
+	Handler        http.Handler
+	Params         []Param
+	AllowedMethods []string
 }
 
 func CreateTree() Tree {
@@ -67,31 +90,36 @@ func (t *Tree) register(httpMethod _const.HTTPMethods, path string, method http.
 	currNode.setEndpoint(httpMethod, method, pathVariablesName)
 }
 
-func (t *Tree) FindRoute(ctx *context.RouterContext, httpMethods _const.HTTPMethods, value string) *Node {
-	if len(value) == 0 {
-		return nil
-	}
-	node, values := t.findPath(value, filterByMethod(httpMethods))
+// Lookup resolves a path against the tree in a single walk.
+func (t *Tree) Lookup(httpMethod _const.HTTPMethods, path string) (Match, Status) {
+	search := lookup{httpMethod: httpMethod}
+	node := t.root.match(splitSegments(path), 0, &search)
 	if node == nil {
-		return nil
+		if allowed := search.allowedMethods(); allowed != nil {
+			return Match{AllowedMethods: allowed}, StatusMethodNotAllowed
+		}
+		return Match{}, StatusNotFound
 	}
-	routeMethod, exists := node.Method[httpMethods]
-	if !exists {
-		return nil
-	}
-	if ctx != nil {
-		setPathVariableValues(ctx, routeMethod.variableName, values)
-	}
-	return node
+
+	endpoint := node.Method[httpMethod]
+	return Match{
+		Handler: endpoint.Handler,
+		Params:  zipParams(endpoint.variableName, search.values),
+	}, StatusFound
 }
 
-func (t *Tree) FindPath(path string) *Node {
-	node, _ := t.findPath(path, filterByAnyMethod())
-	return node
-}
-
-func (t *Tree) findPath(path string, filter methodFilter) (*Node, []string) {
-	return matchPath(t.root, splitSegments(path), 0, nil, filter)
+// zipParams pairs the variable names recorded at registration with the values
+// collected on the walk. The walk enters exactly one parameter node per name,
+// so the two always line up.
+func zipParams(names, values []string) []Param {
+	if len(names) == 0 {
+		return nil
+	}
+	params := make([]Param, len(names))
+	for i, name := range names {
+		params[i] = Param{Name: name, Value: values[i]}
+	}
+	return params
 }
 
 func (t *Tree) Merge(tree RouterTree) {
@@ -104,12 +132,6 @@ func (t *Tree) Merge(tree RouterTree) {
 
 func (t *Tree) Root() *Node {
 	return t.root
-}
-
-func setPathVariableValues(ctx *context.RouterContext, keys, values []string) {
-	for i, k := range keys {
-		(*ctx).Set(k, values[i])
-	}
 }
 
 // splitSegments breaks a path into the segments the tree is keyed by.

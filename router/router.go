@@ -52,27 +52,24 @@ func NewPrefixRouter(prefix string) *Router {
 }
 
 func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	uri := r.URL.Path
-	method := r.Method
-	ctx := context.NewContext()
-	r = ctx.WithRequest(r)
+	routerCtx := context.NewContext()
+	r = routerCtx.WithRequest(r)
+
 	router.mu.RLock()
-	route := router.root.FindRoute(ctx, _const.HTTPMethods(method), uri)
-	var routeHandler http.Handler
-	var allowedMethods []string
-	if route != nil {
-		routeHandler = route.Method[_const.HTTPMethods(r.Method)].Handler
-	} else if pathNode := router.root.FindPath(uri); pathNode != nil {
-		allowedMethods = pathNode.AllowedMethods()
-	}
+	match, status := router.root.Lookup(_const.HTTPMethods(r.Method), r.URL.Path)
 	notFound := *router.notFound
 	router.mu.RUnlock()
-	if routeHandler != nil {
-		routeHandler.ServeHTTP(w, r)
-	} else if len(allowedMethods) > 0 {
-		w.Header().Set("Allow", strings.Join(allowedMethods, ", "))
+
+	switch status {
+	case tree.StatusFound:
+		for _, param := range match.Params {
+			routerCtx.Set(param.Name, param.Value)
+		}
+		match.Handler.ServeHTTP(w, r)
+	case tree.StatusMethodNotAllowed:
+		w.Header().Set("Allow", strings.Join(match.AllowedMethods, ", "))
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
-	} else {
+	default:
 		notFound(w, r)
 	}
 }
