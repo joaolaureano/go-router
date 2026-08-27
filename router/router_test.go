@@ -47,7 +47,7 @@ func TestRouter_RegisterSimplePath(t *testing.T) {
 func TestRouter_RegisterNilHandler(t *testing.T) {
 	r := NewRouter()
 
-	assert.PanicsWithValue(t, "handler must not be nil", func() {
+	assert.PanicsWithError(t, ErrNilHandler.Error(), func() {
 		r.Register(GET, "/path", nil)
 	})
 }
@@ -340,7 +340,7 @@ func TestRouter_GroupNotFoundReachesServingRouter(t *testing.T) {
 func TestRouter_NotFoundNilHandler(t *testing.T) {
 	r := NewRouter()
 
-	assert.PanicsWithValue(t, "handler must not be nil", func() { r.NotFound(nil) })
+	assert.PanicsWithError(t, ErrNilHandler.Error(), func() { r.NotFound(nil) })
 }
 
 func TestRouter_TreatsParameterSyntaxInRequestPathAsLiteral(t *testing.T) {
@@ -428,7 +428,7 @@ func TestRouter_GroupMethodNotAllowedReachesServingRouter(t *testing.T) {
 func TestRouter_MethodNotAllowedNilHandler(t *testing.T) {
 	r := NewRouter()
 
-	assert.PanicsWithValue(t, "handler must not be nil", func() { r.MethodNotAllowed(nil) })
+	assert.PanicsWithError(t, ErrNilHandler.Error(), func() { r.MethodNotAllowed(nil) })
 }
 
 func TestRouter_VerbShortcuts(t *testing.T) {
@@ -527,7 +527,7 @@ func TestRouter_MountKeepsExistingRouteOnConflict(t *testing.T) {
 func TestRouter_MountRejectsSharedTree(t *testing.T) {
 	r := NewRouter()
 
-	assert.PanicsWithValue(t, "router must not be nil", func() { r.Mount("/api", nil) })
+	assert.PanicsWithError(t, ErrNilRouter.Error(), func() { r.Mount("/api", nil) })
 	assert.Panics(t, func() { r.Mount("/api", r) })
 	assert.Panics(t, func() { r.Mount("/api", r.With()) })
 }

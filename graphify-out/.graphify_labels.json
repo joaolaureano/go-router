@@ -10,7 +10,7 @@
   "8": "github.com/joaolaureano/go-router",
   "9": "_const.HTTPMethods",
   "10": "Go-Router",
-  "11": "Node",
+  "11": "net/http.Handler",
   "12": "Tree",
   "13": "github.com/joaolaureano/go-router/router/context.RouterContext",
   "14": "github.com/joaolaureano/go-router/tree.RouterTree",
@@ -18,5 +18,6 @@
   "16": "github.com/joaolaureano/go-router/router.Router",
   "17": "Method",
   "18": "NewChain",
-  "19": "newNode"
+  "19": "router/errors.go",
+  "20": "tree/errors.go"
 }

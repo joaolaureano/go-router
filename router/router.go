@@ -104,7 +104,7 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func (router *Router) Register(httpMethod Method, path string, method http.HandlerFunc) {
 	if method == nil {
-		panic("handler must not be nil")
+		panic(ErrNilHandler)
 	}
 	router.mu.Lock()
 	defer router.mu.Unlock()
@@ -150,14 +150,14 @@ func (router *Router) Use(middleware func(http.Handler) http.Handler) {
 	router.mu.Lock()
 	defer router.mu.Unlock()
 	if router.chain.Sealed() {
-		panic("unable to define middleware after creating first route")
+		panic(ErrChainSealed)
 	}
 	router.chain.Add(middleware)
 }
 
 func (router *Router) NotFound(notFoundFn http.HandlerFunc) {
 	if notFoundFn == nil {
-		panic("handler must not be nil")
+		panic(ErrNilHandler)
 	}
 	router.mu.Lock()
 	defer router.mu.Unlock()
@@ -168,7 +168,7 @@ func (router *Router) NotFound(notFoundFn http.HandlerFunc) {
 // under the requested method. The Allow header is already set when it runs.
 func (router *Router) MethodNotAllowed(methodNotAllowedFn http.HandlerFunc) {
 	if methodNotAllowedFn == nil {
-		panic("handler must not be nil")
+		panic(ErrNilHandler)
 	}
 	router.mu.Lock()
 	defer router.mu.Unlock()
@@ -182,12 +182,12 @@ func (router *Router) MethodNotAllowed(methodNotAllowedFn http.HandlerFunc) {
 // Where both sides define the same method on the same path, this router wins.
 func (router *Router) Mount(prefix string, other *Router) {
 	if other == nil {
-		panic("router must not be nil")
+		panic(ErrNilRouter)
 	}
 	// A group or a With shares the routing tree, and the mutex with it, so
 	// mounting one of those would both deadlock and graft the tree into itself.
 	if other.root == router.root {
-		panic("router must not be mounted onto one that shares its routing tree")
+		panic(ErrSharedRoutingTree)
 	}
 
 	router.mu.Lock()

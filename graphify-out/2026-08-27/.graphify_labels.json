@@ -1,7 +1,7 @@
 {
-  "0": "tree_test.go",
+  "0": "testing.T",
   "1": "node",
-  "2": "testing.T",
+  "2": "NewRouter",
   "3": "FromRequest",
   "4": "_const.HTTPMethods",
   "5": "methodFilter",
@@ -17,5 +17,6 @@
   "15": "Go-Router",
   "16": "github.com/joaolaureano/go-router/router.Router",
   "17": "Method",
-  "18": "NewChain"
+  "18": "NewChain",
+  "19": "newNode"
 }

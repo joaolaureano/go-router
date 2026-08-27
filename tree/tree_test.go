@@ -10,6 +10,18 @@ import (
 
 var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 
+func assertPanicsWith(t *testing.T, want error, fn func()) {
+	t.Helper()
+	defer func() {
+		recovered := recover()
+		err, ok := recovered.(error)
+		if assert.True(t, ok, "expected a panic carrying an error, got %v", recovered) {
+			assert.ErrorIs(t, err, want)
+		}
+	}()
+	fn()
+}
+
 func assertFound(t *testing.T, tree *Tree, httpMethod Method, path string) {
 	t.Helper()
 	_, status := tree.Lookup(httpMethod, path)
@@ -28,7 +40,7 @@ func TestRegister_EmptyPath(t *testing.T) {
 	tree := CreateTree()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 
-	assert.PanicsWithValue(t, "path must not be empty", func() {
+	assert.PanicsWithError(t, ErrEmptyPath.Error(), func() {
 		tree.RegisterRoute(GET, "", handler)
 	})
 	assert.Empty(t, tree.root.children, "Invalid registration should not create children")
@@ -37,7 +49,7 @@ func TestRegister_EmptyPath(t *testing.T) {
 func TestRegister_NilHandler(t *testing.T) {
 	tree := CreateTree()
 
-	assert.PanicsWithValue(t, "handler must not be nil", func() {
+	assert.PanicsWithError(t, ErrNilHandler.Error(), func() {
 		tree.RegisterRoute(GET, "/path", nil)
 	})
 	assert.Empty(t, tree.root.children, "Invalid registration should not create children")
@@ -55,7 +67,7 @@ func TestRegister_PanicInvalidPath(t *testing.T) {
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 	invalidPath := "invalidPath"
 
-	assert.PanicsWithValue(t, "Path must begin with front-slash (/)", func() { tree.RegisterRoute(GET, invalidPath, handler) }, "Insert should panic for an invalid path")
+	assertPanicsWith(t, ErrPathNotRooted, func() { tree.RegisterRoute(GET, invalidPath, handler) })
 }
 
 func TestRegister_OnlyRoot(t *testing.T) {
@@ -170,6 +182,29 @@ func TestValidatePath_InvalidPaths(t *testing.T) {
 	}
 	for _, path := range invalidPaths {
 		assert.Error(t, validateSegments(path, splitSegments(path)), path)
+	}
+}
+
+func TestRegister_PanicsCarryDistinguishableErrors(t *testing.T) {
+	for name, testCase := range map[string]struct {
+		register func(tree *Tree)
+		want     error
+	}{
+		"empty path":          {func(tree *Tree) { tree.RegisterRoute(GET, "", handler) }, ErrEmptyPath},
+		"nil handler":         {func(tree *Tree) { tree.RegisterRoute(GET, "/path", nil) }, ErrNilHandler},
+		"not rooted":          {func(tree *Tree) { tree.RegisterRoute(GET, "path", handler) }, ErrPathNotRooted},
+		"unbalanced brace":    {func(tree *Tree) { tree.RegisterRoute(GET, "/{id", handler) }, ErrInvalidPattern},
+		"duplicate param":     {func(tree *Tree) { tree.RegisterRoute(GET, "/{id}/{id}", handler) }, ErrInvalidPattern},
+		"misplaced catch-all": {func(tree *Tree) { tree.RegisterRoute(GET, "/*/edit", handler) }, ErrInvalidPattern},
+		"duplicate route": {func(tree *Tree) {
+			tree.RegisterRoute(GET, "/path", handler)
+			tree.RegisterRoute(GET, "/path", handler)
+		}, ErrDuplicateRoute},
+	} {
+		t.Run(name, func(t *testing.T) {
+			tree := CreateTree()
+			assertPanicsWith(t, testCase.want, func() { testCase.register(&tree) })
+		})
 	}
 }
 

@@ -45,10 +45,10 @@ func CreateTree() Tree {
 
 func (t *Tree) RegisterRoute(httpMethod Method, newValue string, method http.Handler) {
 	if newValue == "" {
-		panic("path must not be empty")
+		panic(ErrEmptyPath)
 	}
 	if method == nil {
-		panic("handler must not be nil")
+		panic(ErrNilHandler)
 	}
 	t.register(httpMethod, newValue, method)
 }
@@ -56,7 +56,7 @@ func (t *Tree) RegisterRoute(httpMethod Method, newValue string, method http.Han
 func (t *Tree) register(httpMethod Method, path string, method http.Handler) {
 	target, variableNames := t.ensurePath(path)
 	if target.hasMethod(httpMethod) {
-		panic(fmt.Sprintf("Duplicated path: %s", path))
+		panic(fmt.Errorf("%w: %s %s", ErrDuplicateRoute, httpMethod, path))
 	}
 	target.setEndpoint(httpMethod, method, variableNames)
 }
@@ -67,11 +67,11 @@ func (t *Tree) register(httpMethod Method, path string, method http.Handler) {
 // a lookup collects.
 func (t *Tree) ensurePath(path string) (*node, []string) {
 	if path[0] != '/' {
-		panic("Path must begin with front-slash (/)")
+		panic(fmt.Errorf("%w: %s", ErrPathNotRooted, path))
 	}
 	segments := splitSegments(path)
 	if err := validateSegments(path, segments); err != nil {
-		panic(err.Error())
+		panic(err)
 	}
 
 	currNode := t.root
@@ -168,12 +168,12 @@ func validateSegments(path string, segments []string) error {
 	paramNames := make(map[string]struct{})
 	for i, segment := range segments {
 		if segment == "" {
-			return fmt.Errorf("path contains an empty segment")
+			return fmt.Errorf("%w: %s contains an empty segment", ErrInvalidPattern, path)
 		}
 
 		if segment == WildcardParam {
 			if i != len(segments)-1 {
-				return fmt.Errorf("catch-all '%s' must be the last segment of '%s'", WildcardParam, path)
+				return fmt.Errorf("%w: catch-all %q must be the last segment of %s", ErrInvalidPattern, WildcardParam, path)
 			}
 			continue
 		}
@@ -182,22 +182,22 @@ func validateSegments(path string, segments []string) error {
 		endsWithBrace := segment[len(segment)-1] == '}'
 		if startsWithBrace || endsWithBrace {
 			if !startsWithBrace || !endsWithBrace {
-				return fmt.Errorf("Delimiter '{' must be closed by '}'")
+				return fmt.Errorf("%w: unbalanced braces in segment %q of %s", ErrInvalidPattern, segment, path)
 			}
 
 			paramName := strings.TrimSuffix(strings.TrimPrefix(segment, "{"), "}")
 			if paramName == "" || strings.ContainsAny(paramName, "{}") {
-				return fmt.Errorf("invalid route parameter: %s", segment)
+				return fmt.Errorf("%w: invalid parameter %q in %s", ErrInvalidPattern, segment, path)
 			}
 			if paramName == WildcardParam {
-				return fmt.Errorf("'%s' is reserved for the catch-all and cannot name a parameter", WildcardParam)
+				return fmt.Errorf("%w: %q is reserved for the catch-all and cannot name a parameter", ErrInvalidPattern, WildcardParam)
 			}
 			if _, exists := paramNames[paramName]; exists {
-				return fmt.Errorf("routing pattern '%s' contains duplicate param key, '%s'", path, segment)
+				return fmt.Errorf("%w: %s declares %q twice", ErrInvalidPattern, path, segment)
 			}
 			paramNames[paramName] = struct{}{}
 		} else if strings.ContainsAny(segment, "{}") {
-			return fmt.Errorf("invalid route segment: %s", segment)
+			return fmt.Errorf("%w: invalid segment %q in %s", ErrInvalidPattern, segment, path)
 		}
 	}
 	return nil
