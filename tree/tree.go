@@ -122,20 +122,17 @@ func (t *Tree) FindPath(path string) *Node {
 }
 
 func (t *Tree) findPath(path string) (*Node, []string) {
-	currNode := t.root
 	if path == "/" || path == "" {
-		if len(currNode.Method) == 0 {
+		if len(t.root.Method) == 0 {
 			return nil, nil
 		}
-		return currNode, nil
+		return t.root, nil
 	}
-	if len(currNode.children) == 0 {
-		if currNode.parameter == nil {
-			return nil, nil
-		}
+	if len(t.root.children) == 0 && t.root.parameter == nil {
+		return nil, nil
 	}
 	paths := strings.Split(strings.Trim(path, "/"), "/")
-	return matchPath(currNode, paths, 0, nil)
+	return matchPath(t.root, paths, 0, nil)
 }
 
 func matchPath(node *Node, paths []string, index int, values []string) (*Node, []string) {
