@@ -120,6 +120,36 @@ func (router *Router) Register(httpMethod Method, path string, method http.Handl
 		router.chain.BuildHandler(method))
 }
 
+// Get and the shortcuts below are Register with the verb spelled into the name,
+// which is how routing tables usually read.
+func (router *Router) Get(path string, handler http.HandlerFunc) {
+	router.Register(GET, path, handler)
+}
+
+func (router *Router) Head(path string, handler http.HandlerFunc) {
+	router.Register(HEAD, path, handler)
+}
+
+func (router *Router) Post(path string, handler http.HandlerFunc) {
+	router.Register(POST, path, handler)
+}
+
+func (router *Router) Put(path string, handler http.HandlerFunc) {
+	router.Register(PUT, path, handler)
+}
+
+func (router *Router) Patch(path string, handler http.HandlerFunc) {
+	router.Register(PATCH, path, handler)
+}
+
+func (router *Router) Delete(path string, handler http.HandlerFunc) {
+	router.Register(DELETE, path, handler)
+}
+
+func (router *Router) Options(path string, handler http.HandlerFunc) {
+	router.Register(OPTIONS, path, handler)
+}
+
 func (router *Router) Use(middleware func(http.Handler) http.Handler) {
 	router.mu.Lock()
 	defer router.mu.Unlock()

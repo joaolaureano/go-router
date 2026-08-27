@@ -431,6 +431,36 @@ func TestRouter_MethodNotAllowedNilHandler(t *testing.T) {
 	assert.PanicsWithValue(t, "handler must not be nil", func() { r.MethodNotAllowed(nil) })
 }
 
+func TestRouter_VerbShortcuts(t *testing.T) {
+	r := NewRouter()
+	echo := func(name string) http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) { w.Write([]byte(name)) }
+	}
+	r.Get("/path", echo("get"))
+	r.Head("/path", echo("head"))
+	r.Post("/path", echo("post"))
+	r.Put("/path", echo("put"))
+	r.Patch("/path", echo("patch"))
+	r.Delete("/path", echo("delete"))
+	r.Options("/path", echo("options"))
+
+	for verb, want := range map[string]string{
+		http.MethodGet:     "get",
+		http.MethodHead:    "head",
+		http.MethodPost:    "post",
+		http.MethodPut:     "put",
+		http.MethodPatch:   "patch",
+		http.MethodDelete:  "delete",
+		http.MethodOptions: "options",
+	} {
+		response := httptest.NewRecorder()
+		r.ServeHTTP(response, httptest.NewRequest(verb, "/path", nil))
+
+		assert.Equal(t, http.StatusOK, response.Code, verb)
+		assert.Equal(t, want, response.Body.String(), verb)
+	}
+}
+
 func TestRouter_RegisterPathWithQueryString(t *testing.T) {
 	r := NewRouter()
 	r.Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {

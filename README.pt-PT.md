@@ -45,6 +45,7 @@ Mais exemplos no diretório ```.example/```
 
 ## Interface
 - `Register(httpMethod router.Method, path string, method http.HandlerFunc)`: Registra um método HTTP para um determinado caminho.
+- `Get/Head/Post/Put/Patch/Delete/Options(path string, handler http.HandlerFunc)`: Atalhos para `Register` com o verbo no nome.
 - `Use(middleware func(http.Handler) http.Handler)`: Utiliza um middleware para manipular as requisições HTTP.
 - `NotFound(notFoundFn http.HandlerFunc)`: Define um handler para requisições em rotas não encontradas.
 - `MethodNotAllowed(fn http.HandlerFunc)`: Sets a handler for requests to an existing path under an unregistered method.

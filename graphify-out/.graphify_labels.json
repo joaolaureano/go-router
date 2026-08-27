@@ -5,7 +5,7 @@
   "3": "FromRequest",
   "4": "_const.HTTPMethods",
   "5": "methodFilter",
-  "6": "router.Router",
+  "6": "net/http.Handler",
   "7": "Repository",
   "8": "github.com/joaolaureano/go-router",
   "9": "_const.HTTPMethods",
@@ -16,5 +16,6 @@
   "14": "github.com/joaolaureano/go-router/tree.RouterTree",
   "15": "Go-Router",
   "16": "newNode",
-  "17": "NewChain"
+  "17": "Router",
+  "18": "NewChain"
 }

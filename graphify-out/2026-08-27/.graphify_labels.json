@@ -5,7 +5,7 @@
   "3": "FromRequest",
   "4": "_const.HTTPMethods",
   "5": "methodFilter",
-  "6": "Router",
+  "6": "router.Router",
   "7": "Repository",
   "8": "github.com/joaolaureano/go-router",
   "9": "_const.HTTPMethods",
