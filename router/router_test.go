@@ -376,6 +376,22 @@ func TestRouter_GroupResultIsUsableAfterTheCallback(t *testing.T) {
 	assert.Equal(t, "second", response.Body.String())
 }
 
+func TestRouter_RouteWithoutVariablesCarriesNoContext(t *testing.T) {
+	r := NewRouter()
+	var found bool
+	var value string
+	r.Register(GET, "/static", func(w http.ResponseWriter, r *http.Request) {
+		routerCtx, ok := context.FromRequest(r)
+		found = ok
+		value = routerCtx.Value("anything")
+	})
+
+	r.ServeHTTP(httptest.NewRecorder(), httptest.NewRequest(http.MethodGet, "/static", nil))
+
+	assert.False(t, found, "a route capturing nothing should not derive a request")
+	assert.Equal(t, "", value, "reading through the absent context must stay safe")
+}
+
 func TestRouter_RegisterPathWithQueryString(t *testing.T) {
 	r := NewRouter()
 	r.Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {

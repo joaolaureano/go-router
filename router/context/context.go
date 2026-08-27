@@ -15,7 +15,13 @@ type RouterContext struct {
 	params map[string]string
 }
 
+// Value reads a route variable. It tolerates a nil receiver so that the common
+// `routerCtx, _ := FromRequest(r)` shape stays safe on a route that captured
+// nothing and therefore carries no context.
 func (routerCtx *RouterContext) Value(key string) string {
+	if routerCtx == nil {
+		return ""
+	}
 	return routerCtx.params[key]
 }
 

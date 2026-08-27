@@ -73,9 +73,6 @@ func NewPrefixRouter(prefix string) *Router {
 }
 
 func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	routerCtx := context.NewContext()
-	r = routerCtx.WithRequest(r)
-
 	router.mu.RLock()
 	match, status := router.root.Lookup(tree.Method(r.Method), r.URL.Path)
 	notFound := *router.notFound
@@ -83,8 +80,15 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	switch status {
 	case tree.StatusFound:
-		for _, param := range match.Params {
-			routerCtx.Set(param.Name, param.Value)
+		// A route with no variables has nothing to carry, and deriving a
+		// request costs an allocation, so only routes that captured something
+		// pay for the context.
+		if len(match.Params) > 0 {
+			routerCtx := context.NewContext()
+			for _, param := range match.Params {
+				routerCtx.Set(param.Name, param.Value)
+			}
+			r = routerCtx.WithRequest(r)
 		}
 		match.Handler.ServeHTTP(w, r)
 	case tree.StatusMethodNotAllowed:
