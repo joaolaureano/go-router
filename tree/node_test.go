@@ -16,26 +16,31 @@ func TestNewNodeInitializesInvariantState(t *testing.T) {
 	assert.Empty(t, node.endpoints)
 }
 
-func TestNodeAddChildSeparatesStaticAndParameterChildren(t *testing.T) {
+func TestNodeAddChildSeparatesTheThreeSlots(t *testing.T) {
 	node := newNode("users")
 	staticChild := newNode("list")
-	parameterChild := newNode("{*}")
+	parameterChild := newNode(parameterNodePath)
+	wildcardChild := newNode(WildcardParam)
 
-	node.addChild(staticChild, false)
-	node.addChild(parameterChild, true)
+	node.addChild(staticChild, staticSegment)
+	node.addChild(parameterChild, parameterSegment)
+	node.addChild(wildcardChild, wildcardSegment)
 
 	assert.Same(t, staticChild, node.staticChild("list"))
-	assert.Nil(t, node.staticChild("{*}"), "a literal segment must not reach the parameter branch")
-	assert.Same(t, parameterChild, node.childFor("{*}", true))
+	assert.Nil(t, node.staticChild(parameterNodePath), "a literal segment must not reach the parameter branch")
+	assert.Nil(t, node.staticChild(WildcardParam), "a literal segment must not reach the catch-all branch")
+	assert.Same(t, parameterChild, node.childFor(parameterNodePath, parameterSegment))
+	assert.Same(t, wildcardChild, node.childFor(WildcardParam, wildcardSegment))
 	assert.Len(t, node.children, 1)
 	assert.Same(t, parameterChild, node.parameter)
+	assert.Same(t, wildcardChild, node.wildcard)
 }
 
 func TestNodeAddChildRejectsNil(t *testing.T) {
 	node := newNode("users")
 
 	assert.PanicsWithValue(t, "node child must not be nil", func() {
-		node.addChild(nil, false)
+		node.addChild(nil, staticSegment)
 	})
 }
 

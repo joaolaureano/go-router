@@ -3,6 +3,7 @@ package tree
 import (
 	"net/http"
 	"sort"
+	"strings"
 )
 
 // node is one path segment of the tree. It is deliberately unexported: the
@@ -12,8 +13,19 @@ type node struct {
 	path      string
 	children  []*node
 	parameter *node
+	wildcard  *node
 	endpoints map[Method]endpoint
 }
+
+// segmentKind tells the three shapes a pattern segment can take apart. Only the
+// registrar classifies a segment: to a request, every segment is literal text.
+type segmentKind int
+
+const (
+	staticSegment segmentKind = iota
+	parameterSegment
+	wildcardSegment
+)
 
 // endpoint is what a single method registered on a node resolves to. The
 // variable names live here rather than on the node because two methods on the
@@ -44,24 +56,31 @@ func (n *node) staticChild(path string) *node {
 }
 
 // childFor returns the slot a registration should descend into. Only the
-// registrar knows whether a segment was written as a parameter, so only it may
-// ask for the parameter branch.
-func (n *node) childFor(path string, parameter bool) *node {
-	if parameter {
+// registrar knows how a segment was written, so only it may ask for the
+// parameter or wildcard branch.
+func (n *node) childFor(path string, kind segmentKind) *node {
+	switch kind {
+	case parameterSegment:
 		return n.parameter
+	case wildcardSegment:
+		return n.wildcard
+	default:
+		return n.staticChild(path)
 	}
-	return n.staticChild(path)
 }
 
-func (n *node) addChild(child *node, parameter bool) {
+func (n *node) addChild(child *node, kind segmentKind) {
 	if child == nil {
 		panic("node child must not be nil")
 	}
-	if parameter {
+	switch kind {
+	case parameterSegment:
 		n.parameter = child
-		return
+	case wildcardSegment:
+		n.wildcard = child
+	default:
+		n.children = append(n.children, child)
 	}
-	n.children = append(n.children, child)
 }
 
 func (n *node) setEndpoint(httpMethod Method, handler http.Handler, variableNames []string) {
@@ -117,16 +136,19 @@ func (search *lookup) allowedMethods() []Method {
 	return methods
 }
 
-// match walks the remaining segments, preferring the static child and falling
-// back to the parameter branch, and returns the first node answering the
-// method being searched for.
+// match walks the remaining segments, preferring the static child, then the
+// parameter branch, and only then the catch-all, and returns the first node
+// answering the method being searched for.
+//
+// The catch-all is also tried once the path runs out, so that "/files/*" covers
+// "/files" itself with an empty remainder.
 func (n *node) match(paths []string, index int, search *lookup) *node {
 	if index == len(paths) {
 		if n.hasMethod(search.httpMethod) {
 			return n
 		}
 		search.recordAllowed(n)
-		return nil
+		return n.matchWildcard(paths, index, search)
 	}
 
 	if child := n.staticChild(paths[index]); child != nil {
@@ -143,11 +165,25 @@ func (n *node) match(paths []string, index int, search *lookup) *node {
 		search.values = search.values[:len(search.values)-1]
 	}
 
+	return n.matchWildcard(paths, index, search)
+}
+
+// matchWildcard consumes whatever is left of the path in one value. A catch-all
+// node is always terminal, so there is nothing further to walk.
+func (n *node) matchWildcard(paths []string, index int, search *lookup) *node {
+	if n.wildcard == nil {
+		return nil
+	}
+
+	search.values = append(search.values, strings.Join(paths[index:], "/"))
+	if n.wildcard.hasMethod(search.httpMethod) {
+		return n.wildcard
+	}
+	search.recordAllowed(n.wildcard)
+	search.values = search.values[:len(search.values)-1]
 	return nil
 }
 
-// mergeNodes copies source into target. prefixVariables names the variables
-// that target already sits below, which every grafted endpoint has to inherit.
 func mergeNodes(target, source *node, prefixVariables []string) {
 	for httpMethod, sourceEndpoint := range source.endpoints {
 		if !target.hasMethod(httpMethod) {
@@ -164,14 +200,21 @@ func mergeNodes(target, source *node, prefixVariables []string) {
 		mergeNodes(targetChild, sourceChild, prefixVariables)
 	}
 
-	if source.parameter == nil {
+	mergeBranch(&target.parameter, source.parameter, prefixVariables)
+	mergeBranch(&target.wildcard, source.wildcard, prefixVariables)
+}
+
+// mergeBranch merges one of the single-slot branches, cloning when the target
+// has nothing there yet.
+func mergeBranch(target **node, source *node, prefixVariables []string) {
+	if source == nil {
 		return
 	}
-	if target.parameter == nil {
-		target.parameter = cloneNode(source.parameter, prefixVariables)
+	if *target == nil {
+		*target = cloneNode(source, prefixVariables)
 		return
 	}
-	mergeNodes(target.parameter, source.parameter, prefixVariables)
+	mergeNodes(*target, source, prefixVariables)
 }
 
 func cloneNode(source *node, prefixVariables []string) *node {
@@ -184,6 +227,9 @@ func cloneNode(source *node, prefixVariables []string) *node {
 	}
 	if source.parameter != nil {
 		clone.parameter = cloneNode(source.parameter, prefixVariables)
+	}
+	if source.wildcard != nil {
+		clone.wildcard = cloneNode(source.wildcard, prefixVariables)
 	}
 	return clone
 }

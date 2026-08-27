@@ -43,6 +43,18 @@ O projeto foi desenvolvido com o fim de aprendizado e experimentação da lingua
 ```
 Mais exemplos no diretório ```.example/```
 
+
+### Rotas catch-all
+Um segmento final `*` casa com o resto do caminho e o captura sob `router.WildcardParam`:
+
+```go
+r.Get("/files/*", func(w http.ResponseWriter, r *http.Request) {
+    http.ServeFile(w, r, filepath.Join("./public", context.Param(r, router.WildcardParam)))
+})
+```
+
+Rotas estáticas e com parâmetro têm precedência, portanto `/files/readme` continua a chegar à rota registada para tal. `*` só é catch-all como segmento inteiro, e apenas como o último.
+
 ## Interface
 - `Register(httpMethod router.Method, path string, method http.HandlerFunc)`: Registra um método HTTP para um determinado caminho.
 - `Get/Head/Post/Put/Patch/Delete/Options(path string, handler http.HandlerFunc)`: Atalhos para `Register` com o verbo no nome.

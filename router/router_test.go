@@ -532,6 +532,42 @@ func TestRouter_MountRejectsSharedTree(t *testing.T) {
 	assert.Panics(t, func() { r.Mount("/api", r.With()) })
 }
 
+func TestRouter_CatchAllRoute(t *testing.T) {
+	r := NewRouter()
+	r.Get("/files/*", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("serving:" + context.Param(r, WildcardParam)))
+	})
+	r.Get("/files/readme", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("exact"))
+	})
+
+	for path, want := range map[string]string{
+		"/files/a/b/c":  "serving:a/b/c",
+		"/files/readme": "exact",
+		"/files":        "serving:",
+	} {
+		response := httptest.NewRecorder()
+		r.ServeHTTP(response, httptest.NewRequest(http.MethodGet, path, nil))
+
+		assert.Equal(t, http.StatusOK, response.Code, path)
+		assert.Equal(t, want, response.Body.String(), path)
+	}
+}
+
+func TestRouter_CatchAllUnderGroup(t *testing.T) {
+	r := NewRouter()
+	r.Group("/static", func(subrouter *Router) {
+		subrouter.Get("/*", func(w http.ResponseWriter, r *http.Request) {
+			w.Write([]byte(context.Param(r, WildcardParam)))
+		})
+	})
+
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, httptest.NewRequest(http.MethodGet, "/static/css/app.css", nil))
+
+	assert.Equal(t, "css/app.css", response.Body.String())
+}
+
 func TestRouter_RegisterPathWithQueryString(t *testing.T) {
 	r := NewRouter()
 	r.Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {

@@ -290,6 +290,74 @@ func TestLookup_AllowCollectsEveryBranchThatEndsThePath(t *testing.T) {
 	assert.Equal(t, []Method{PATCH, POST}, match.AllowedMethods)
 }
 
+func TestLookup_CatchAll(t *testing.T) {
+	tree := CreateTree()
+	tree.RegisterRoute(GET, "/files/*", handler)
+
+	for path, want := range map[string]string{
+		"/files/a/b/c": "a/b/c",
+		"/files/a":     "a",
+		"/files/":      "",
+		"/files":       "",
+	} {
+		match, status := tree.Lookup(GET, path)
+
+		assert.Equal(t, StatusFound, status, path)
+		assert.Equal(t, []Param{{Name: WildcardParam, Value: want}}, match.Params, path)
+	}
+}
+
+func TestLookup_CatchAllYieldsToStaticAndParameter(t *testing.T) {
+	tree := CreateTree()
+	tree.RegisterRoute(GET, "/files/exact", handler)
+	tree.RegisterRoute(GET, "/files/{id}/edit", handler)
+	tree.RegisterRoute(GET, "/files/*", handler)
+
+	match, status := tree.Lookup(GET, "/files/exact")
+	assert.Equal(t, StatusFound, status)
+	assert.Empty(t, match.Params, "a static route wins over the catch-all")
+
+	match, status = tree.Lookup(GET, "/files/7/edit")
+	assert.Equal(t, StatusFound, status)
+	assert.Equal(t, []Param{{Name: "id", Value: "7"}}, match.Params, "a parameter route wins over the catch-all")
+
+	match, status = tree.Lookup(GET, "/files/7/other")
+	assert.Equal(t, StatusFound, status)
+	assert.Equal(t, []Param{{Name: WildcardParam, Value: "7/other"}}, match.Params, "the catch-all takes what nothing else matched")
+}
+
+func TestLookup_CatchAllAfterParameters(t *testing.T) {
+	tree := CreateTree()
+	tree.RegisterRoute(GET, "/{tenant}/files/*", handler)
+
+	match, status := tree.Lookup(GET, "/acme/files/a/b")
+
+	assert.Equal(t, StatusFound, status)
+	assert.Equal(t, []Param{{Name: "tenant", Value: "acme"}, {Name: WildcardParam, Value: "a/b"}}, match.Params)
+}
+
+func TestLookup_CatchAllIsMethodAware(t *testing.T) {
+	tree := CreateTree()
+	tree.RegisterRoute(POST, "/files/*", handler)
+
+	match, status := tree.Lookup(GET, "/files/a/b")
+
+	assert.Equal(t, StatusMethodNotAllowed, status)
+	assert.Equal(t, []Method{POST}, match.AllowedMethods)
+}
+
+func TestRegister_CatchAllMustBeLast(t *testing.T) {
+	tree := CreateTree()
+
+	assert.Panics(t, func() { tree.RegisterRoute(GET, "/files/*/edit", handler) })
+}
+
+func TestRegister_WildcardNameIsReserved(t *testing.T) {
+	tree := CreateTree()
+
+	assert.Panics(t, func() { tree.RegisterRoute(GET, "/{*}", handler) })
+}
+
 func TestLookup_EmptyTree(t *testing.T) {
 	tree := CreateTree()
 

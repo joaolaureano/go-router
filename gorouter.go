@@ -52,6 +52,9 @@ type Router interface {
 // package can name a method.
 type Method = router.Method
 
+// WildcardParam is the name a catch-all route captures under.
+const WildcardParam = router.WildcardParam
+
 const (
 	GET     = router.GET
 	HEAD    = router.HEAD

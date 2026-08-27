@@ -15,6 +15,10 @@ import (
 // a method does not force callers to import the tree package.
 type Method = tree.Method
 
+// WildcardParam is the name a catch-all route captures under: a request to
+// "/files/a/b" against "/files/*" reads "a/b" from context.Param(r, "*").
+const WildcardParam = tree.WildcardParam
+
 const (
 	GET     = tree.GET
 	HEAD    = tree.HEAD

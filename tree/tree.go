@@ -77,16 +77,19 @@ func (t *Tree) ensurePath(path string) (*node, []string) {
 	currNode := t.root
 	var variableNames []string
 	for _, segment := range segments {
-		isParameter := isParam(segment)
+		kind := classify(segment)
 		nodePath := segment
-		if isParameter {
-			nodePath = "{*}"
+		switch kind {
+		case parameterSegment:
+			nodePath = parameterNodePath
 			variableNames = append(variableNames, strings.Trim(segment, "{}"))
+		case wildcardSegment:
+			variableNames = append(variableNames, WildcardParam)
 		}
-		nextNode := currNode.childFor(nodePath, isParameter)
+		nextNode := currNode.childFor(nodePath, kind)
 		if nextNode == nil {
 			nextNode = newNode(nodePath)
-			currNode.addChild(nextNode, isParameter)
+			currNode.addChild(nextNode, kind)
 		}
 		currNode = nextNode
 	}
@@ -163,9 +166,16 @@ func splitSegments(path string) []string {
 
 func validateSegments(path string, segments []string) error {
 	paramNames := make(map[string]struct{})
-	for _, segment := range segments {
+	for i, segment := range segments {
 		if segment == "" {
 			return fmt.Errorf("path contains an empty segment")
+		}
+
+		if segment == WildcardParam {
+			if i != len(segments)-1 {
+				return fmt.Errorf("catch-all '%s' must be the last segment of '%s'", WildcardParam, path)
+			}
+			continue
 		}
 
 		startsWithBrace := segment[0] == '{'
@@ -179,6 +189,9 @@ func validateSegments(path string, segments []string) error {
 			if paramName == "" || strings.ContainsAny(paramName, "{}") {
 				return fmt.Errorf("invalid route parameter: %s", segment)
 			}
+			if paramName == WildcardParam {
+				return fmt.Errorf("'%s' is reserved for the catch-all and cannot name a parameter", WildcardParam)
+			}
 			if _, exists := paramNames[paramName]; exists {
 				return fmt.Errorf("routing pattern '%s' contains duplicate param key, '%s'", path, segment)
 			}
@@ -188,6 +201,27 @@ func validateSegments(path string, segments []string) error {
 		}
 	}
 	return nil
+}
+
+// WildcardParam is the name a catch-all segment captures under. A request to
+// "/files/a/b" against "/files/*" reads "a/b" from it.
+const WildcardParam = "*"
+
+// parameterNodePath is the internal path every parameter node is stored under.
+// It is not a pattern anyone writes: "{*}" as a route parameter is rejected,
+// and as a request segment it is literal text.
+const parameterNodePath = "{*}"
+
+// classify reports how a pattern segment was written.
+func classify(segment string) segmentKind {
+	switch {
+	case segment == WildcardParam:
+		return wildcardSegment
+	case isParam(segment):
+		return parameterSegment
+	default:
+		return staticSegment
+	}
 }
 
 func isParam(path string) bool {

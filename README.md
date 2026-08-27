@@ -46,6 +46,18 @@ The project was developed for the purpose of learning and experimenting with the
 ```
 You can find more at folder ```.example/```
 
+
+### Catch-all routes
+A trailing `*` segment matches the rest of the path and captures it under `router.WildcardParam`:
+
+```go
+r.Get("/files/*", func(w http.ResponseWriter, r *http.Request) {
+    http.ServeFile(w, r, filepath.Join("./public", context.Param(r, router.WildcardParam)))
+})
+```
+
+Static and parameter routes take precedence, so `/files/readme` still reaches a route registered for it. `*` is only a catch-all as a whole segment, and only as the last one.
+
 ## Interface
 - `Register(httpMethod router.Method, path string, method http.HandlerFunc)`: Registers an HTTP method for a specific path.
 - `Get/Head/Post/Put/Patch/Delete/Options(path string, handler http.HandlerFunc)`: Shortcuts for `Register` with the verb spelled into the name.
