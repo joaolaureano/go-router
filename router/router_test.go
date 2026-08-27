@@ -392,6 +392,45 @@ func TestRouter_RouteWithoutVariablesCarriesNoContext(t *testing.T) {
 	assert.Equal(t, "", value, "reading through the absent context must stay safe")
 }
 
+func TestRouter_MethodNotAllowedHandlerIsConfigurable(t *testing.T) {
+	r := NewRouter()
+	r.Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {})
+	r.MethodNotAllowed(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusTeapot)
+		w.Write([]byte("custom"))
+	})
+
+	request := httptest.NewRequest(http.MethodPost, "/path", nil)
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, request)
+
+	assert.Equal(t, http.StatusTeapot, response.Code)
+	assert.Equal(t, "custom", response.Body.String())
+	assert.Equal(t, "GET", response.Header().Get("Allow"), "Allow is set before the handler runs")
+}
+
+func TestRouter_GroupMethodNotAllowedReachesServingRouter(t *testing.T) {
+	r := NewRouter()
+	r.Group("/group", func(subrouter *Router) {
+		subrouter.MethodNotAllowed(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusTeapot)
+		})
+		subrouter.Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {})
+	})
+
+	request := httptest.NewRequest(http.MethodPost, "/group/path", nil)
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, request)
+
+	assert.Equal(t, http.StatusTeapot, response.Code)
+}
+
+func TestRouter_MethodNotAllowedNilHandler(t *testing.T) {
+	r := NewRouter()
+
+	assert.PanicsWithValue(t, "handler must not be nil", func() { r.MethodNotAllowed(nil) })
+}
+
 func TestRouter_RegisterPathWithQueryString(t *testing.T) {
 	r := NewRouter()
 	r.Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {

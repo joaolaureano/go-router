@@ -38,9 +38,11 @@ type Router struct {
 
 	chain chain.Middleware
 
-	// notFound is shared by reference across the router family, like root and
-	// mu, so a handler installed on a group reaches the router that serves.
-	notFound *http.HandlerFunc
+	// notFound and methodNotAllowed are shared by reference across the router
+	// family, like root and mu, so a handler installed on a group reaches the
+	// router that serves.
+	notFound         *http.HandlerFunc
+	methodNotAllowed *http.HandlerFunc
 
 	prefix string
 
@@ -48,34 +50,33 @@ type Router struct {
 }
 
 func NewRouter() *Router {
-	tree := tree.CreateTree()
-	notFound := http.HandlerFunc(http.NotFound)
-
-	return &Router{
-		root:     &tree,
-		chain:    &chain.Chain{},
-		notFound: &notFound,
-		mu:       &sync.RWMutex{},
-	}
+	return NewPrefixRouter("")
 }
 
 func NewPrefixRouter(prefix string) *Router {
-	tree := tree.CreateTree()
+	routes := tree.CreateTree()
 	notFound := http.HandlerFunc(http.NotFound)
+	methodNotAllowed := http.HandlerFunc(defaultMethodNotAllowed)
 
 	return &Router{
-		root:     &tree,
-		chain:    &chain.Chain{},
-		notFound: &notFound,
-		prefix:   prefix,
-		mu:       &sync.RWMutex{},
+		root:             &routes,
+		chain:            &chain.Chain{},
+		notFound:         &notFound,
+		methodNotAllowed: &methodNotAllowed,
+		prefix:           prefix,
+		mu:               &sync.RWMutex{},
 	}
+}
+
+func defaultMethodNotAllowed(w http.ResponseWriter, r *http.Request) {
+	http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 }
 
 func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	router.mu.RLock()
 	match, status := router.root.Lookup(tree.Method(r.Method), r.URL.Path)
 	notFound := *router.notFound
+	methodNotAllowed := *router.methodNotAllowed
 	router.mu.RUnlock()
 
 	switch status {
@@ -96,8 +97,10 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		for i, httpMethod := range match.AllowedMethods {
 			allowed[i] = string(httpMethod)
 		}
+		// Allow is set before the handler runs, so a custom one inherits it and
+		// can still override it.
 		w.Header().Set("Allow", strings.Join(allowed, ", "))
-		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		methodNotAllowed(w, r)
 	default:
 		notFound(w, r)
 	}
@@ -135,6 +138,17 @@ func (router *Router) NotFound(notFoundFn http.HandlerFunc) {
 	*router.notFound = notFoundFn
 }
 
+// MethodNotAllowed sets the handler for requests whose path exists but not
+// under the requested method. The Allow header is already set when it runs.
+func (router *Router) MethodNotAllowed(methodNotAllowedFn http.HandlerFunc) {
+	if methodNotAllowedFn == nil {
+		panic("handler must not be nil")
+	}
+	router.mu.Lock()
+	defer router.mu.Unlock()
+	*router.methodNotAllowed = methodNotAllowedFn
+}
+
 // Group returns a subrouter that registers under prefix and starts from a copy
 // of this router's middleware. It shares the routing tree, so routes declared
 // on it are served by the router this was called on.
@@ -146,11 +160,12 @@ func (router *Router) Group(prefix string, fn func(r *Router)) *Router {
 	router.mu.RUnlock()
 	chain := chain.NewChain(middlewares...)
 	subrouter := &Router{
-		root:     router.root,
-		chain:    chain,
-		notFound: router.notFound,
-		prefix:   fullPrefix,
-		mu:       mu,
+		root:             router.root,
+		chain:            chain,
+		notFound:         router.notFound,
+		methodNotAllowed: router.methodNotAllowed,
+		prefix:           fullPrefix,
+		mu:               mu,
 	}
 
 	fn(subrouter)
@@ -162,10 +177,11 @@ func (router *Router) With(middleware ...func(http.Handler) http.Handler) *Route
 	router.mu.RLock()
 	middlewares := append([]func(http.Handler) http.Handler(nil), router.chain.Middlewares()...)
 	subrouter := &Router{
-		root:     router.root,
-		notFound: router.notFound,
-		prefix:   router.prefix,
-		mu:       router.mu,
+		root:             router.root,
+		notFound:         router.notFound,
+		methodNotAllowed: router.methodNotAllowed,
+		prefix:           router.prefix,
+		mu:               router.mu,
 	}
 	router.mu.RUnlock()
 	subrouter.chain = chain.NewChain(append(middlewares, middleware...)...)

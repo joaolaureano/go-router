@@ -47,6 +47,7 @@ Mais exemplos no diretório ```.example/```
 - `Register(httpMethod router.Method, path string, method http.HandlerFunc)`: Registra um método HTTP para um determinado caminho.
 - `Use(middleware func(http.Handler) http.Handler)`: Utiliza um middleware para manipular as requisições HTTP.
 - `NotFound(notFoundFn http.HandlerFunc)`: Define um handler para requisições em rotas não encontradas.
+- `MethodNotAllowed(fn http.HandlerFunc)`: Sets a handler for requests to an existing path under an unregistered method.
 - `Group(prefix string, fn func(r *router.Router)) *router.Router`: Agrupa rotas com um determinado prefixo.
 - `With(middleware ...func(http.Handler) http.Handler) *router.Router`: Utiliza middleware para um conjunto específico de rotas.
 

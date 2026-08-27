@@ -26,6 +26,11 @@ type Router interface {
 	// It takes a http.HandlerFunc as a parameter and assigns it as the handler for 404 routes.
 	NotFound(notFoundFn http.HandlerFunc)
 
+	// MethodNotAllowed sets the handler for requests whose path exists but is
+	// not registered under the requested method. The Allow header is already
+	// set by the time it runs.
+	MethodNotAllowed(methodNotAllowedFn http.HandlerFunc)
+
 	// Group creates a subgroup of routes with a common prefix.
 	// It takes a prefix string and a function that operates on a router.Router as parameters.
 	// This method allows organizing routes under a shared path prefix.
