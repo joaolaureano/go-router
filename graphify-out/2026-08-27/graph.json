@@ -907,14 +907,14 @@
     },
     {
       "id": "context_routercontext",
-      "label": "RouterContext",
+      "label": "context.RouterContext",
       "_origin": "ast",
       "community": 3,
       "community_name": "NewContext",
       "file_type": "code",
-      "norm_label": "routercontext",
-      "source_file": "router/context/context.go",
-      "source_location": "L12"
+      "norm_label": "context.routercontext",
+      "source_file": "",
+      "source_location": ""
     },
     {
       "id": "context_routercontext_injectintorequest",
@@ -1215,14 +1215,14 @@
     },
     {
       "id": "tree_routertree",
-      "label": "tree.RouterTree",
+      "label": "RouterTree",
       "_origin": "ast",
       "community": 5,
       "community_name": "Tree",
       "file_type": "code",
-      "norm_label": "tree.routertree",
-      "source_file": "",
-      "source_location": ""
+      "norm_label": "routertree",
+      "source_file": "tree/tree.go",
+      "source_location": "L16"
     },
     {
       "id": "tree_tree",
@@ -1244,7 +1244,7 @@
       "file_type": "code",
       "norm_label": ".findpath()",
       "source_file": "tree/tree.go",
-      "source_location": "L95"
+      "source_location": "L88"
     },
     {
       "id": "tree_tree_findpath_2da54a",
@@ -1255,7 +1255,7 @@
       "file_type": "code",
       "norm_label": ".findpath()",
       "source_file": "tree/tree.go",
-      "source_location": "L100"
+      "source_location": "L93"
     },
     {
       "id": "tree_tree_findroute",
@@ -1266,7 +1266,7 @@
       "file_type": "code",
       "norm_label": ".findroute()",
       "source_file": "tree/tree.go",
-      "source_location": "L77"
+      "source_location": "L70"
     },
     {
       "id": "tree_tree_isparam",
@@ -1277,7 +1277,7 @@
       "file_type": "code",
       "norm_label": "isparam()",
       "source_file": "tree/tree.go",
-      "source_location": "L167"
+      "source_location": "L158"
     },
     {
       "id": "tree_tree_merge",
@@ -1288,7 +1288,7 @@
       "file_type": "code",
       "norm_label": ".merge()",
       "source_file": "tree/tree.go",
-      "source_location": "L113"
+      "source_location": "L97"
     },
     {
       "id": "tree_tree_register",
@@ -1321,7 +1321,7 @@
       "file_type": "code",
       "norm_label": ".root()",
       "source_file": "tree/tree.go",
-      "source_location": "L121"
+      "source_location": "L105"
     },
     {
       "id": "tree_tree_setpathvariablevalues",
@@ -1332,7 +1332,7 @@
       "file_type": "code",
       "norm_label": "setpathvariablevalues()",
       "source_file": "tree/tree.go",
-      "source_location": "L125"
+      "source_location": "L109"
     },
     {
       "id": "tree_tree_splitsegments",
@@ -1343,7 +1343,7 @@
       "file_type": "code",
       "norm_label": "splitsegments()",
       "source_file": "tree/tree.go",
-      "source_location": "L134"
+      "source_location": "L121"
     },
     {
       "id": "tree_tree_test_testisparam",
@@ -1387,7 +1387,7 @@
       "file_type": "code",
       "norm_label": "validatesegments()",
       "source_file": "tree/tree.go",
-      "source_location": "L138"
+      "source_location": "L129"
     },
     {
       "id": "chain_chain",
@@ -2192,7 +2192,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tree/tree.go",
-      "source_location": "L96",
+      "source_location": "L89",
       "weight": 1.0
     },
     {
@@ -2204,7 +2204,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tree/tree.go",
-      "source_location": "L110",
+      "source_location": "L94",
       "weight": 1.0
     },
     {
@@ -2216,7 +2216,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tree/tree.go",
-      "source_location": "L81",
+      "source_location": "L74",
       "weight": 1.0
     },
     {
@@ -2228,7 +2228,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tree/tree.go",
-      "source_location": "L90",
+      "source_location": "L83",
       "weight": 1.0
     },
     {
@@ -2240,7 +2240,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tree/tree.go",
-      "source_location": "L114",
+      "source_location": "L98",
       "weight": 1.0
     },
     {
@@ -2252,7 +2252,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tree/tree.go",
-      "source_location": "L52",
+      "source_location": "L45",
       "weight": 1.0
     },
     {
@@ -2264,7 +2264,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tree/tree.go",
-      "source_location": "L53",
+      "source_location": "L46",
       "weight": 1.0
     },
     {
@@ -2276,7 +2276,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tree/tree.go",
-      "source_location": "L58",
+      "source_location": "L51",
       "weight": 1.0
     },
     {
@@ -3200,7 +3200,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree.go",
-      "source_location": "L100",
+      "source_location": "L93",
       "weight": 1.0
     },
     {
@@ -3212,7 +3212,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree.go",
-      "source_location": "L77",
+      "source_location": "L70",
       "weight": 1.0
     },
     {
@@ -3224,7 +3224,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree.go",
-      "source_location": "L77",
+      "source_location": "L70",
       "weight": 1.0
     },
     {
@@ -3236,7 +3236,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree.go",
-      "source_location": "L113",
+      "source_location": "L97",
       "weight": 1.0
     },
     {
@@ -3296,7 +3296,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "tree/tree.go",
-      "source_location": "L125",
+      "source_location": "L109",
       "weight": 1.0
     },
     {
@@ -3812,7 +3812,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "tree/tree.go",
-      "source_location": "L95",
+      "source_location": "L88",
       "weight": 1.0
     },
     {
@@ -3824,7 +3824,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "tree/tree.go",
-      "source_location": "L100",
+      "source_location": "L93",
       "weight": 1.0
     },
     {
@@ -3836,7 +3836,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "tree/tree.go",
-      "source_location": "L77",
+      "source_location": "L70",
       "weight": 1.0
     },
     {
@@ -3848,7 +3848,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "tree/tree.go",
-      "source_location": "L121",
+      "source_location": "L105",
       "weight": 1.0
     },
     {
@@ -4656,6 +4656,17 @@
     },
     {
       "source": "tree_tree",
+      "target": "tree_tree_setpathvariablevalues",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tree/tree.go",
+      "source_location": "L109",
+      "weight": 1.0
+    },
+    {
+      "source": "tree_tree",
       "target": "tree_tree",
       "relation": "contains",
       "_origin": "ast",
@@ -4667,24 +4678,13 @@
     },
     {
       "source": "tree_tree",
-      "target": "tree_tree_setpathvariablevalues",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tree/tree.go",
-      "source_location": "L125",
-      "weight": 1.0
-    },
-    {
-      "source": "tree_tree",
       "target": "tree_tree_splitsegments",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree.go",
-      "source_location": "L134",
+      "source_location": "L121",
       "weight": 1.0
     },
     {
@@ -4695,7 +4695,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree.go",
-      "source_location": "L138",
+      "source_location": "L129",
+      "weight": 1.0
+    },
+    {
+      "source": "tree_tree",
+      "target": "tree_tree_isparam",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tree/tree.go",
+      "source_location": "L158",
       "weight": 1.0
     },
     {
@@ -4707,17 +4718,6 @@
       "confidence_score": 1.0,
       "source_file": "tree/tree.go",
       "source_location": "L16",
-      "weight": 1.0
-    },
-    {
-      "source": "tree_tree",
-      "target": "tree_tree_isparam",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tree/tree.go",
-      "source_location": "L167",
       "weight": 1.0
     },
     {
@@ -5338,35 +5338,13 @@
     },
     {
       "source": "tree_tree",
-      "target": "tree_tree_findpath_2da54a",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tree/tree.go",
-      "source_location": "L100",
-      "weight": 1.0
-    },
-    {
-      "source": "tree_tree",
-      "target": "tree_tree_merge",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tree/tree.go",
-      "source_location": "L113",
-      "weight": 1.0
-    },
-    {
-      "source": "tree_tree",
       "target": "tree_tree_root",
       "relation": "method",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree.go",
-      "source_location": "L121",
+      "source_location": "L105",
       "weight": 1.0
     },
     {
@@ -5399,7 +5377,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree.go",
-      "source_location": "L77",
+      "source_location": "L70",
       "weight": 1.0
     },
     {
@@ -5410,7 +5388,29 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tree/tree.go",
-      "source_location": "L95",
+      "source_location": "L88",
+      "weight": 1.0
+    },
+    {
+      "source": "tree_tree",
+      "target": "tree_tree_findpath_2da54a",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tree/tree.go",
+      "source_location": "L93",
+      "weight": 1.0
+    },
+    {
+      "source": "tree_tree",
+      "target": "tree_tree_merge",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tree/tree.go",
+      "source_location": "L97",
       "weight": 1.0
     },
     {
@@ -5914,7 +5914,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree.go",
-      "source_location": "L96",
+      "source_location": "L89",
       "weight": 1.0
     },
     {
@@ -5926,7 +5926,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree.go",
-      "source_location": "L110",
+      "source_location": "L94",
       "weight": 1.0
     },
     {
@@ -5938,7 +5938,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree.go",
-      "source_location": "L81",
+      "source_location": "L74",
       "weight": 1.0
     },
     {
@@ -5950,7 +5950,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree.go",
-      "source_location": "L118",
+      "source_location": "L102",
       "weight": 1.0
     },
     {
@@ -5962,7 +5962,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "tree/tree.go",
-      "source_location": "L66",
+      "source_location": "L59",
       "weight": 1.0
     },
     {
@@ -6339,5 +6339,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "f6aa488172c0d24f411ca252e5fa4477fc07d58a"
+  "built_at_commit": "eae3bf8d70703e890a89441a22ebb19d0cdad102"
 }

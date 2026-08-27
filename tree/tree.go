@@ -54,7 +54,7 @@ func (t *Tree) register(httpMethod _const.HTTPMethods, path string, method http.
 			nodePath = "{*}"
 			pathVariablesName = append(pathVariablesName, strings.Trim(pathSplitted, "{}"))
 		}
-		nextNode := currNode.getChild(nodePath)
+		nextNode := currNode.childFor(nodePath, isParameter)
 		if nextNode == nil {
 			nextNode = newNode(nodePath)
 			currNode.addChild(nextNode, isParameter)

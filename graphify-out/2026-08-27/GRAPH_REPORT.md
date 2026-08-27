@@ -1,7 +1,7 @@
 # Graph Report - go-router  (2026-08-27)
 
 ## Corpus Check
-- 16 files · ~5,787 words
+- 16 files · ~5,772 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f6aa4881`
+- Built from commit: `eae3bf8d`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -33,11 +33,11 @@
 3. `Node` - 20 edges
 4. `Tree` - 16 edges
 5. `Router` - 14 edges
-6. `NewContext()` - 11 edges
-7. `HTTPMethods` - 11 edges
-8. `setup()` - 11 edges
+6. `HTTPMethods` - 11 edges
+7. `setup()` - 11 edges
+8. `NewContext()` - 11 edges
 9. `Chain` - 9 edges
-10. `RouterContext` - 8 edges
+10. `newNode()` - 8 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `NewPrefixRouter()` --calls--> `CreateTree()`  [EXTRACTED]
@@ -48,8 +48,8 @@
   gorouter.go → router/router.go
 - `Router` --references--> `Middleware`  [EXTRACTED]
   router/router.go → chain/chain.go
-- `TestFindRoute_FallsBackToParameterAfterStaticBranchFails()` --calls--> `NewContext()`  [EXTRACTED]
-  tree/tree_test.go → router/context/context.go
+- `CreateTree()` --calls--> `newNode()`  [INFERRED]
+  tree/tree.go → tree/node.go
 
 ## Import Cycles
 - None detected.
@@ -70,11 +70,11 @@ Nodes (31): net/http/httptest.Server, testing.T, NewRouter(), setup(), TestNewRo
 
 ### Community 3 - "NewContext"
 Cohesion: 0.13
-Nodes (18): contextKey, RouterContext, net/http.Request, net/http.ResponseWriter, FromRequest(), NewContext(), setup(), TestContext_InvalidKey() (+10 more)
+Nodes (18): contextKey, context.RouterContext, net/http.Request, net/http.ResponseWriter, FromRequest(), NewContext(), setup(), TestContext_InvalidKey() (+10 more)
 
 ### Community 5 - "Tree"
 Cohesion: 0.21
-Nodes (12): github.com/joaolaureano/go-router/router/context.RouterContext, methodFilter, Node, tree.RouterTree, Tree, isParam(), setPathVariableValues(), splitSegments() (+4 more)
+Nodes (12): github.com/joaolaureano/go-router/router/context.RouterContext, methodFilter, Node, RouterTree, Tree, isParam(), setPathVariableValues(), splitSegments() (+4 more)
 
 ### Community 6 - "Router"
 Cohesion: 0.11

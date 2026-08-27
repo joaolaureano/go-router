@@ -27,16 +27,26 @@ func newNode(path string) *Node {
 	}
 }
 
-func (node *Node) getChild(path string) *Node {
+// staticChild finds the child holding this exact segment. It never returns the
+// parameter branch: a request segment that happens to read "{*}" is literal
+// text, not a request for the parameter slot.
+func (node *Node) staticChild(path string) *Node {
 	for _, child := range node.children {
 		if path == child.path {
 			return child
 		}
 	}
-	if path == "{*}" {
+	return nil
+}
+
+// childFor returns the slot a registration should descend into. Only the
+// registrar knows whether a segment was written as a parameter, so only it may
+// ask for the parameter branch.
+func (node *Node) childFor(path string, parameter bool) *Node {
+	if parameter {
 		return node.parameter
 	}
-	return nil
+	return node.staticChild(path)
 }
 
 func (node *Node) addChild(child *Node, parameter bool) {
@@ -109,7 +119,7 @@ func matchPath(node *Node, paths []string, index int, values []string, filter me
 		return node, values
 	}
 
-	if child := node.getChild(paths[index]); child != nil {
+	if child := node.staticChild(paths[index]); child != nil {
 		if matchedNode, matchedValues := matchPath(child, paths, index+1, values, filter); matchedNode != nil {
 			return matchedNode, matchedValues
 		}
@@ -133,7 +143,7 @@ func mergeNodes(target, source *Node) {
 	}
 
 	for _, sourceChild := range source.children {
-		targetChild := staticChild(target, sourceChild.path)
+		targetChild := target.staticChild(sourceChild.path)
 		if targetChild == nil {
 			target.children = append(target.children, cloneNode(sourceChild))
 			continue
@@ -149,15 +159,6 @@ func mergeNodes(target, source *Node) {
 		return
 	}
 	mergeNodes(target.parameter, source.parameter)
-}
-
-func staticChild(node *Node, path string) *Node {
-	for _, child := range node.children {
-		if child.path == path {
-			return child
-		}
-	}
-	return nil
 }
 
 func cloneNode(source *Node) *Node {

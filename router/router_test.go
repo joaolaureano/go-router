@@ -346,6 +346,21 @@ func TestRouter_NotFoundNilHandler(t *testing.T) {
 	assert.PanicsWithValue(t, "handler must not be nil", func() { r.NotFound(nil) })
 }
 
+func TestRouter_TreatsParameterSyntaxInRequestPathAsLiteral(t *testing.T) {
+	r := NewRouter()
+	r.Register(_const.GET, "/{id}", func(w http.ResponseWriter, r *http.Request) {
+		routerCtx, _ := context.FromRequest(r)
+		w.Write([]byte(routerCtx.Value("id")))
+	})
+
+	request := httptest.NewRequest(http.MethodGet, "/%7B*%7D", nil)
+	response := httptest.NewRecorder()
+
+	assert.NotPanics(t, func() { r.ServeHTTP(response, request) })
+	assert.Equal(t, http.StatusOK, response.Code)
+	assert.Equal(t, "{*}", response.Body.String())
+}
+
 func TestRouter_RegisterPathWithQueryString(t *testing.T) {
 	r := NewRouter()
 	r.Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {

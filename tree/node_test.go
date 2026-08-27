@@ -25,8 +25,9 @@ func TestNodeAddChildSeparatesStaticAndParameterChildren(t *testing.T) {
 	node.addChild(staticChild, false)
 	node.addChild(parameterChild, true)
 
-	assert.Same(t, staticChild, node.getChild("list"))
-	assert.Same(t, parameterChild, node.getChild("{*}"))
+	assert.Same(t, staticChild, node.staticChild("list"))
+	assert.Nil(t, node.staticChild("{*}"), "a literal segment must not reach the parameter branch")
+	assert.Same(t, parameterChild, node.childFor("{*}", true))
 	assert.Len(t, node.children, 1)
 	assert.Same(t, parameterChild, node.parameter)
 }
