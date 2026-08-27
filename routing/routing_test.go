@@ -186,6 +186,29 @@ func TestValidatePath_InvalidPaths(t *testing.T) {
 	}
 }
 
+func TestMergeAt_RejectsACatchAllPrefix(t *testing.T) {
+	source := CreateTree[http.Handler]()
+	source.RegisterRoute(GET, "/posts/{postID}", handler)
+
+	for _, prefix := range []string{"/*", "/api/*", "/{tenant}/*", "/*/"} {
+		target := CreateTree[http.Handler]()
+		assertPanicsWith(t, ErrInvalidPattern, func() { target.MergeAt(prefix, &source) })
+	}
+}
+
+func TestMergeAt_KeepsACatchAllInsideTheGraftedTree(t *testing.T) {
+	source := CreateTree[http.Handler]()
+	source.RegisterRoute(GET, "/files/*", handler)
+
+	target := CreateTree[http.Handler]()
+	target.MergeAt("/api", &source)
+
+	match, status := target.Lookup(GET, "/api/files/a/b")
+
+	assert.Equal(t, StatusFound, status, "only the prefix may not end in a catch-all")
+	assert.Equal(t, []Param{{Name: WildcardParam, Value: "a/b"}}, match.Params)
+}
+
 func TestRegister_PanicsCarryDistinguishableErrors(t *testing.T) {
 	for name, testCase := range map[string]struct {
 		register func(tree *Tree[http.Handler])

@@ -165,6 +165,14 @@ func (t *Tree[E]) Merge(source *Tree[E]) {
 // that, a lookup would pair the prefix's captured value with the first name the
 // grafted route declared.
 func (t *Tree[E]) MergeAt(prefix string, source *Tree[E]) {
+	// A catch-all node is terminal by construction: it consumes whatever is
+	// left of the path, so nothing grafted below one can ever be walked to.
+	// Accepting such a prefix would swallow every route of source in silence.
+	if segments := splitSegments(prefix); len(segments) > 0 &&
+		classify(segments[len(segments)-1]) == wildcardSegment {
+		panic(fmt.Errorf("%w: nothing mounted under the catch-all %q in %s could be reached", ErrInvalidPattern, WildcardParam, prefix))
+	}
+
 	target, prefixVariables := t.ensurePath(prefix)
 	if target == source.root {
 		return

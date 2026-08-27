@@ -507,6 +507,16 @@ func TestRouter_MountUnderParameterisedPrefix(t *testing.T) {
 	assert.Equal(t, "acme/7", response.Body.String(), "the prefix variable must not be paired with the mounted route's name")
 }
 
+func TestRouter_MountRejectsACatchAllPrefix(t *testing.T) {
+	api := NewRouter()
+	api.Get("/health", func(w http.ResponseWriter, r *http.Request) {})
+
+	r := NewRouter()
+
+	assert.Panics(t, func() { r.Mount("/*", api) },
+		"a catch-all consumes the rest of the path, so nothing mounted below it could be reached")
+}
+
 func TestRouter_MountKeepsExistingRouteOnConflict(t *testing.T) {
 	api := NewRouter()
 	api.Get("/health", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("mounted")) })

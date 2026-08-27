@@ -127,3 +127,51 @@ func FuzzLookupOfAnyPathTerminates(f *testing.F) {
 		}
 	})
 }
+
+// tryMergeAt reports whether the tree accepted this prefix, on the same terms
+// as tryRegister.
+func tryMergeAt(target *Tree[string], prefix string, source *Tree[string]) (accepted bool) {
+	defer func() {
+		if recover() != nil {
+			accepted = false
+		}
+	}()
+	target.MergeAt(prefix, source)
+	return true
+}
+
+// FuzzMergeAtPairsPrefixVariables asserts that grafting a routing table under a
+// prefix keeps every variable paired with its own name. A grafted endpoint
+// recorded its names against its own depth, so the prefix's have to be
+// prepended; without that the prefix's captured value lands on the grafted
+// route's first name and shifts every variable along silently.
+func FuzzMergeAtPairsPrefixVariables(f *testing.F) {
+	for _, seed := range []string{
+		"/", "/api", "/{tenant}", "/{tenant}/{region}", "/api/{version}",
+		"/{a}/b/{c}", "/*", "/{postID}",
+	} {
+		f.Add(seed)
+	}
+
+	const grafted = "/posts/{postID}"
+
+	f.Fuzz(func(t *testing.T, prefix string) {
+		source := CreateTree[string]()
+		source.RegisterRoute(GET, grafted, "handler")
+
+		target := CreateTree[string]()
+		if !tryMergeAt(&target, prefix, &source) {
+			t.Skip("prefix rejected at merge")
+		}
+
+		path, names := concreteFor(strings.TrimRight(prefix, "/") + grafted)
+		match, status := target.Lookup(GET, path)
+
+		require.Equal(t, StatusFound, status, "%q grafted under %q but %q did not reach it", grafted, prefix, path)
+		require.Len(t, match.Params, len(names), "under %q", prefix)
+		for i, name := range names {
+			assert.Equal(t, name, match.Params[i].Name, "variable %d under prefix %q", i, prefix)
+			assert.Equal(t, capturedValue, match.Params[i].Value, "variable %q under prefix %q", name, prefix)
+		}
+	})
+}
