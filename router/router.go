@@ -12,8 +12,16 @@ import (
 	"github.com/joaolaureano/go-router/tree"
 )
 
+// routeTree is the slice of the tree the router actually needs. Declaring it
+// here rather than beside Tree keeps the domain free to grow methods without
+// widening what the router is coupled to.
+type routeTree interface {
+	RegisterRoute(httpMethod _const.HTTPMethods, newValue string, method http.Handler)
+	Lookup(httpMethod _const.HTTPMethods, path string) (tree.Match, tree.Status)
+}
+
 type Router struct {
-	root tree.RouterTree
+	root routeTree
 
 	chain chain.Middleware
 

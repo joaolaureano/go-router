@@ -48,9 +48,9 @@
     "semantic_hash": ""
   },
   "router/router.go": {
-    "mtime": 1787804984.5039625,
-    "seen": 1787805358.3981109,
-    "ast_hash": "7b6a19d41422f240e16781897c51e348",
+    "mtime": 1787805395.4694352,
+    "seen": 1787805404.841434,
+    "ast_hash": "1fe2c69edba7fd39790dc19f4961d523",
     "semantic_hash": ""
   },
   "router/router_test.go": {
@@ -60,9 +60,9 @@
     "semantic_hash": ""
   },
   "tree/tree.go": {
-    "mtime": 1787804974.490705,
-    "seen": 1787805358.3981152,
-    "ast_hash": "27e5f0ef0df91089f8595ede1d58b940",
+    "mtime": 1787805395.4692304,
+    "seen": 1787805404.8414369,
+    "ast_hash": "83353c5361ce25a80c007e02c15a475d",
     "semantic_hash": ""
   },
   "tree/tree_test.go": {

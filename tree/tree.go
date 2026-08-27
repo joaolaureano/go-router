@@ -12,13 +12,6 @@ type Tree struct {
 	root *Node
 }
 
-type RouterTree interface {
-	RegisterRoute(httpMethod _const.HTTPMethods, newValue string, method http.Handler)
-	Lookup(httpMethod _const.HTTPMethods, path string) (Match, Status)
-	Merge(tree RouterTree)
-	Root() *Node
-}
-
 // Status says how a lookup ended. Carrying "the path exists under other
 // methods" in the result is what lets one walk answer what used to take two.
 type Status int
@@ -122,16 +115,12 @@ func zipParams(names, values []string) []Param {
 	return params
 }
 
-func (t *Tree) Merge(tree RouterTree) {
-	sourceRoot := tree.Root()
-	if t.root == sourceRoot {
+// Merge copies every route of source that this tree does not already define.
+func (t *Tree) Merge(source *Tree) {
+	if t.root == source.root {
 		return
 	}
-	mergeNodes(t.root, sourceRoot)
-}
-
-func (t *Tree) Root() *Node {
-	return t.root
+	mergeNodes(t.root, source.root)
 }
 
 // splitSegments breaks a path into the segments the tree is keyed by.
