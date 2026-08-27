@@ -18,10 +18,10 @@
     "semantic_hash": ""
   },
   "go.mod": {
-    "mtime": 1787796509.464945,
-    "seen": 1787796660.369448,
-    "ast_hash": "e16c16d7005090c6ec9fe44639bc12f3",
-    "semantic_hash": "e16c16d7005090c6ec9fe44639bc12f3"
+    "mtime": 1787810671.6150267,
+    "seen": 1787810694.266915,
+    "ast_hash": "34cb446529a80ddd273d25e03905b326",
+    "semantic_hash": ""
   },
   "gorouter.go": {
     "mtime": 1787806681.474057,
