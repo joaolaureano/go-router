@@ -231,10 +231,19 @@ func (search *lookup) allowedMethods() []Method {
 	return search.allowed
 }
 
+// typicalMethodCount sizes the allowed slice on first use. A resource answers
+// four or so verbs, and growing from nothing costs an allocation per verb
+// recorded -- three of them on an ordinary CRUD path, where sizing once costs
+// one.
+const typicalMethodCount = 4
+
 // recordAllowed notes the methods this node answers under. More than one node
 // can reach here in a single walk -- a parameter branch and the catch-all below
 // it both end the same path -- so a method already recorded is skipped.
 func (n *node[E]) recordAllowed(search *lookup) {
+	if search.allowed == nil && len(n.endpoints) > 0 {
+		search.allowed = make([]Method, 0, typicalMethodCount)
+	}
 	for i := range n.endpoints {
 		if !slices.Contains(search.allowed, n.endpoints[i].method) {
 			search.allowed = append(search.allowed, n.endpoints[i].method)
