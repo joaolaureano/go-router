@@ -155,10 +155,6 @@ func (n *node[E]) hasMethod(httpMethod Method) bool {
 	return n.find(httpMethod) != nil
 }
 
-func (n *node[E]) hasAnyMethod() bool {
-	return len(n.endpoints) > 0
-}
-
 // lookup carries the state of one walk. Parameter values accumulate as the
 // walk descends and unwind when a branch fails, so only the values on the
 // surviving route remain. Nodes that end the path under some other verb are
@@ -182,7 +178,12 @@ type lookup struct {
 	// the walk can run straight off the request path without splitting it.
 	decode func(string) string
 
-	allowed map[Method]struct{}
+	// allowed accumulates the methods a path answers under when the walk reaches
+	// it with the wrong one. A slice, not a set: a path is registered under one
+	// or two methods and never more than the seven that exist, and at that size
+	// scanning beats hashing -- and the slice is the very one handed back, where
+	// a set had to be copied out into one to be sorted.
+	allowed []Method
 }
 
 // segmentEnd reports where the leading segment ends: at the next separator, or
@@ -226,23 +227,18 @@ func (search *lookup) allowedMethods() []Method {
 	if len(search.allowed) == 0 {
 		return nil
 	}
-	methods := make([]Method, 0, len(search.allowed))
-	for httpMethod := range search.allowed {
-		methods = append(methods, httpMethod)
-	}
-	slices.Sort(methods)
-	return methods
+	slices.Sort(search.allowed)
+	return search.allowed
 }
 
+// recordAllowed notes the methods this node answers under. More than one node
+// can reach here in a single walk -- a parameter branch and the catch-all below
+// it both end the same path -- so a method already recorded is skipped.
 func (n *node[E]) recordAllowed(search *lookup) {
-	if !n.hasAnyMethod() {
-		return
-	}
-	if search.allowed == nil {
-		search.allowed = make(map[Method]struct{}, len(n.endpoints))
-	}
 	for i := range n.endpoints {
-		search.allowed[n.endpoints[i].method] = struct{}{}
+		if !slices.Contains(search.allowed, n.endpoints[i].method) {
+			search.allowed = append(search.allowed, n.endpoints[i].method)
+		}
 	}
 }
 
