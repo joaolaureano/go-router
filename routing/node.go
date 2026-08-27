@@ -186,19 +186,6 @@ type lookup struct {
 	allowed []Method
 }
 
-// segmentEnd reports where the leading segment ends: at the next separator, or
-// at the end of the path when there is none left.
-//
-// It returns an index rather than the two substrings so that it stays inside
-// the inliner's budget -- constructing the strings here costs enough to push it
-// over, and this runs once per segment of every request.
-func segmentEnd(path string) int {
-	if separator := strings.IndexByte(path, '/'); separator >= 0 {
-		return separator
-	}
-	return len(path)
-}
-
 // typicalCaptureCount sizes the slice on first capture. Growing from nothing
 // costs an allocation per variable; starting at two spares that for the routes
 // people actually write, and costs a route with a single variable nothing but a
