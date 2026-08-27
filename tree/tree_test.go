@@ -135,8 +135,8 @@ func TestRegister_MultipleBranches(t *testing.T) {
 	assert.Zero(t, len(firstChild.parameter.Method), "Method should be nil")
 	//
 	//// Third child node - branching paths
-	branch1 := firstChild.parameter.children[1]
-	branch2 := firstChild.parameter.children[0]
+	branch1 := firstChild.parameter.children[0]
+	branch2 := firstChild.parameter.children[1]
 	assert.NotNil(t, branch1.children, "Second child's children should not be nil")
 	assert.NotNil(t, branch2.children, "Second child's children should not be nil")
 	assert.Equal(t, "path1", branch1.path, "Path should be /path1")

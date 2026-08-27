@@ -46,7 +46,7 @@ func (node *Node) addChild(child *Node, parameter bool) {
 		node.parameter = child
 		return
 	}
-	node.children = append([]*Node{child}, node.children...)
+	node.children = append(node.children, child)
 }
 
 func (node *Node) setEndpoint(httpMethod _const.HTTPMethods, handler http.Handler, pathVariables []string) {

@@ -66,9 +66,9 @@
     "semantic_hash": ""
   },
   "tree/tree_test.go": {
-    "mtime": 1787802438.8621962,
-    "seen": 1787802520.238538,
-    "ast_hash": "3c7962373b7f75760cd98f3dcbb99596",
+    "mtime": 1787804190.8903284,
+    "seen": 1787804197.918294,
+    "ast_hash": "bf09a93facf9e8327366c0616fae74e4",
     "semantic_hash": ""
   },
   "README.md": {
@@ -84,9 +84,9 @@
     "semantic_hash": ""
   },
   "tree/node.go": {
-    "mtime": 1787803950.1962311,
-    "seen": 1787803984.3164039,
-    "ast_hash": "ed36b5013f384b365365fcae18df2b9c",
+    "mtime": 1787804170.4236681,
+    "seen": 1787804197.918292,
+    "ast_hash": "212460be32c224deb0490a8831a46cd1",
     "semantic_hash": ""
   },
   "tree/node_test.go": {
