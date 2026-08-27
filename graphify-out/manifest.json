@@ -24,9 +24,9 @@
     "semantic_hash": "e16c16d7005090c6ec9fe44639bc12f3"
   },
   "gorouter.go": {
-    "mtime": 1787806024.0927858,
-    "seen": 1787806042.758894,
-    "ast_hash": "0e1b422053aca2a4e9575ebe38db9511",
+    "mtime": 1787806205.4598532,
+    "seen": 1787806214.543392,
+    "ast_hash": "ffba3ffffbb979e8ecad715c72f85009",
     "semantic_hash": ""
   },
   "router/context/context.go": {

@@ -6,9 +6,11 @@ import (
 	"github.com/joaolaureano/go-router/router"
 )
 
-// Router is an interface that extends the http.Handler interface,
-// requiring any implementing type to fulfill the http.Handler contract.
-// It declares two methods - Register and Use - for registering routes and adding middleware.
+// Router is the surface for code that wants to accept a router rather than
+// construct one. It is not meant to mirror every method *router.Router offers:
+// NewRouter returns the concrete type, so new methods can be added there
+// without widening this. The assertion below keeps the two from drifting apart
+// in the direction that matters.
 type Router interface {
 	http.Handler
 
@@ -56,6 +58,15 @@ const (
 	OPTIONS = router.OPTIONS
 )
 
-func NewRouter() Router {
+var _ Router = (*router.Router)(nil)
+
+// NewRouter returns the concrete router. Returning the struct rather than the
+// interface is what lets Router stay a small accept-surface.
+func NewRouter() *router.Router {
 	return router.NewRouter()
+}
+
+// NewPrefixRouter returns a router that registers every route under prefix.
+func NewPrefixRouter(prefix string) *router.Router {
+	return router.NewPrefixRouter(prefix)
 }
