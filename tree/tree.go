@@ -9,18 +9,6 @@ import (
 	"github.com/joaolaureano/go-router/router/context"
 )
 
-type Node struct {
-	path      string
-	children  []*Node
-	parameter *Node
-	Method    map[_const.HTTPMethods]Method
-}
-
-type Method struct {
-	Handler      http.Handler
-	variableName []string
-}
-
 type Tree struct {
 	root *Node
 }
@@ -35,11 +23,7 @@ type RouterTree interface {
 
 func CreateTree() Tree {
 	return Tree{
-		root: &Node{
-			path:     "",
-			children: make([]*Node, 0),
-			Method:   make(map[_const.HTTPMethods]Method),
-		},
+		root: newNode(""),
 	}
 }
 
@@ -79,16 +63,8 @@ func (t *Tree) register(httpMethod _const.HTTPMethods, path string, method http.
 		}
 		nextNode := currNode.getChild(nodePath)
 		if nextNode == nil {
-			nextNode = &Node{
-				path:     nodePath,
-				children: []*Node{},
-				Method:   make(map[_const.HTTPMethods]Method),
-			}
-			if isParameter {
-				currNode.parameter = nextNode
-			} else {
-				currNode.children = append([]*Node{nextNode}, currNode.children...)
-			}
+			nextNode = newNode(nodePath)
+			currNode.addChild(nextNode, isParameter)
 		}
 		currNode = nextNode
 	}
@@ -135,96 +111,12 @@ func (t *Tree) findPath(path string) (*Node, []string) {
 	return matchPath(t.root, paths, 0, nil)
 }
 
-func matchPath(node *Node, paths []string, index int, values []string) (*Node, []string) {
-	if index == len(paths) {
-		if len(node.Method) == 0 {
-			return nil, nil
-		}
-		return node, values
-	}
-
-	if child := node.getChild(paths[index]); child != nil {
-		if matchedNode, matchedValues := matchPath(child, paths, index+1, values); matchedNode != nil {
-			return matchedNode, matchedValues
-		}
-	}
-
-	if node.parameter != nil {
-		values = append(values, paths[index])
-		if matchedNode, matchedValues := matchPath(node.parameter, paths, index+1, values); matchedNode != nil {
-			return matchedNode, matchedValues
-		}
-	}
-
-	return nil, nil
-}
-
 func (t *Tree) Merge(tree RouterTree) {
 	sourceRoot := tree.Root()
 	if t.root == sourceRoot {
 		return
 	}
 	mergeNodes(t.root, sourceRoot)
-}
-
-func mergeNodes(target, source *Node) {
-	for httpMethod, method := range source.Method {
-		if _, exists := target.Method[httpMethod]; !exists {
-			target.Method[httpMethod] = cloneMethod(method)
-		}
-	}
-
-	for _, sourceChild := range source.children {
-		targetChild := staticChild(target, sourceChild.path)
-		if targetChild == nil {
-			target.children = append(target.children, cloneNode(sourceChild))
-			continue
-		}
-		mergeNodes(targetChild, sourceChild)
-	}
-
-	if source.parameter == nil {
-		return
-	}
-	if target.parameter == nil {
-		target.parameter = cloneNode(source.parameter)
-		return
-	}
-	mergeNodes(target.parameter, source.parameter)
-}
-
-func staticChild(node *Node, path string) *Node {
-	for _, child := range node.children {
-		if child.path == path {
-			return child
-		}
-	}
-	return nil
-}
-
-func cloneNode(source *Node) *Node {
-	clone := &Node{
-		path:     source.path,
-		children: make([]*Node, 0, len(source.children)),
-		Method:   make(map[_const.HTTPMethods]Method, len(source.Method)),
-	}
-	for httpMethod, method := range source.Method {
-		clone.Method[httpMethod] = cloneMethod(method)
-	}
-	for _, child := range source.children {
-		clone.children = append(clone.children, cloneNode(child))
-	}
-	if source.parameter != nil {
-		clone.parameter = cloneNode(source.parameter)
-	}
-	return clone
-}
-
-func cloneMethod(method Method) Method {
-	return Method{
-		Handler:      method.Handler,
-		variableName: append([]string(nil), method.variableName...),
-	}
 }
 
 func (t *Tree) Root() *Node {
@@ -235,25 +127,6 @@ func setPathVariableValues(ctx *context.RouterContext, keys, values []string) {
 	for i, k := range keys {
 		(*ctx).Set(k, values[i])
 	}
-}
-
-func (n *Node) setEndpoint(httpMethod _const.HTTPMethods, handler http.Handler, pathVariables []string) {
-	n.Method[httpMethod] = Method{
-		Handler:      handler,
-		variableName: pathVariables,
-	}
-}
-
-func (n *Node) getChild(path string) *Node {
-	for _, child := range n.children {
-		if path == child.path {
-			return child
-		}
-	}
-	if path == "{*}" {
-		return n.parameter
-	}
-	return nil
 }
 
 func validatePath(path string) error {

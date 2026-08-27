@@ -60,9 +60,9 @@
     "semantic_hash": ""
   },
   "tree/tree.go": {
-    "mtime": 1787802436.789656,
-    "seen": 1787802520.238537,
-    "ast_hash": "b13598a9a995c64bcd98b0a6ac66c158",
+    "mtime": 1787802810.0619895,
+    "seen": 1787802899.287024,
+    "ast_hash": "11299f6fdbd62e5869c848bd5ea03854",
     "semantic_hash": ""
   },
   "tree/tree_test.go": {
@@ -81,6 +81,18 @@
     "mtime": 1787796509.4643693,
     "seen": 1787797727.441123,
     "ast_hash": "920ec6a65b54fce86409e958a9aad15a",
+    "semantic_hash": ""
+  },
+  "tree/node.go": {
+    "mtime": 1787802723.6217508,
+    "seen": 1787802899.287022,
+    "ast_hash": "7eff0b24c02c3cb5908af66134bda06f",
+    "semantic_hash": ""
+  },
+  "tree/node_test.go": {
+    "mtime": 1787802810.062381,
+    "seen": 1787802899.287023,
+    "ast_hash": "efe1b92a7d80db0cc25e7f7b88c32a50",
     "semantic_hash": ""
   }
 }
