@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/joaolaureano/go-router/tree"
+	"github.com/joaolaureano/go-router/routing"
 )
 
 // contextKey is unexported and of a package-local type, so no other package can
@@ -20,7 +20,7 @@ type contextKey struct{}
 // a lookup builds fresh each time and hands over rather than have the router
 // copy it into a second one.
 type RouterContext struct {
-	params []tree.Param
+	params []routing.Param
 }
 
 // Value reads a route variable. It tolerates a nil receiver so that the common
@@ -48,9 +48,9 @@ func (routerCtx *RouterContext) Set(key string, value string) {
 	if routerCtx.params == nil {
 		// Room for a typical route's variables up front, so filling the context
 		// does not regrow the slice once per variable.
-		routerCtx.params = make([]tree.Param, 0, 4)
+		routerCtx.params = make([]routing.Param, 0, 4)
 	}
-	routerCtx.params = append(routerCtx.params, tree.Param{Name: key, Value: value})
+	routerCtx.params = append(routerCtx.params, routing.Param{Name: key, Value: value})
 }
 
 func NewContext() *RouterContext {
@@ -60,7 +60,7 @@ func NewContext() *RouterContext {
 // FromParams takes ownership of the params a lookup produced. A lookup builds
 // that slice fresh for each request, so there is nothing to copy and nothing
 // shared with the routing table.
-func FromParams(params []tree.Param) *RouterContext {
+func FromParams(params []routing.Param) *RouterContext {
 	return &RouterContext{params: params}
 }
 

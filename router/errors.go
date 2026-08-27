@@ -3,7 +3,7 @@ package router
 import (
 	"errors"
 
-	"github.com/joaolaureano/go-router/tree"
+	"github.com/joaolaureano/go-router/routing"
 )
 
 // Misconfiguring a router is a programming error, caught while the route table
@@ -12,7 +12,7 @@ import (
 var (
 	// ErrNilHandler is the tree's, not a second error meaning the same thing:
 	// a caller recovering around registration sees one value either way.
-	ErrNilHandler = tree.ErrNilHandler
+	ErrNilHandler = routing.ErrNilHandler
 
 	ErrChainSealed       = errors.New("middleware cannot be added once the chain has built a route")
 	ErrNilRouter         = errors.New("router must not be nil")

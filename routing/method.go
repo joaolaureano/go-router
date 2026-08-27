@@ -1,4 +1,4 @@
-package tree
+package routing
 
 // Method is an HTTP method as the routing table understands it. It stays a
 // string underneath so that a verb the constants below do not name still

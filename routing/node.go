@@ -1,11 +1,11 @@
-package tree
+package routing
 
 import (
 	"sort"
 	"strings"
 )
 
-// node is one path segment of the tree. It is deliberately unexported: the
+// node is one path segment of the routing. It is deliberately unexported: the
 // invariant tying an endpoint's variable names to the parameter nodes above it
 // only holds while Tree is the sole writer.
 type node[E any] struct {

@@ -9,30 +9,30 @@ import (
 
 	"github.com/joaolaureano/go-router/chain"
 	"github.com/joaolaureano/go-router/router/context"
-	"github.com/joaolaureano/go-router/tree"
+	"github.com/joaolaureano/go-router/routing"
 )
 
 // Method and the verbs below re-export the routing vocabulary, so that naming
 // a method does not force callers to import the tree package.
-type Method = tree.Method
+type Method = routing.Method
 
 // WildcardParam is the name a catch-all route captures under: a request to
 // "/files/a/b" against "/files/*" reads "a/b" from context.Param(r, "*").
-const WildcardParam = tree.WildcardParam
+const WildcardParam = routing.WildcardParam
 
 const (
-	GET     = tree.GET
-	HEAD    = tree.HEAD
-	POST    = tree.POST
-	PUT     = tree.PUT
-	PATCH   = tree.PATCH
-	DELETE  = tree.DELETE
-	OPTIONS = tree.OPTIONS
+	GET     = routing.GET
+	HEAD    = routing.HEAD
+	POST    = routing.POST
+	PUT     = routing.PUT
+	PATCH   = routing.PATCH
+	DELETE  = routing.DELETE
+	OPTIONS = routing.OPTIONS
 )
 
 // routes is the routing tree pinned to what this adapter resolves a route to.
 // The tree itself is agnostic; naming the endpoint type is the adapter's job.
-type routes = tree.Tree[http.Handler]
+type routes = routing.Tree[http.Handler]
 
 type Router struct {
 	root *routes
@@ -55,7 +55,7 @@ func NewRouter() *Router {
 }
 
 func NewPrefixRouter(prefix string) *Router {
-	routeTree := tree.CreateTree[http.Handler]()
+	routeTree := routing.CreateTree[http.Handler]()
 	notFound := http.HandlerFunc(http.NotFound)
 	methodNotAllowed := http.HandlerFunc(defaultMethodNotAllowed)
 
@@ -77,7 +77,7 @@ func NewPrefixRouter(prefix string) *Router {
 // the escaped form first and decoding after keeps the boundary where the client
 // put it.
 func requestSegments(r *http.Request) []string {
-	segments := tree.SplitPath(r.URL.EscapedPath())
+	segments := routing.SplitPath(r.URL.EscapedPath())
 	for i, segment := range segments {
 		decoded, err := url.PathUnescape(segment)
 		if err != nil {
@@ -96,15 +96,15 @@ func defaultMethodNotAllowed(w http.ResponseWriter, r *http.Request) {
 }
 
 func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	httpMethod := tree.Method(r.Method)
+	httpMethod := routing.Method(r.Method)
 	segments := requestSegments(r)
 
 	router.mu.RLock()
 	match, status := router.root.LookupSegments(httpMethod, segments)
 	// RFC 9110: HEAD is GET without content, and net/http already suppresses
 	// the body, so a GET route answers HEAD unless one was registered for it.
-	if status != tree.StatusFound && httpMethod == HEAD {
-		if getMatch, getStatus := router.root.LookupSegments(GET, segments); getStatus == tree.StatusFound {
+	if status != routing.StatusFound && httpMethod == HEAD {
+		if getMatch, getStatus := router.root.LookupSegments(GET, segments); getStatus == routing.StatusFound {
 			match, status = getMatch, getStatus
 		}
 	}
@@ -113,7 +113,7 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	router.mu.RUnlock()
 
 	switch status {
-	case tree.StatusFound:
+	case routing.StatusFound:
 		// A route with no variables has nothing to carry, and deriving a
 		// request costs an allocation, so only routes that captured something
 		// pay for the context.
@@ -121,7 +121,7 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			r = context.FromParams(match.Params).WithRequest(r)
 		}
 		match.Handler.ServeHTTP(w, r)
-	case tree.StatusMethodNotAllowed:
+	case routing.StatusMethodNotAllowed:
 		// Allow is set before the handler runs, so a custom one inherits it and
 		// can still override it.
 		w.Header().Set("Allow", advertisedMethods(match.AllowedMethods))
@@ -140,7 +140,7 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 // advertisedMethods renders an Allow header from the methods a path was
 // registered under, plus the two this router answers on their behalf: OPTIONS,
 // which it handles when nothing else does, and HEAD wherever there is a GET.
-func advertisedMethods(registered []tree.Method) string {
+func advertisedMethods(registered []routing.Method) string {
 	advertised := make([]string, 0, len(registered)+2)
 	var hasGet, hasHead, hasOptions bool
 	for _, httpMethod := range registered {
