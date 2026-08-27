@@ -813,33 +813,11 @@
       "source_location": ""
     },
     {
-      "id": "e",
-      "label": "E",
-      "_origin": "ast",
-      "community": 17,
-      "community_name": "E",
-      "file_type": "code",
-      "norm_label": "e",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "node",
-      "label": "node",
-      "_origin": "ast",
-      "community": 17,
-      "community_name": "E",
-      "file_type": "code",
-      "norm_label": "node",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "routing_match",
       "label": "Match",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": "match",
       "source_file": "routing/routing.go",
@@ -850,7 +828,7 @@
       "label": "Param",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": "param",
       "source_file": "routing/routing.go",
@@ -861,7 +839,7 @@
       "label": "routing.go",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": "routing.go",
       "source_file": "routing/routing.go",
@@ -872,18 +850,29 @@
       "label": "classify()",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": "classify()",
       "source_file": "routing/routing.go",
-      "source_location": "L243"
+      "source_location": "L242"
+    },
+    {
+      "id": "routing_routing_go_e",
+      "label": "E",
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "routing.go",
+      "file_type": "code",
+      "norm_label": "e",
+      "source_file": "",
+      "source_location": ""
     },
     {
       "id": "routing_routing_go_method",
       "label": "Method",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": "method",
       "source_file": "",
@@ -894,29 +883,40 @@
       "label": "isParam()",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": "isparam()",
       "source_file": "routing/routing.go",
-      "source_location": "L254"
+      "source_location": "L253"
+    },
+    {
+      "id": "routing_routing_nameparams",
+      "label": "nameParams()",
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "routing.go",
+      "file_type": "code",
+      "norm_label": "nameparams()",
+      "source_file": "routing/routing.go",
+      "source_location": "L133"
     },
     {
       "id": "routing_routing_splitsegments",
       "label": "splitSegments()",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": "splitsegments()",
       "source_file": "routing/routing.go",
-      "source_location": "L186"
+      "source_location": "L185"
     },
     {
       "id": "routing_routing_test_testisparam",
       "label": "TestIsParam()",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": "testisparam()",
       "source_file": "routing/routing_test.go",
@@ -927,7 +927,7 @@
       "label": "TestValidatePath_InvalidPaths()",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": "testvalidatepath_invalidpaths()",
       "source_file": "routing/routing_test.go",
@@ -938,7 +938,7 @@
       "label": "TestValidatePath_ValidPaths()",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": "testvalidatepath_validpaths()",
       "source_file": "routing/routing_test.go",
@@ -949,29 +949,18 @@
       "label": "validateSegments()",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": "validatesegments()",
       "source_file": "routing/routing.go",
-      "source_location": "L194"
-    },
-    {
-      "id": "routing_routing_zipparams",
-      "label": "zipParams()",
-      "_origin": "ast",
-      "community": 17,
-      "community_name": "E",
-      "file_type": "code",
-      "norm_label": "zipparams()",
-      "source_file": "routing/routing.go",
-      "source_location": "L133"
+      "source_location": "L193"
     },
     {
       "id": "routing_status",
       "label": "Status",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": "status",
       "source_file": "routing/routing.go",
@@ -982,7 +971,7 @@
       "label": "Tree",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": "tree",
       "source_file": "routing/routing.go",
@@ -993,7 +982,7 @@
       "label": "Tree[E]",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": "tree[e]",
       "source_file": "routing/routing.go",
@@ -1004,18 +993,18 @@
       "label": ".Clone()",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": ".clone()",
       "source_file": "routing/routing.go",
-      "source_location": "L147"
+      "source_location": "L146"
     },
     {
       "id": "routing_tree_e_ensurepath",
       "label": ".ensurePath()",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": ".ensurepath()",
       "source_file": "routing/routing.go",
@@ -1026,7 +1015,7 @@
       "label": ".Lookup()",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": ".lookup()",
       "source_file": "routing/routing.go",
@@ -1037,7 +1026,7 @@
       "label": ".LookupSegments()",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": ".lookupsegments()",
       "source_file": "routing/routing.go",
@@ -1048,29 +1037,29 @@
       "label": ".Merge()",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": ".merge()",
       "source_file": "routing/routing.go",
-      "source_location": "L152"
+      "source_location": "L151"
     },
     {
       "id": "routing_tree_e_mergeat",
       "label": ".MergeAt()",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": ".mergeat()",
       "source_file": "routing/routing.go",
-      "source_location": "L165"
+      "source_location": "L164"
     },
     {
       "id": "routing_tree_e_register",
       "label": ".register()",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": ".register()",
       "source_file": "routing/routing.go",
@@ -1081,25 +1070,14 @@
       "label": ".RegisterRoute()",
       "_origin": "ast",
       "community": 17,
-      "community_name": "E",
+      "community_name": "routing.go",
       "file_type": "code",
       "norm_label": ".registerroute()",
       "source_file": "routing/routing.go",
       "source_location": "L49"
     },
     {
-      "id": "segmentkind",
-      "label": "segmentKind",
-      "_origin": "ast",
-      "community": 17,
-      "community_name": "E",
-      "file_type": "code",
-      "norm_label": "segmentkind",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "routing_routing_go_e",
+      "id": "e",
       "label": "E",
       "_origin": "ast",
       "community": 18,
@@ -1759,17 +1737,6 @@
       "source_location": "L277"
     },
     {
-      "id": "router_router_test_testrouter_withpreservesprefix",
-      "label": "TestRouter_WithPreservesPrefix()",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "testrouter_withpreservesprefix()",
-      "source_file": "router/router_test.go",
-      "source_location": "L216"
-    },
-    {
       "id": "routing_endpoint",
       "label": "endpoint",
       "_origin": "ast",
@@ -1800,18 +1767,7 @@
       "file_type": "code",
       "norm_label": ".allowedmethods()",
       "source_file": "routing/node.go",
-      "source_location": "L117"
-    },
-    {
-      "id": "routing_method_go_routing_method",
-      "label": "Method",
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "node",
-      "file_type": "code",
-      "norm_label": "method",
-      "source_file": "routing/method.go",
-      "source_location": "L9"
+      "source_location": "L124"
     },
     {
       "id": "routing_node",
@@ -1833,7 +1789,7 @@
       "file_type": "code",
       "norm_label": "cloneendpoint()",
       "source_file": "routing/node.go",
-      "source_location": "L241"
+      "source_location": "L248"
     },
     {
       "id": "routing_node_clonenode",
@@ -1844,7 +1800,7 @@
       "file_type": "code",
       "norm_label": "clonenode()",
       "source_file": "routing/node.go",
-      "source_location": "L224"
+      "source_location": "L231"
     },
     {
       "id": "routing_node_e",
@@ -1910,7 +1866,7 @@
       "file_type": "code",
       "norm_label": ".match()",
       "source_file": "routing/node.go",
-      "source_location": "L147"
+      "source_location": "L154"
     },
     {
       "id": "routing_node_e_matchwildcard",
@@ -1921,7 +1877,7 @@
       "file_type": "code",
       "norm_label": ".matchwildcard()",
       "source_file": "routing/node.go",
-      "source_location": "L175"
+      "source_location": "L182"
     },
     {
       "id": "routing_node_e_recordallowed",
@@ -1932,7 +1888,7 @@
       "file_type": "code",
       "norm_label": ".recordallowed()",
       "source_file": "routing/node.go",
-      "source_location": "L129"
+      "source_location": "L136"
     },
     {
       "id": "routing_node_e_setendpoint",
@@ -1968,6 +1924,17 @@
       "source_location": ""
     },
     {
+      "id": "routing_node_go_method",
+      "label": "Method",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "node",
+      "file_type": "code",
+      "norm_label": "method",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "routing_node_mergebranch",
       "label": "mergeBranch()",
       "_origin": "ast",
@@ -1976,7 +1943,7 @@
       "file_type": "code",
       "norm_label": "mergebranch()",
       "source_file": "routing/node.go",
-      "source_location": "L213"
+      "source_location": "L220"
     },
     {
       "id": "routing_node_mergenodes",
@@ -1987,7 +1954,7 @@
       "file_type": "code",
       "norm_label": "mergenodes()",
       "source_file": "routing/node.go",
-      "source_location": "L191"
+      "source_location": "L198"
     },
     {
       "id": "routing_node_newnode",
@@ -2019,6 +1986,17 @@
       "community_name": "E",
       "file_type": "code",
       "norm_label": "e",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "node",
+      "label": "node",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "node",
+      "file_type": "code",
+      "norm_label": "node",
       "source_file": "",
       "source_location": ""
     },
@@ -2133,6 +2111,17 @@
       "source_location": ""
     },
     {
+      "id": "segmentkind",
+      "label": "segmentKind",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "segmentKind",
+      "file_type": "code",
+      "norm_label": "segmentkind",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "context_contextkey",
       "label": "contextKey",
       "_origin": "ast",
@@ -2175,6 +2164,39 @@
       "norm_label": ".value()",
       "source_file": "router/context/context.go",
       "source_location": "L29"
+    },
+    {
+      "id": "context_routercontext_withrequest",
+      "label": ".WithRequest()",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "FromRequest",
+      "file_type": "code",
+      "norm_label": ".withrequest()",
+      "source_file": "router/context/context.go",
+      "source_location": "L68"
+    },
+    {
+      "id": "go_type_net_http_request",
+      "label": "net/http.Request",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "FromRequest",
+      "file_type": "code",
+      "norm_label": "net/http.request",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "go_type_net_http_responsewriter",
+      "label": "net/http.ResponseWriter",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "FromRequest",
+      "file_type": "code",
+      "norm_label": "net/http.responsewriter",
+      "source_file": "",
+      "source_location": ""
     },
     {
       "id": "router_context_context",
@@ -2320,6 +2342,72 @@
       "source_location": "L38"
     },
     {
+      "id": "router_router_advertisedmethods",
+      "label": "advertisedMethods()",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "FromRequest",
+      "file_type": "code",
+      "norm_label": "advertisedmethods()",
+      "source_file": "router/router.go",
+      "source_location": "L131"
+    },
+    {
+      "id": "router_router_defaultmethodnotallowed",
+      "label": "defaultMethodNotAllowed()",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "FromRequest",
+      "file_type": "code",
+      "norm_label": "defaultmethodnotallowed()",
+      "source_file": "router/router.go",
+      "source_location": "L83"
+    },
+    {
+      "id": "router_router_requestsegments",
+      "label": "requestSegments()",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "FromRequest",
+      "file_type": "code",
+      "norm_label": "requestsegments()",
+      "source_file": "router/router.go",
+      "source_location": "L68"
+    },
+    {
+      "id": "router_router_servehttp",
+      "label": ".ServeHTTP()",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "FromRequest",
+      "file_type": "code",
+      "norm_label": ".servehttp()",
+      "source_file": "router/router.go",
+      "source_location": "L87"
+    },
+    {
+      "id": "routing_method_go_routing_method",
+      "label": "Method",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "FromRequest",
+      "file_type": "code",
+      "norm_label": "method",
+      "source_file": "routing/method.go",
+      "source_location": "L9"
+    },
+    {
+      "id": "routing_routing_splitpath",
+      "label": "SplitPath()",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "FromRequest",
+      "file_type": "code",
+      "norm_label": "splitpath()",
+      "source_file": "routing/routing.go",
+      "source_location": "L181"
+    },
+    {
       "id": "routing_errors",
       "label": "routing/errors.go",
       "_origin": "ast",
@@ -2386,17 +2474,6 @@
       "source_location": ""
     },
     {
-      "id": "context_routercontext_withrequest",
-      "label": ".WithRequest()",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Router",
-      "file_type": "code",
-      "norm_label": ".withrequest()",
-      "source_file": "router/context/context.go",
-      "source_location": "L68"
-    },
-    {
       "id": "go_type_net_http_handlerfunc",
       "label": "net/http.HandlerFunc",
       "_origin": "ast",
@@ -2404,28 +2481,6 @@
       "community_name": "Router",
       "file_type": "code",
       "norm_label": "net/http.handlerfunc",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "go_type_net_http_request",
-      "label": "net/http.Request",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Router",
-      "file_type": "code",
-      "norm_label": "net/http.request",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "go_type_net_http_responsewriter",
-      "label": "net/http.ResponseWriter",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Router",
-      "file_type": "code",
-      "norm_label": "net/http.responsewriter",
       "source_file": "",
       "source_location": ""
     },
@@ -2472,28 +2527,6 @@
       "norm_label": "router",
       "source_file": "router/router.go",
       "source_location": "L36"
-    },
-    {
-      "id": "router_router_advertisedmethods",
-      "label": "advertisedMethods()",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Router",
-      "file_type": "code",
-      "norm_label": "advertisedmethods()",
-      "source_file": "router/router.go",
-      "source_location": "L131"
-    },
-    {
-      "id": "router_router_defaultmethodnotallowed",
-      "label": "defaultMethodNotAllowed()",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Router",
-      "file_type": "code",
-      "norm_label": "defaultmethodnotallowed()",
-      "source_file": "router/router.go",
-      "source_location": "L83"
     },
     {
       "id": "router_router_delete",
@@ -2639,26 +2672,15 @@
       "source_location": "L155"
     },
     {
-      "id": "router_router_requestsegments",
-      "label": "requestSegments()",
+      "id": "router_router_test_testrouter_withpreservesprefix",
+      "label": "TestRouter_WithPreservesPrefix()",
       "_origin": "ast",
       "community": 6,
       "community_name": "Router",
       "file_type": "code",
-      "norm_label": "requestsegments()",
-      "source_file": "router/router.go",
-      "source_location": "L68"
-    },
-    {
-      "id": "router_router_servehttp",
-      "label": ".ServeHTTP()",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Router",
-      "file_type": "code",
-      "norm_label": ".servehttp()",
-      "source_file": "router/router.go",
-      "source_location": "L87"
+      "norm_label": "testrouter_withpreservesprefix()",
+      "source_file": "router/router_test.go",
+      "source_location": "L216"
     },
     {
       "id": "router_state",
@@ -2736,17 +2758,6 @@
       "norm_label": "routes",
       "source_file": "",
       "source_location": ""
-    },
-    {
-      "id": "routing_routing_splitpath",
-      "label": "SplitPath()",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Router",
-      "file_type": "code",
-      "norm_label": "splitpath()",
-      "source_file": "routing/routing.go",
-      "source_location": "L182"
     },
     {
       "id": "complete_article",
@@ -3387,7 +3398,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L227",
+      "source_location": "L234",
       "weight": 1.0
     },
     {
@@ -3411,7 +3422,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L149",
+      "source_location": "L156",
       "weight": 1.0
     },
     {
@@ -3423,7 +3434,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L152",
+      "source_location": "L159",
       "weight": 1.0
     },
     {
@@ -3435,7 +3446,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L153",
+      "source_location": "L160",
       "weight": 1.0
     },
     {
@@ -3447,7 +3458,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L156",
+      "source_location": "L163",
       "weight": 1.0
     },
     {
@@ -3459,7 +3470,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L181",
+      "source_location": "L188",
       "weight": 1.0
     },
     {
@@ -3471,7 +3482,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L184",
+      "source_location": "L191",
       "weight": 1.0
     },
     {
@@ -3483,7 +3494,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L130",
+      "source_location": "L137",
       "weight": 1.0
     },
     {
@@ -3495,7 +3506,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L218",
+      "source_location": "L225",
       "weight": 1.0
     },
     {
@@ -3507,7 +3518,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L221",
+      "source_location": "L228",
       "weight": 1.0
     },
     {
@@ -3519,7 +3530,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L193",
+      "source_location": "L200",
       "weight": 1.0
     },
     {
@@ -3531,7 +3542,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L194",
+      "source_location": "L201",
       "weight": 1.0
     },
     {
@@ -3543,7 +3554,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L199",
+      "source_location": "L206",
       "weight": 1.0
     },
     {
@@ -3555,7 +3566,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L201",
+      "source_location": "L208",
       "weight": 1.0
     },
     {
@@ -3567,7 +3578,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/routing.go",
-      "source_location": "L247",
+      "source_location": "L246",
       "weight": 1.0
     },
     {
@@ -3579,7 +3590,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/routing.go",
-      "source_location": "L183",
+      "source_location": "L182",
       "weight": 1.0
     },
     {
@@ -3740,7 +3751,7 @@
     },
     {
       "source": "routing_tree_e_lookupsegments",
-      "target": "routing_routing_zipparams",
+      "target": "routing_routing_nameparams",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -3759,7 +3770,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/routing.go",
-      "source_location": "L166",
+      "source_location": "L165",
       "weight": 1.0
     },
     {
@@ -3884,19 +3895,31 @@
     },
     {
       "source": "routing_lookup",
-      "target": "routing_method_go_routing_method",
+      "target": "routing_param",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "routing/node.go",
-      "source_location": "L112",
+      "source_location": "L117",
+      "weight": 1.0
+    },
+    {
+      "source": "routing_lookup",
+      "target": "routing_node_go_method",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "field",
+      "source_file": "routing/node.go",
+      "source_location": "L119",
       "weight": 1.0
     },
     {
       "source": "routing_match",
-      "target": "e",
+      "target": "routing_routing_go_e",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -3932,7 +3955,7 @@
     },
     {
       "source": "routing_node",
-      "target": "routing_method_go_routing_method",
+      "target": "routing_node_go_method",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -3944,7 +3967,7 @@
     },
     {
       "source": "routing_tree",
-      "target": "node",
+      "target": "routing_node",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -3999,7 +4022,7 @@
       "confidence_score": 1.0,
       "context": "generic_arg",
       "source_file": "routing/node.go",
-      "source_location": "L241",
+      "source_location": "L248",
       "weight": 1.0
     },
     {
@@ -4011,7 +4034,7 @@
       "confidence_score": 1.0,
       "context": "generic_arg",
       "source_file": "routing/node.go",
-      "source_location": "L224",
+      "source_location": "L231",
       "weight": 1.0
     },
     {
@@ -4047,7 +4070,7 @@
       "confidence_score": 1.0,
       "context": "generic_arg",
       "source_file": "routing/node.go",
-      "source_location": "L147",
+      "source_location": "L154",
       "weight": 1.0
     },
     {
@@ -4059,7 +4082,7 @@
       "confidence_score": 1.0,
       "context": "generic_arg",
       "source_file": "routing/node.go",
-      "source_location": "L175",
+      "source_location": "L182",
       "weight": 1.0
     },
     {
@@ -4083,7 +4106,7 @@
       "confidence_score": 1.0,
       "context": "generic_arg",
       "source_file": "routing/node.go",
-      "source_location": "L213",
+      "source_location": "L220",
       "weight": 1.0
     },
     {
@@ -4095,7 +4118,7 @@
       "confidence_score": 1.0,
       "context": "generic_arg",
       "source_file": "routing/node.go",
-      "source_location": "L191",
+      "source_location": "L198",
       "weight": 1.0
     },
     {
@@ -4112,7 +4135,7 @@
     },
     {
       "source": "routing_routing_createtree",
-      "target": "e",
+      "target": "routing_routing_go_e",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -4136,7 +4159,7 @@
     },
     {
       "source": "routing_tree",
-      "target": "e",
+      "target": "routing_routing_go_e",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -4148,19 +4171,19 @@
     },
     {
       "source": "routing_tree_e_clone",
-      "target": "e",
+      "target": "routing_routing_go_e",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "generic_arg",
       "source_file": "routing/routing.go",
-      "source_location": "L147",
+      "source_location": "L146",
       "weight": 1.0
     },
     {
       "source": "routing_tree_e_ensurepath",
-      "target": "e",
+      "target": "routing_routing_go_e",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -4172,7 +4195,7 @@
     },
     {
       "source": "routing_tree_e_lookup",
-      "target": "e",
+      "target": "routing_routing_go_e",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -4184,7 +4207,7 @@
     },
     {
       "source": "routing_tree_e_lookupsegments",
-      "target": "e",
+      "target": "routing_routing_go_e",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -4196,26 +4219,26 @@
     },
     {
       "source": "routing_tree_e_merge",
-      "target": "e",
+      "target": "routing_routing_go_e",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "generic_arg",
       "source_file": "routing/routing.go",
-      "source_location": "L152",
+      "source_location": "L151",
       "weight": 1.0
     },
     {
       "source": "routing_tree_e_mergeat",
-      "target": "e",
+      "target": "routing_routing_go_e",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "generic_arg",
       "source_file": "routing/routing.go",
-      "source_location": "L165",
+      "source_location": "L164",
       "weight": 1.0
     },
     {
@@ -5372,7 +5395,7 @@
     },
     {
       "source": "routing_node_e_hasmethod",
-      "target": "routing_method_go_routing_method",
+      "target": "routing_node_go_method",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -5391,7 +5414,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "routing/node.go",
-      "source_location": "L147",
+      "source_location": "L154",
       "weight": 1.0
     },
     {
@@ -5403,7 +5426,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "routing/node.go",
-      "source_location": "L175",
+      "source_location": "L182",
       "weight": 1.0
     },
     {
@@ -5415,12 +5438,12 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "routing/node.go",
-      "source_location": "L129",
+      "source_location": "L136",
       "weight": 1.0
     },
     {
       "source": "routing_node_e_setendpoint",
-      "target": "routing_method_go_routing_method",
+      "target": "routing_node_go_e",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -5432,7 +5455,7 @@
     },
     {
       "source": "routing_node_e_setendpoint",
-      "target": "routing_node_go_e",
+      "target": "routing_node_go_method",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -6027,7 +6050,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "routing/routing.go",
-      "source_location": "L152",
+      "source_location": "L151",
       "weight": 1.0
     },
     {
@@ -6039,12 +6062,12 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "routing/routing.go",
-      "source_location": "L165",
+      "source_location": "L164",
       "weight": 1.0
     },
     {
       "source": "routing_tree_e_register",
-      "target": "e",
+      "target": "routing_routing_go_e",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -6068,7 +6091,7 @@
     },
     {
       "source": "routing_tree_e_registerroute",
-      "target": "e",
+      "target": "routing_routing_go_e",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -6212,14 +6235,14 @@
     },
     {
       "source": "routing_lookup_allowedmethods",
-      "target": "routing_method_go_routing_method",
+      "target": "routing_node_go_method",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "routing/node.go",
-      "source_location": "L117",
+      "source_location": "L124",
       "weight": 1.0
     },
     {
@@ -6231,7 +6254,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "routing/node.go",
-      "source_location": "L241",
+      "source_location": "L248",
       "weight": 1.0
     },
     {
@@ -6255,7 +6278,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "routing/node.go",
-      "source_location": "L147",
+      "source_location": "L154",
       "weight": 1.0
     },
     {
@@ -6267,7 +6290,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "routing/node.go",
-      "source_location": "L175",
+      "source_location": "L182",
       "weight": 1.0
     },
     {
@@ -6284,14 +6307,14 @@
     },
     {
       "source": "routing_routing_classify",
-      "target": "segmentkind",
+      "target": "routing_segmentkind",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "routing/routing.go",
-      "source_location": "L243",
+      "source_location": "L242",
       "weight": 1.0
     },
     {
@@ -6307,7 +6330,7 @@
       "weight": 1.0
     },
     {
-      "source": "routing_routing_zipparams",
+      "source": "routing_routing_nameparams",
       "target": "routing_param",
       "relation": "references",
       "_origin": "ast",
@@ -6327,12 +6350,12 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "routing/routing.go",
-      "source_location": "L147",
+      "source_location": "L146",
       "weight": 1.0
     },
     {
       "source": "routing_tree_e_ensurepath",
-      "target": "node",
+      "target": "routing_node",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -7476,7 +7499,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/node.go",
-      "source_location": "L191",
+      "source_location": "L198",
       "weight": 1.0
     },
     {
@@ -7498,7 +7521,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/node.go",
-      "source_location": "L213",
+      "source_location": "L220",
       "weight": 1.0
     },
     {
@@ -7509,7 +7532,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/node.go",
-      "source_location": "L224",
+      "source_location": "L231",
       "weight": 1.0
     },
     {
@@ -7520,7 +7543,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/node.go",
-      "source_location": "L241",
+      "source_location": "L248",
       "weight": 1.0
     },
     {
@@ -7591,7 +7614,7 @@
     },
     {
       "source": "routing_routing",
-      "target": "routing_routing_zipparams",
+      "target": "routing_routing_nameparams",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -7619,7 +7642,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/routing.go",
-      "source_location": "L182",
+      "source_location": "L181",
       "weight": 1.0
     },
     {
@@ -7630,7 +7653,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/routing.go",
-      "source_location": "L186",
+      "source_location": "L185",
       "weight": 1.0
     },
     {
@@ -7641,7 +7664,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/routing.go",
-      "source_location": "L194",
+      "source_location": "L193",
       "weight": 1.0
     },
     {
@@ -7663,7 +7686,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/routing.go",
-      "source_location": "L243",
+      "source_location": "L242",
       "weight": 1.0
     },
     {
@@ -7674,7 +7697,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/routing.go",
-      "source_location": "L254",
+      "source_location": "L253",
       "weight": 1.0
     },
     {
@@ -8510,7 +8533,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/node.go",
-      "source_location": "L117",
+      "source_location": "L124",
       "weight": 1.0
     },
     {
@@ -8521,7 +8544,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/node.go",
-      "source_location": "L129",
+      "source_location": "L136",
       "weight": 1.0
     },
     {
@@ -8532,7 +8555,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/node.go",
-      "source_location": "L147",
+      "source_location": "L154",
       "weight": 1.0
     },
     {
@@ -8543,7 +8566,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/node.go",
-      "source_location": "L175",
+      "source_location": "L182",
       "weight": 1.0
     },
     {
@@ -8642,7 +8665,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/routing.go",
-      "source_location": "L147",
+      "source_location": "L146",
       "weight": 1.0
     },
     {
@@ -8653,7 +8676,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/routing.go",
-      "source_location": "L152",
+      "source_location": "L151",
       "weight": 1.0
     },
     {
@@ -8664,7 +8687,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/routing.go",
-      "source_location": "L165",
+      "source_location": "L164",
       "weight": 1.0
     },
     {
@@ -9957,7 +9980,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "routing/routing.go",
-      "source_location": "L148",
+      "source_location": "L147",
       "weight": 1.0
     },
     {
@@ -9969,7 +9992,7 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "routing/routing.go",
-      "source_location": "L156",
+      "source_location": "L155",
       "weight": 1.0
     },
     {
@@ -9981,10 +10004,10 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "routing/routing.go",
-      "source_location": "L170",
+      "source_location": "L169",
       "weight": 1.0
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "8266e541bd55510c11de17bf66f6c36180ef9765"
+  "built_at_commit": "3ff710fc9a39196bc22b4cd2ae70dd10a32d2a61"
 }

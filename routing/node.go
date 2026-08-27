@@ -108,8 +108,15 @@ func (n *node[E]) hasAnyMethod() bool {
 // what a route resolves to.
 type lookup struct {
 	httpMethod Method
-	values     []string
-	allowed    map[Method]struct{}
+
+	// params accumulate as the walk descends and unwind when a branch fails, so
+	// only those on the surviving route remain. Values land here as they are
+	// captured and the names are filled in at the end, once the matched
+	// endpoint says what it called them -- one slice built once, rather than a
+	// slice of values and a second one to pair it with.
+	params []Param
+
+	allowed map[Method]struct{}
 }
 
 // allowedMethods returns the recorded methods sorted, so that a caller
@@ -160,11 +167,11 @@ func (n *node[E]) match(paths []string, index int, search *lookup) *node[E] {
 	}
 
 	if n.parameter != nil {
-		search.values = append(search.values, paths[index])
+		search.params = append(search.params, Param{Value: paths[index]})
 		if matched := n.parameter.match(paths, index+1, search); matched != nil {
 			return matched
 		}
-		search.values = search.values[:len(search.values)-1]
+		search.params = search.params[:len(search.params)-1]
 	}
 
 	return n.matchWildcard(paths, index, search)
@@ -177,12 +184,12 @@ func (n *node[E]) matchWildcard(paths []string, index int, search *lookup) *node
 		return nil
 	}
 
-	search.values = append(search.values, strings.Join(paths[index:], "/"))
+	search.params = append(search.params, Param{Value: strings.Join(paths[index:], "/")})
 	if n.wildcard.hasMethod(search.httpMethod) {
 		return n.wildcard
 	}
 	n.wildcard.recordAllowed(search)
-	search.values = search.values[:len(search.values)-1]
+	search.params = search.params[:len(search.params)-1]
 	return nil
 }
 

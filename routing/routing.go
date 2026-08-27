@@ -123,20 +123,19 @@ func (t *Tree[E]) LookupSegments(httpMethod Method, segments []string) (Match[E]
 	resolved := matched.endpoints[httpMethod]
 	return Match[E]{
 		Handler: resolved.handler,
-		Params:  zipParams(resolved.variableNames, search.values),
+		Params:  nameParams(search.params, resolved.variableNames),
 	}, StatusFound
 }
 
-// zipParams pairs the variable names recorded at registration with the values
-// collected on the walk. The walk enters exactly one parameter node per name,
-// so the two always line up.
-func zipParams(names, values []string) []Param {
+// nameParams labels the values the walk captured with the names the matched
+// endpoint recorded at registration. The walk enters exactly one parameter node
+// per name, so the two always line up.
+func nameParams(params []Param, names []string) []Param {
 	if len(names) == 0 {
 		return nil
 	}
-	params := make([]Param, len(names))
 	for i, name := range names {
-		params[i] = Param{Name: name, Value: values[i]}
+		params[i].Name = name
 	}
 	return params
 }
