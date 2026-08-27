@@ -111,8 +111,7 @@ func TestRouter_RegisterCapturePathVariable(t *testing.T) {
 	path := "/path/{test}"
 	pathToTest := "/path/hello"
 	method := func(w http.ResponseWriter, r *http.Request) {
-		rp := r.Context().Value("RouterContext").(*context.RouterContext)
-		w.Write([]byte(rp.Value("test")))
+		w.Write([]byte(context.Param(r, "test")))
 	}
 	r.Register(GET, path, method)
 	s := setup(r)
@@ -128,8 +127,7 @@ func TestRouter_RegisterCaptureMultiplePathVariable(t *testing.T) {
 	path := "/path/{test}/path/{test2}"
 	pathToTest := "/path/hello/path/world"
 	method := func(w http.ResponseWriter, r *http.Request) {
-		rp := r.Context().Value("RouterContext").(*context.RouterContext)
-		w.Write([]byte(fmt.Sprintf("%s_%s", rp.Value("test"), rp.Value("test2"))))
+		w.Write([]byte(fmt.Sprintf("%s_%s", context.Param(r, "test"), context.Param(r, "test2"))))
 	}
 	r.Register(GET, path, method)
 	s := setup(r)

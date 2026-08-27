@@ -1,7 +1,6 @@
 package context
 
 import (
-	"context"
 	"net/http/httptest"
 	"testing"
 
@@ -36,37 +35,17 @@ func TestContext_SetOverwritesExistingKey(t *testing.T) {
 	assert.Equal(t, "second", ctx.Value("id"))
 }
 
-func TestInjectIntoRequest(t *testing.T) {
-	routerCtx := &RouterContext{
-		// Initialize RouterContext properties for testing if needed
-	}
-
-	req := httptest.NewRequest("GET", "/", nil)
-	routerCtx.InjectIntoRequest(req)
-
-	// Retrieve the RouterContext from the request's context
-	ctxValue := req.Context().Value(RouterContextKey)
-	injectedCtx, ok := ctxValue.(*RouterContext)
-	if !ok {
-		t.Errorf("Expected RouterContext, got %T", ctxValue)
-	}
-	assert.NotNil(t, injectedCtx)
-	if injectedCtx == nil {
-		t.Error("Injected context is nil")
-	}
-	if injectedCtx != routerCtx {
-		t.Error("Injected context does not match the original context")
-	}
-
-}
-
 func TestWithRequestDoesNotMutateOriginalRequest(t *testing.T) {
 	routerCtx := NewContext()
 	request := httptest.NewRequest("GET", "/", nil)
 	derivedRequest := routerCtx.WithRequest(request)
 
-	assert.Nil(t, request.Context().Value(RouterContextKey))
-	assert.Same(t, routerCtx, derivedRequest.Context().Value(RouterContextKey))
+	_, attachedToOriginal := FromRequest(request)
+	assert.False(t, attachedToOriginal)
+
+	derivedContext, ok := FromRequest(derivedRequest)
+	assert.True(t, ok)
+	assert.Same(t, routerCtx, derivedContext)
 }
 
 func TestFromRequest(t *testing.T) {
@@ -79,16 +58,21 @@ func TestFromRequest(t *testing.T) {
 	assert.Same(t, routerCtx, foundContext)
 }
 
-func TestFromRequestSupportsLegacyContextKey(t *testing.T) {
+func TestFromRequestWithoutRoutingContext(t *testing.T) {
+	foundContext, ok := FromRequest(httptest.NewRequest("GET", "/", nil))
+
+	assert.False(t, ok)
+	assert.Nil(t, foundContext)
+}
+
+func TestParam(t *testing.T) {
 	routerCtx := NewContext()
-	request := httptest.NewRequest("GET", "/", nil).WithContext(
-		context.WithValue(context.Background(), RouterContextKey, routerCtx),
-	)
+	routerCtx.Set("id", "42")
+	request := routerCtx.WithRequest(httptest.NewRequest("GET", "/", nil))
 
-	foundContext, ok := FromRequest(request)
-
-	assert.True(t, ok)
-	assert.Same(t, routerCtx, foundContext)
+	assert.Equal(t, "42", Param(request, "id"))
+	assert.Equal(t, "", Param(request, "missing"))
+	assert.Equal(t, "", Param(httptest.NewRequest("GET", "/", nil), "id"))
 }
 
 func setup() *RouterContext {

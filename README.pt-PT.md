@@ -29,10 +29,8 @@ O projeto foi desenvolvido com o fim de aprendizado e experimentação da lingua
         r.Group("/{id}", func(r router.Router) {
             r.Use(func(next http.Handler) http.Handler {
                 return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-                    requestCtx := request.Context().Value(context.RouterContextKey)
-                    ctxValue, _ := requestCtx.(*context.RouterContext)
                     next.ServeHTTP(writer, request)
-                    message := fmt.Sprintf("Group Middleware\n Found Path value: " + string(ctxValue.Value("id")))
+                    message := fmt.Sprintf("Group Middleware\n Found Path value: %s", context.Param(request, "id"))
                     writer.Write([]byte(message))
                 })
             })
