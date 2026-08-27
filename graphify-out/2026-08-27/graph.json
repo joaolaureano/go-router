@@ -907,14 +907,14 @@
     },
     {
       "id": "context_routercontext",
-      "label": "context.RouterContext",
+      "label": "RouterContext",
       "_origin": "ast",
       "community": 3,
       "community_name": "NewContext",
       "file_type": "code",
-      "norm_label": "context.routercontext",
-      "source_file": "",
-      "source_location": ""
+      "norm_label": "routercontext",
+      "source_file": "router/context/context.go",
+      "source_location": "L12"
     },
     {
       "id": "context_routercontext_injectintorequest",
@@ -1013,7 +1013,7 @@
       "file_type": "code",
       "norm_label": "newcontext()",
       "source_file": "router/context/context.go",
-      "source_location": "L27"
+      "source_location": "L29"
     },
     {
       "id": "router_context_context_test",
@@ -3740,7 +3740,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "router/context/context.go",
-      "source_location": "L27",
+      "source_location": "L29",
       "weight": 1.0
     },
     {
@@ -4046,7 +4046,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/context/context.go",
-      "source_location": "L27",
+      "source_location": "L29",
       "weight": 1.0
     },
     {
@@ -6339,5 +6339,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "c6cb1bedb31ad77428a9c6bf7c693f49a2aaefc1"
+  "built_at_commit": "f6aa488172c0d24f411ca252e5fa4477fc07d58a"
 }

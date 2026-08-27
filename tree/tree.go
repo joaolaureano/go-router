@@ -42,13 +42,6 @@ func (t *Tree) register(httpMethod _const.HTTPMethods, path string, method http.
 	if path[0] != '/' {
 		panic("Path must begin with front-slash (/)")
 	}
-	if path == "/" {
-		if _, exists := currNode.Method[httpMethod]; exists {
-			panic(fmt.Sprintf("Duplicated path: %s", path))
-		}
-		currNode.Method[httpMethod] = Method{Handler: method}
-		return
-	}
 	segments := splitSegments(path)
 	if err := validateSegments(path, segments); err != nil {
 		panic(err.Error())
@@ -98,15 +91,6 @@ func (t *Tree) FindPath(path string) *Node {
 }
 
 func (t *Tree) findPath(path string, filter methodFilter) (*Node, []string) {
-	if path == "/" || path == "" {
-		if !filter.accepts(t.root) {
-			return nil, nil
-		}
-		return t.root, nil
-	}
-	if len(t.root.children) == 0 && t.root.parameter == nil {
-		return nil, nil
-	}
 	return matchPath(t.root, splitSegments(path), 0, nil, filter)
 }
 
@@ -131,8 +115,15 @@ func setPathVariableValues(ctx *context.RouterContext, keys, values []string) {
 // splitSegments breaks a path into the segments the tree is keyed by.
 // Registration and lookup have to agree on this normalisation, otherwise a
 // route can be stored under a shape that no request will ever reach.
+//
+// The root carries no segments, so it needs no special case on either side:
+// an empty segment list simply leaves the walk standing on the root node.
 func splitSegments(path string) []string {
-	return strings.Split(strings.Trim(path, "/"), "/")
+	trimmed := strings.Trim(path, "/")
+	if trimmed == "" {
+		return nil
+	}
+	return strings.Split(trimmed, "/")
 }
 
 func validateSegments(path string, segments []string) error {
