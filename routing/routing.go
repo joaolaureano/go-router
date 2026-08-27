@@ -141,6 +141,13 @@ func zipParams(names, values []string) []Param {
 	return params
 }
 
+// Clone returns a deep copy sharing only the endpoints themselves. It is what
+// lets a caller publish changes without locking readers: mutate the copy, then
+// swap it in, and a reader is always walking one whole tree or the other.
+func (t *Tree[E]) Clone() *Tree[E] {
+	return &Tree[E]{root: cloneNode(t.root, nil)}
+}
+
 // Merge copies every route of source that this tree does not already define.
 func (t *Tree[E]) Merge(source *Tree[E]) {
 	if t.root == source.root {

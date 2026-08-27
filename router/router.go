@@ -5,7 +5,6 @@ import (
 	"net/url"
 	"sort"
 	"strings"
-	"sync"
 
 	"github.com/joaolaureano/go-router/chain"
 	"github.com/joaolaureano/go-router/router/context"
@@ -35,19 +34,14 @@ const (
 type routes = routing.Tree[http.Handler]
 
 type Router struct {
-	root *routes
+	// state is shared with every router derived from this one, so a route or a
+	// fallback handler installed on a group reaches the router that serves.
+	state *state
 
-	chain chain.Middleware
-
-	// notFound and methodNotAllowed are shared by reference across the router
-	// family, like root and mu, so a handler installed on a group reaches the
-	// router that serves.
-	notFound         *http.HandlerFunc
-	methodNotAllowed *http.HandlerFunc
-
+	// chain and prefix belong to this router alone: that is what makes a group
+	// a group.
+	chain  chain.Middleware
 	prefix string
-
-	mu *sync.RWMutex
 }
 
 func NewRouter() *Router {
@@ -56,16 +50,11 @@ func NewRouter() *Router {
 
 func NewPrefixRouter(prefix string) *Router {
 	routeTree := routing.CreateTree[http.Handler]()
-	notFound := http.HandlerFunc(http.NotFound)
-	methodNotAllowed := http.HandlerFunc(defaultMethodNotAllowed)
 
 	return &Router{
-		root:             &routeTree,
-		chain:            &chain.Chain{},
-		notFound:         &notFound,
-		methodNotAllowed: &methodNotAllowed,
-		prefix:           prefix,
-		mu:               &sync.RWMutex{},
+		state:  newState(&routeTree),
+		chain:  &chain.Chain{},
+		prefix: prefix,
 	}
 }
 
@@ -99,18 +88,17 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	httpMethod := routing.Method(r.Method)
 	segments := requestSegments(r)
 
-	router.mu.RLock()
-	match, status := router.root.LookupSegments(httpMethod, segments)
+	// Atomic loads and no lock: see the comment on state.
+	router.state.markServed()
+	tree := router.state.tree.Load()
+	match, status := tree.LookupSegments(httpMethod, segments)
 	// RFC 9110: HEAD is GET without content, and net/http already suppresses
 	// the body, so a GET route answers HEAD unless one was registered for it.
 	if status != routing.StatusFound && httpMethod == HEAD {
-		if getMatch, getStatus := router.root.LookupSegments(GET, segments); getStatus == routing.StatusFound {
+		if getMatch, getStatus := tree.LookupSegments(GET, segments); getStatus == routing.StatusFound {
 			match, status = getMatch, getStatus
 		}
 	}
-	notFound := *router.notFound
-	methodNotAllowed := *router.methodNotAllowed
-	router.mu.RUnlock()
 
 	switch status {
 	case routing.StatusFound:
@@ -131,9 +119,9 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusNoContent)
 			return
 		}
-		methodNotAllowed(w, r)
+		(*router.state.methodNotAllowed.Load())(w, r)
 	default:
-		notFound(w, r)
+		(*router.state.notFound.Load())(w, r)
 	}
 }
 
@@ -168,14 +156,15 @@ func (router *Router) Register(httpMethod Method, path string, method http.Handl
 	if method == nil {
 		panic(ErrNilHandler)
 	}
-	router.mu.Lock()
-	defer router.mu.Unlock()
 	if router.prefix != "" {
 		path = router.prefix + path
 	}
-	router.root.RegisterRoute(httpMethod,
-		path,
-		router.chain.BuildHandler(method))
+	router.state.mu.Lock()
+	defer router.state.mu.Unlock()
+	handler := router.chain.BuildHandler(method)
+	router.state.mutateTree(func(tree *routes) {
+		tree.RegisterRoute(httpMethod, path, handler)
+	})
 }
 
 // Get and the shortcuts below are Register with the verb spelled into the name,
@@ -209,8 +198,8 @@ func (router *Router) Options(path string, handler http.HandlerFunc) {
 }
 
 func (router *Router) Use(middleware func(http.Handler) http.Handler) {
-	router.mu.Lock()
-	defer router.mu.Unlock()
+	router.state.mu.Lock()
+	defer router.state.mu.Unlock()
 	if router.chain.Sealed() {
 		panic(ErrChainSealed)
 	}
@@ -221,9 +210,7 @@ func (router *Router) NotFound(notFoundFn http.HandlerFunc) {
 	if notFoundFn == nil {
 		panic(ErrNilHandler)
 	}
-	router.mu.Lock()
-	defer router.mu.Unlock()
-	*router.notFound = notFoundFn
+	router.state.setNotFound(notFoundFn)
 }
 
 // MethodNotAllowed sets the handler for requests whose path exists but not
@@ -232,9 +219,7 @@ func (router *Router) MethodNotAllowed(methodNotAllowedFn http.HandlerFunc) {
 	if methodNotAllowedFn == nil {
 		panic(ErrNilHandler)
 	}
-	router.mu.Lock()
-	defer router.mu.Unlock()
-	*router.methodNotAllowed = methodNotAllowedFn
+	router.state.setMethodNotAllowed(methodNotAllowedFn)
 }
 
 // Mount grafts another router's routes in under prefix. The mounted routes keep
@@ -246,37 +231,32 @@ func (router *Router) Mount(prefix string, other *Router) {
 	if other == nil {
 		panic(ErrNilRouter)
 	}
-	// A group or a With shares the routing tree, and the mutex with it, so
-	// mounting one of those would both deadlock and graft the tree into itself.
-	if other.root == router.root {
+	// A group or a With shares the whole state, so mounting one of those would
+	// both deadlock on the writer lock and graft the tree into itself.
+	if other.state == router.state {
 		panic(ErrSharedRoutingTree)
 	}
 
-	router.mu.Lock()
-	defer router.mu.Unlock()
-	other.mu.RLock()
-	defer other.mu.RUnlock()
-
-	router.root.MergeAt(router.prefix+prefix, other.root)
+	prefix = router.prefix + prefix
+	router.state.mu.Lock()
+	defer router.state.mu.Unlock()
+	source := other.state.tree.Load()
+	router.state.mutateTree(func(tree *routes) {
+		tree.MergeAt(prefix, source)
+	})
 }
 
 // Group returns a subrouter that registers under prefix and starts from a copy
 // of this router's middleware. It shares the routing tree, so routes declared
 // on it are served by the router this was called on.
 func (router *Router) Group(prefix string, fn func(r *Router)) *Router {
-	router.mu.RLock()
+	router.state.mu.Lock()
 	middlewares := append([]func(http.Handler) http.Handler(nil), router.chain.Middlewares()...)
-	fullPrefix := router.prefix + prefix
-	mu := router.mu
-	router.mu.RUnlock()
-	chain := chain.NewChain(middlewares...)
+	router.state.mu.Unlock()
 	subrouter := &Router{
-		root:             router.root,
-		chain:            chain,
-		notFound:         router.notFound,
-		methodNotAllowed: router.methodNotAllowed,
-		prefix:           fullPrefix,
-		mu:               mu,
+		state:  router.state,
+		chain:  chain.NewChain(middlewares...),
+		prefix: router.prefix + prefix,
 	}
 
 	fn(subrouter)
@@ -285,17 +265,13 @@ func (router *Router) Group(prefix string, fn func(r *Router)) *Router {
 }
 
 func (router *Router) With(middleware ...func(http.Handler) http.Handler) *Router {
-	router.mu.RLock()
+	router.state.mu.Lock()
 	middlewares := append([]func(http.Handler) http.Handler(nil), router.chain.Middlewares()...)
-	subrouter := &Router{
-		root:             router.root,
-		notFound:         router.notFound,
-		methodNotAllowed: router.methodNotAllowed,
-		prefix:           router.prefix,
-		mu:               router.mu,
-	}
-	router.mu.RUnlock()
-	subrouter.chain = chain.NewChain(append(middlewares, middleware...)...)
+	router.state.mu.Unlock()
 
-	return subrouter
+	return &Router{
+		state:  router.state,
+		chain:  chain.NewChain(append(middlewares, middleware...)...),
+		prefix: router.prefix,
+	}
 }

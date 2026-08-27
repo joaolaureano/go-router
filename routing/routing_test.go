@@ -221,6 +221,21 @@ func TestTree_ResolvesToAnyEndpointType(t *testing.T) {
 	assert.Equal(t, []Param{{Name: "id", Value: "42"}}, match.Params)
 }
 
+func TestTree_CloneIsIndependent(t *testing.T) {
+	source := CreateTree[http.Handler]()
+	source.RegisterRoute(GET, "/original", handler)
+
+	clone := source.Clone()
+	clone.RegisterRoute(GET, "/added", handler)
+
+	assertFound(t, clone, GET, "/original")
+	assertFound(t, clone, GET, "/added")
+	assertFound(t, &source, GET, "/original")
+
+	_, status := source.Lookup(GET, "/added")
+	assert.Equal(t, StatusNotFound, status, "the source must not see what was added to the clone")
+}
+
 func TestLookup(t *testing.T) {
 	tree := CreateTree[http.Handler]()
 	tree.RegisterRoute(GET, "/path", handler)

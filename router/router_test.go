@@ -17,14 +17,14 @@ func TestNewRouter(t *testing.T) {
 	router := NewRouter()
 
 	assert.NotNil(t, router, "Router should not be nil")
-	assert.NotNil(t, router.root, "Root should not be nil")
+	assert.NotNil(t, router.state.tree.Load(), "Routing table should not be nil")
 
 }
 func TestNewRouterWithPrefix(t *testing.T) {
 	router := NewPrefixRouter("/prefix")
 
 	assert.NotNil(t, router, "Router should not be nil")
-	assert.NotNil(t, router.root, "Root should not be nil")
+	assert.NotNil(t, router.state.tree.Load(), "Routing table should not be nil")
 	assert.Equal(t, "/prefix", router.prefix, "Root should not be nil")
 
 }
@@ -683,6 +683,56 @@ func TestRouter_OptionsOnUnknownPathIsStillNotFound(t *testing.T) {
 	r.ServeHTTP(response, httptest.NewRequest(http.MethodOptions, "/other", nil))
 
 	assert.Equal(t, http.StatusNotFound, response.Code)
+}
+
+func TestRouter_RegistersWhileServing(t *testing.T) {
+	r := NewRouter()
+	r.Get("/stable", func(w http.ResponseWriter, r *http.Request) {})
+
+	// The first request flips the router onto its copy-on-write path, so what
+	// follows exercises publishing a new table under live readers.
+	r.ServeHTTP(httptest.NewRecorder(), httptest.NewRequest(http.MethodGet, "/stable", nil))
+
+	var waitGroup sync.WaitGroup
+	for i := 0; i < 8; i++ {
+		waitGroup.Add(1)
+		go func() {
+			defer waitGroup.Done()
+			for j := 0; j < 200; j++ {
+				r.ServeHTTP(httptest.NewRecorder(), httptest.NewRequest(http.MethodGet, "/stable", nil))
+			}
+		}()
+	}
+	waitGroup.Add(1)
+	go func() {
+		defer waitGroup.Done()
+		r.Get("/added/{id}", func(w http.ResponseWriter, r *http.Request) {
+			w.Write([]byte(context.Param(r, "id")))
+		})
+	}()
+	waitGroup.Wait()
+
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, httptest.NewRequest(http.MethodGet, "/added/7", nil))
+
+	assert.Equal(t, http.StatusOK, response.Code, "a route added while serving must become visible")
+	assert.Equal(t, "7", response.Body.String())
+}
+
+func TestRouter_MountWhileServing(t *testing.T) {
+	api := NewRouter()
+	api.Get("/health", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok")) })
+
+	r := NewRouter()
+	r.Get("/stable", func(w http.ResponseWriter, r *http.Request) {})
+	r.ServeHTTP(httptest.NewRecorder(), httptest.NewRequest(http.MethodGet, "/stable", nil))
+
+	r.Mount("/api", api)
+
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, httptest.NewRequest(http.MethodGet, "/api/health", nil))
+
+	assert.Equal(t, "ok", response.Body.String())
 }
 
 func TestRouter_RegisterPathWithQueryString(t *testing.T) {
