@@ -24,10 +24,10 @@ func (routerCtx *RouterContext) Set(key string, value string) {
 	routerCtx.params[key] = value
 }
 
+// NewContext leaves params nil. Reads on a nil map are legal and Set allocates
+// on demand, so a route without variables never pays for the map.
 func NewContext() *RouterContext {
-	return &RouterContext{
-		params: make(map[string]string),
-	}
+	return &RouterContext{}
 }
 
 func (routerCtx *RouterContext) InjectIntoRequest(r *http.Request) {
