@@ -7,6 +7,8 @@ import (
 
 const RouterContextKey = "RouterContext"
 
+type contextKey struct{}
+
 type RouterContext struct {
 	params map[string]string
 }
@@ -29,5 +31,18 @@ func NewContext() *RouterContext {
 }
 
 func (routerCtx *RouterContext) InjectIntoRequest(r *http.Request) {
-	*r = *r.WithContext(context.WithValue((*r).Context(), RouterContextKey, routerCtx))
+	*r = *routerCtx.WithRequest(r)
+}
+
+func (routerCtx *RouterContext) WithRequest(r *http.Request) *http.Request {
+	requestContext := context.WithValue(r.Context(), contextKey{}, routerCtx)
+	return r.WithContext(context.WithValue(requestContext, RouterContextKey, routerCtx))
+}
+
+func FromRequest(r *http.Request) (*RouterContext, bool) {
+	routerCtx, ok := r.Context().Value(contextKey{}).(*RouterContext)
+	if !ok {
+		routerCtx, ok = r.Context().Value(RouterContextKey).(*RouterContext)
+	}
+	return routerCtx, ok
 }

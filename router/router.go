@@ -5,7 +5,7 @@ import (
 	"sync"
 
 	"github.com/joaolaureano/go-router/chain"
-	"github.com/joaolaureano/go-router/const"
+	_const "github.com/joaolaureano/go-router/const"
 	"github.com/joaolaureano/go-router/router/context"
 	"github.com/joaolaureano/go-router/tree"
 )
@@ -51,7 +51,7 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	uri := r.URL.Path
 	method := r.Method
 	ctx := context.NewContext()
-	ctx.InjectIntoRequest(r)
+	r = ctx.WithRequest(r)
 	router.mu.RLock()
 	route := router.root.FindRoute(ctx, _const.HTTPMethods(method), uri)
 	var routeHandler http.Handler

@@ -1,6 +1,7 @@
 package context
 
 import (
+	"context"
 	"net/http/httptest"
 	"testing"
 
@@ -57,6 +58,37 @@ func TestInjectIntoRequest(t *testing.T) {
 		t.Error("Injected context does not match the original context")
 	}
 
+}
+
+func TestWithRequestDoesNotMutateOriginalRequest(t *testing.T) {
+	routerCtx := NewContext()
+	request := httptest.NewRequest("GET", "/", nil)
+	derivedRequest := routerCtx.WithRequest(request)
+
+	assert.Nil(t, request.Context().Value(RouterContextKey))
+	assert.Same(t, routerCtx, derivedRequest.Context().Value(RouterContextKey))
+}
+
+func TestFromRequest(t *testing.T) {
+	routerCtx := NewContext()
+	request := routerCtx.WithRequest(httptest.NewRequest("GET", "/", nil))
+
+	foundContext, ok := FromRequest(request)
+
+	assert.True(t, ok)
+	assert.Same(t, routerCtx, foundContext)
+}
+
+func TestFromRequestSupportsLegacyContextKey(t *testing.T) {
+	routerCtx := NewContext()
+	request := httptest.NewRequest("GET", "/", nil).WithContext(
+		context.WithValue(context.Background(), RouterContextKey, routerCtx),
+	)
+
+	foundContext, ok := FromRequest(request)
+
+	assert.True(t, ok)
+	assert.Same(t, routerCtx, foundContext)
 }
 
 func setup() *RouterContext {

@@ -500,14 +500,14 @@
     },
     {
       "id": "tree_routertree",
-      "label": "RouterTree",
+      "label": "tree.RouterTree",
       "_origin": "ast",
       "community": 1,
       "community_name": "Node",
       "file_type": "code",
-      "norm_label": "routertree",
-      "source_file": "tree/tree.go",
-      "source_location": "L16"
+      "norm_label": "tree.routertree",
+      "source_file": "",
+      "source_location": ""
     },
     {
       "id": "tree_tree",
@@ -695,6 +695,94 @@
       "norm_label": "testnodesetendpoint()",
       "source_file": "tree/node_test.go",
       "source_location": "L42"
+    },
+    {
+      "id": "chain_chain",
+      "label": "Chain",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "net/http.Handler",
+      "file_type": "code",
+      "norm_label": "chain",
+      "source_file": "chain/chain.go",
+      "source_location": "L11"
+    },
+    {
+      "id": "chain_chain_add",
+      "label": ".Add()",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "net/http.Handler",
+      "file_type": "code",
+      "norm_label": ".add()",
+      "source_file": "chain/chain.go",
+      "source_location": "L15"
+    },
+    {
+      "id": "chain_chain_buildhandler",
+      "label": ".BuildHandler()",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "net/http.Handler",
+      "file_type": "code",
+      "norm_label": ".buildhandler()",
+      "source_file": "chain/chain.go",
+      "source_location": "L19"
+    },
+    {
+      "id": "chain_chain_middlewares",
+      "label": ".Middlewares()",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "net/http.Handler",
+      "file_type": "code",
+      "norm_label": ".middlewares()",
+      "source_file": "chain/chain.go",
+      "source_location": "L37"
+    },
+    {
+      "id": "go_router_router",
+      "label": "Router",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "net/http.Handler",
+      "file_type": "code",
+      "norm_label": "router",
+      "source_file": "gorouter.go",
+      "source_location": "L13"
+    },
+    {
+      "id": "go_type_net_http_handler",
+      "label": "net/http.Handler",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "net/http.Handler",
+      "file_type": "code",
+      "norm_label": "net/http.handler",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "gorouter",
+      "label": "gorouter.go",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "net/http.Handler",
+      "file_type": "code",
+      "norm_label": "gorouter.go",
+      "source_file": "gorouter.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "gorouter_newrouter",
+      "label": "NewRouter()",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "net/http.Handler",
+      "file_type": "code",
+      "norm_label": "newrouter()",
+      "source_file": "gorouter.go",
+      "source_location": "L41"
     },
     {
       "id": "go_type_net_http_httptest_server",
@@ -928,44 +1016,77 @@
       "source_location": "L255"
     },
     {
+      "id": "context_contextkey",
+      "label": "contextKey",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "NewContext",
+      "file_type": "code",
+      "norm_label": "contextkey",
+      "source_file": "router/context/context.go",
+      "source_location": "L10"
+    },
+    {
+      "id": "context_routercontext",
+      "label": "RouterContext",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "NewContext",
+      "file_type": "code",
+      "norm_label": "routercontext",
+      "source_file": "router/context/context.go",
+      "source_location": "L12"
+    },
+    {
       "id": "context_routercontext_injectintorequest",
       "label": ".InjectIntoRequest()",
       "_origin": "ast",
       "community": 3,
-      "community_name": "RouterContext",
+      "community_name": "NewContext",
       "file_type": "code",
       "norm_label": ".injectintorequest()",
       "source_file": "router/context/context.go",
-      "source_location": "L31"
+      "source_location": "L33"
     },
     {
       "id": "context_routercontext_set",
       "label": ".Set()",
       "_origin": "ast",
       "community": 3,
-      "community_name": "RouterContext",
+      "community_name": "NewContext",
       "file_type": "code",
       "norm_label": ".set()",
       "source_file": "router/context/context.go",
-      "source_location": "L18"
+      "source_location": "L20"
     },
     {
       "id": "context_routercontext_value",
       "label": ".Value()",
       "_origin": "ast",
       "community": 3,
-      "community_name": "RouterContext",
+      "community_name": "NewContext",
       "file_type": "code",
       "norm_label": ".value()",
       "source_file": "router/context/context.go",
-      "source_location": "L14"
+      "source_location": "L16"
+    },
+    {
+      "id": "context_routercontext_withrequest",
+      "label": ".WithRequest()",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "NewContext",
+      "file_type": "code",
+      "norm_label": ".withrequest()",
+      "source_file": "router/context/context.go",
+      "source_location": "L37"
     },
     {
       "id": "go_type_net_http_request",
       "label": "net/http.Request",
       "_origin": "ast",
       "community": 3,
-      "community_name": "RouterContext",
+      "community_name": "NewContext",
       "file_type": "code",
       "norm_label": "net/http.request",
       "source_file": "",
@@ -976,7 +1097,7 @@
       "label": "net/http.ResponseWriter",
       "_origin": "ast",
       "community": 3,
-      "community_name": "RouterContext",
+      "community_name": "NewContext",
       "file_type": "code",
       "norm_label": "net/http.responsewriter",
       "source_file": "",
@@ -987,40 +1108,40 @@
       "label": "context.go",
       "_origin": "ast",
       "community": 3,
-      "community_name": "RouterContext",
+      "community_name": "NewContext",
       "file_type": "code",
       "norm_label": "context.go",
       "source_file": "router/context/context.go",
       "source_location": "L1"
     },
     {
-      "id": "router_context_context_go_context_routercontext",
-      "label": "RouterContext",
+      "id": "router_context_context_fromrequest",
+      "label": "FromRequest()",
       "_origin": "ast",
       "community": 3,
-      "community_name": "RouterContext",
+      "community_name": "NewContext",
       "file_type": "code",
-      "norm_label": "routercontext",
+      "norm_label": "fromrequest()",
       "source_file": "router/context/context.go",
-      "source_location": "L10"
+      "source_location": "L42"
     },
     {
       "id": "router_context_context_newcontext",
       "label": "NewContext()",
       "_origin": "ast",
       "community": 3,
-      "community_name": "RouterContext",
+      "community_name": "NewContext",
       "file_type": "code",
       "norm_label": "newcontext()",
       "source_file": "router/context/context.go",
-      "source_location": "L25"
+      "source_location": "L27"
     },
     {
       "id": "router_context_context_test",
       "label": "context_test.go",
       "_origin": "ast",
       "community": 3,
-      "community_name": "RouterContext",
+      "community_name": "NewContext",
       "file_type": "code",
       "norm_label": "context_test.go",
       "source_file": "router/context/context_test.go",
@@ -1031,154 +1152,110 @@
       "label": "setup()",
       "_origin": "ast",
       "community": 3,
-      "community_name": "RouterContext",
+      "community_name": "NewContext",
       "file_type": "code",
       "norm_label": "setup()",
       "source_file": "router/context/context_test.go",
-      "source_location": "L62"
+      "source_location": "L94"
     },
     {
       "id": "router_context_context_test_testcontext_invalidkey",
       "label": "TestContext_InvalidKey()",
       "_origin": "ast",
       "community": 3,
-      "community_name": "RouterContext",
+      "community_name": "NewContext",
       "file_type": "code",
       "norm_label": "testcontext_invalidkey()",
       "source_file": "router/context/context_test.go",
-      "source_location": "L22"
+      "source_location": "L23"
     },
     {
       "id": "router_context_context_test_testcontext_setoverwritesexistingkey",
       "label": "TestContext_SetOverwritesExistingKey()",
       "_origin": "ast",
       "community": 3,
-      "community_name": "RouterContext",
+      "community_name": "NewContext",
       "file_type": "code",
       "norm_label": "testcontext_setoverwritesexistingkey()",
       "source_file": "router/context/context_test.go",
-      "source_location": "L30"
+      "source_location": "L31"
     },
     {
       "id": "router_context_context_test_testcontext_validkey",
       "label": "TestContext_ValidKey()",
       "_origin": "ast",
       "community": 3,
-      "community_name": "RouterContext",
+      "community_name": "NewContext",
       "file_type": "code",
       "norm_label": "testcontext_validkey()",
       "source_file": "router/context/context_test.go",
-      "source_location": "L10"
+      "source_location": "L11"
+    },
+    {
+      "id": "router_context_context_test_testfromrequest",
+      "label": "TestFromRequest()",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "NewContext",
+      "file_type": "code",
+      "norm_label": "testfromrequest()",
+      "source_file": "router/context/context_test.go",
+      "source_location": "L72"
+    },
+    {
+      "id": "router_context_context_test_testfromrequestsupportslegacycontextkey",
+      "label": "TestFromRequestSupportsLegacyContextKey()",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "NewContext",
+      "file_type": "code",
+      "norm_label": "testfromrequestsupportslegacycontextkey()",
+      "source_file": "router/context/context_test.go",
+      "source_location": "L82"
     },
     {
       "id": "router_context_context_test_testinjectintorequest",
       "label": "TestInjectIntoRequest()",
       "_origin": "ast",
       "community": 3,
-      "community_name": "RouterContext",
+      "community_name": "NewContext",
       "file_type": "code",
       "norm_label": "testinjectintorequest()",
       "source_file": "router/context/context_test.go",
-      "source_location": "L38"
+      "source_location": "L39"
+    },
+    {
+      "id": "router_context_context_test_testwithrequestdoesnotmutateoriginalrequest",
+      "label": "TestWithRequestDoesNotMutateOriginalRequest()",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "NewContext",
+      "file_type": "code",
+      "norm_label": "testwithrequestdoesnotmutateoriginalrequest()",
+      "source_file": "router/context/context_test.go",
+      "source_location": "L63"
     },
     {
       "id": "router_router_servehttp",
       "label": ".ServeHTTP()",
       "_origin": "ast",
       "community": 3,
-      "community_name": "RouterContext",
+      "community_name": "NewContext",
       "file_type": "code",
       "norm_label": ".servehttp()",
       "source_file": "router/router.go",
       "source_location": "L50"
     },
     {
-      "id": "chain_chain",
-      "label": "Chain",
+      "id": "router_router_go_const_httpmethods",
+      "label": "_const.HTTPMethods",
       "_origin": "ast",
       "community": 4,
-      "community_name": "net/http.Handler",
+      "community_name": "_const.HTTPMethods",
       "file_type": "code",
-      "norm_label": "chain",
-      "source_file": "chain/chain.go",
-      "source_location": "L11"
-    },
-    {
-      "id": "chain_chain_add",
-      "label": ".Add()",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "net/http.Handler",
-      "file_type": "code",
-      "norm_label": ".add()",
-      "source_file": "chain/chain.go",
-      "source_location": "L15"
-    },
-    {
-      "id": "chain_chain_buildhandler",
-      "label": ".BuildHandler()",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "net/http.Handler",
-      "file_type": "code",
-      "norm_label": ".buildhandler()",
-      "source_file": "chain/chain.go",
-      "source_location": "L19"
-    },
-    {
-      "id": "chain_chain_middlewares",
-      "label": ".Middlewares()",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "net/http.Handler",
-      "file_type": "code",
-      "norm_label": ".middlewares()",
-      "source_file": "chain/chain.go",
-      "source_location": "L37"
-    },
-    {
-      "id": "go_router_router",
-      "label": "Router",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "net/http.Handler",
-      "file_type": "code",
-      "norm_label": "router",
-      "source_file": "gorouter.go",
-      "source_location": "L13"
-    },
-    {
-      "id": "go_type_net_http_handler",
-      "label": "net/http.Handler",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "net/http.Handler",
-      "file_type": "code",
-      "norm_label": "net/http.handler",
+      "norm_label": "_const.httpmethods",
       "source_file": "",
       "source_location": ""
-    },
-    {
-      "id": "gorouter",
-      "label": "gorouter.go",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "net/http.Handler",
-      "file_type": "code",
-      "norm_label": "gorouter.go",
-      "source_file": "gorouter.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "gorouter_newrouter",
-      "label": "NewRouter()",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "net/http.Handler",
-      "file_type": "code",
-      "norm_label": "newrouter()",
-      "source_file": "gorouter.go",
-      "source_location": "L41"
     },
     {
       "id": "chain_chain_go_chain_middleware",
@@ -1190,6 +1267,17 @@
       "norm_label": "middleware",
       "source_file": "chain/chain.go",
       "source_location": "L5"
+    },
+    {
+      "id": "go_type_github_com_joaolaureano_go_router_tree_routertree",
+      "label": "github.com/joaolaureano/go-router/tree.RouterTree",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "Router",
+      "file_type": "code",
+      "norm_label": "github.com/joaolaureano/go-router/tree.routertree",
+      "source_file": "",
+      "source_location": ""
     },
     {
       "id": "go_type_net_http_handlerfunc",
@@ -1223,17 +1311,6 @@
       "norm_label": "router",
       "source_file": "router/router.go",
       "source_location": "L13"
-    },
-    {
-      "id": "router_router_go_const_httpmethods",
-      "label": "_const.HTTPMethods",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "Router",
-      "file_type": "code",
-      "norm_label": "_const.httpmethods",
-      "source_file": "",
-      "source_location": ""
     },
     {
       "id": "router_router_newprefixrouter",
@@ -1526,6 +1603,18 @@
   ],
   "links": [
     {
+      "source": "context_routercontext_injectintorequest",
+      "target": "context_routercontext_withrequest",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "router/context/context.go",
+      "source_location": "L34",
+      "weight": 1.0
+    },
+    {
       "source": "gorouter_newrouter",
       "target": "router_router_newrouter",
       "relation": "calls",
@@ -1538,6 +1627,18 @@
       "weight": 1.0
     },
     {
+      "source": "router_context_context_fromrequest",
+      "target": "context_routercontext_value",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "router/context/context.go",
+      "source_location": "L43",
+      "weight": 1.0
+    },
+    {
       "source": "router_context_context_test_testcontext_invalidkey",
       "target": "router_context_context_test_setup",
       "relation": "calls",
@@ -1546,7 +1647,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "router/context/context_test.go",
-      "source_location": "L23",
+      "source_location": "L24",
       "weight": 1.0
     },
     {
@@ -1558,7 +1659,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "router/context/context_test.go",
-      "source_location": "L31",
+      "source_location": "L32",
       "weight": 1.0
     },
     {
@@ -1570,7 +1671,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "router/context/context_test.go",
-      "source_location": "L11",
+      "source_location": "L12",
       "weight": 1.0
     },
     {
@@ -1619,6 +1720,18 @@
       "context": "call",
       "source_file": "router/router.go",
       "source_location": "L53",
+      "weight": 1.0
+    },
+    {
+      "source": "router_router_servehttp",
+      "target": "const_const_go_const_httpmethods",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "router/router.go",
+      "source_location": "L56",
       "weight": 1.0
     },
     {
@@ -1983,6 +2096,18 @@
     },
     {
       "source": "router_router",
+      "target": "go_type_github_com_joaolaureano_go_router_tree_routertree",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "field",
+      "source_file": "router/router.go",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "router_router",
       "target": "chain_chain_go_chain_middleware",
       "relation": "references",
       "_origin": "ast",
@@ -2158,7 +2283,19 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/context/context.go",
-      "source_location": "L31",
+      "source_location": "L33",
+      "weight": 1.0
+    },
+    {
+      "source": "router_context_context_fromrequest",
+      "target": "go_type_net_http_request",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "router/context/context.go",
+      "source_location": "L42",
       "weight": 1.0
     },
     {
@@ -2170,7 +2307,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/context/context_test.go",
-      "source_location": "L22",
+      "source_location": "L23",
       "weight": 1.0
     },
     {
@@ -2182,7 +2319,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/context/context_test.go",
-      "source_location": "L30",
+      "source_location": "L31",
       "weight": 1.0
     },
     {
@@ -2194,7 +2331,31 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/context/context_test.go",
-      "source_location": "L10",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "router_context_context_test_testfromrequest",
+      "target": "go_type_testing_t",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "router/context/context_test.go",
+      "source_location": "L72",
+      "weight": 1.0
+    },
+    {
+      "source": "router_context_context_test_testfromrequestsupportslegacycontextkey",
+      "target": "go_type_testing_t",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "router/context/context_test.go",
+      "source_location": "L82",
       "weight": 1.0
     },
     {
@@ -2206,7 +2367,19 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/context/context_test.go",
-      "source_location": "L38",
+      "source_location": "L39",
+      "weight": 1.0
+    },
+    {
+      "source": "router_context_context_test_testwithrequestdoesnotmutateoriginalrequest",
+      "target": "go_type_testing_t",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "router/context/context_test.go",
+      "source_location": "L63",
       "weight": 1.0
     },
     {
@@ -2223,7 +2396,7 @@
     },
     {
       "source": "router_router_register",
-      "target": "go_type_net_http_handlerfunc",
+      "target": "const_const_go_const_httpmethods",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -2235,7 +2408,7 @@
     },
     {
       "source": "router_router_register",
-      "target": "router_router_go_const_httpmethods",
+      "target": "go_type_net_http_handlerfunc",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -2618,18 +2791,6 @@
       "weight": 1.0
     },
     {
-      "source": "tree_tree_findroute",
-      "target": "router_context_context_go_context_routercontext",
-      "relation": "references",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "parameter_type",
-      "source_file": "tree/tree.go",
-      "source_location": "L77",
-      "weight": 1.0
-    },
-    {
       "source": "tree_tree_merge",
       "target": "tree_routertree",
       "relation": "references",
@@ -2687,18 +2848,6 @@
       "context": "parameter_type",
       "source_file": "tree/tree.go",
       "source_location": "L30",
-      "weight": 1.0
-    },
-    {
-      "source": "tree_tree_setpathvariablevalues",
-      "target": "router_context_context_go_context_routercontext",
-      "relation": "references",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "parameter_type",
-      "source_file": "tree/tree.go",
-      "source_location": "L126",
       "weight": 1.0
     },
     {
@@ -3086,6 +3235,18 @@
       "weight": 1.0
     },
     {
+      "source": "context_routercontext_withrequest",
+      "target": "go_type_net_http_request",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "return_type",
+      "source_file": "router/context/context.go",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
       "source": "example_complete_sampledb_new",
       "target": "complete_repository",
       "relation": "references",
@@ -3110,27 +3271,39 @@
       "weight": 1.0
     },
     {
-      "source": "router_context_context_newcontext",
-      "target": "router_context_context_go_context_routercontext",
+      "source": "router_context_context_fromrequest",
+      "target": "context_routercontext",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "router/context/context.go",
-      "source_location": "L25",
+      "source_location": "L42",
+      "weight": 1.0
+    },
+    {
+      "source": "router_context_context_newcontext",
+      "target": "context_routercontext",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "return_type",
+      "source_file": "router/context/context.go",
+      "source_location": "L27",
       "weight": 1.0
     },
     {
       "source": "router_context_context_test_setup",
-      "target": "router_context_context_go_context_routercontext",
+      "target": "context_routercontext",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "router/context/context_test.go",
-      "source_location": "L62",
+      "source_location": "L94",
       "weight": 1.0
     },
     {
@@ -3372,7 +3545,7 @@
     },
     {
       "source": "router_context_context",
-      "target": "router_context_context_go_context_routercontext",
+      "target": "context_contextkey",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -3383,13 +3556,35 @@
     },
     {
       "source": "router_context_context",
+      "target": "context_routercontext",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "router/context/context.go",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "router_context_context",
       "target": "router_context_context_newcontext",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/context/context.go",
-      "source_location": "L25",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "router_context_context",
+      "target": "router_context_context_fromrequest",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "router/context/context.go",
+      "source_location": "L42",
       "weight": 1.0
     },
     {
@@ -3400,7 +3595,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/context/context_test.go",
-      "source_location": "L10",
+      "source_location": "L11",
       "weight": 1.0
     },
     {
@@ -3411,7 +3606,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/context/context_test.go",
-      "source_location": "L22",
+      "source_location": "L23",
       "weight": 1.0
     },
     {
@@ -3422,7 +3617,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/context/context_test.go",
-      "source_location": "L30",
+      "source_location": "L31",
       "weight": 1.0
     },
     {
@@ -3433,7 +3628,40 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/context/context_test.go",
-      "source_location": "L38",
+      "source_location": "L39",
+      "weight": 1.0
+    },
+    {
+      "source": "router_context_context_test",
+      "target": "router_context_context_test_testwithrequestdoesnotmutateoriginalrequest",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "router/context/context_test.go",
+      "source_location": "L63",
+      "weight": 1.0
+    },
+    {
+      "source": "router_context_context_test",
+      "target": "router_context_context_test_testfromrequest",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "router/context/context_test.go",
+      "source_location": "L72",
+      "weight": 1.0
+    },
+    {
+      "source": "router_context_context_test",
+      "target": "router_context_context_test_testfromrequestsupportslegacycontextkey",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "router/context/context_test.go",
+      "source_location": "L82",
       "weight": 1.0
     },
     {
@@ -3444,7 +3672,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/context/context_test.go",
-      "source_location": "L62",
+      "source_location": "L94",
       "weight": 1.0
     },
     {
@@ -4306,36 +4534,47 @@
       "weight": 1.0
     },
     {
-      "source": "router_context_context_go_context_routercontext",
+      "source": "context_routercontext",
       "target": "context_routercontext_value",
       "relation": "method",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/context/context.go",
-      "source_location": "L14",
+      "source_location": "L16",
       "weight": 1.0
     },
     {
-      "source": "router_context_context_go_context_routercontext",
+      "source": "context_routercontext",
       "target": "context_routercontext_set",
       "relation": "method",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/context/context.go",
-      "source_location": "L18",
+      "source_location": "L20",
       "weight": 1.0
     },
     {
-      "source": "router_context_context_go_context_routercontext",
+      "source": "context_routercontext",
       "target": "context_routercontext_injectintorequest",
       "relation": "method",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/context/context.go",
-      "source_location": "L31",
+      "source_location": "L33",
+      "weight": 1.0
+    },
+    {
+      "source": "context_routercontext",
+      "target": "context_routercontext_withrequest",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "router/context/context.go",
+      "source_location": "L37",
       "weight": 1.0
     },
     {
@@ -4570,7 +4809,67 @@
       "confidence_score": 0.85,
       "context": "call",
       "source_file": "router/context/context_test.go",
-      "source_location": "L63",
+      "source_location": "L95",
+      "weight": 1.0
+    },
+    {
+      "source": "router_context_context_test_testfromrequest",
+      "target": "router_context_context_newcontext",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "router/context/context_test.go",
+      "source_location": "L73",
+      "weight": 1.0
+    },
+    {
+      "source": "router_context_context_test_testfromrequest",
+      "target": "router_context_context_fromrequest",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "router/context/context_test.go",
+      "source_location": "L76",
+      "weight": 1.0
+    },
+    {
+      "source": "router_context_context_test_testfromrequestsupportslegacycontextkey",
+      "target": "router_context_context_newcontext",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "router/context/context_test.go",
+      "source_location": "L83",
+      "weight": 1.0
+    },
+    {
+      "source": "router_context_context_test_testfromrequestsupportslegacycontextkey",
+      "target": "router_context_context_fromrequest",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "router/context/context_test.go",
+      "source_location": "L88",
+      "weight": 1.0
+    },
+    {
+      "source": "router_context_context_test_testwithrequestdoesnotmutateoriginalrequest",
+      "target": "router_context_context_newcontext",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "call",
+      "source_file": "router/context/context_test.go",
+      "source_location": "L64",
       "weight": 1.0
     },
     {
@@ -5247,5 +5546,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e02d1b34b592fba804da2d23a874b817ac788a6e"
+  "built_at_commit": "e7dc6d33c08f34b6c1559a1adfaa137a843ed15f"
 }
