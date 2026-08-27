@@ -3,7 +3,6 @@ package tree
 import (
 	"fmt"
 	"net/http"
-	"slices"
 	"strings"
 
 	_const "github.com/joaolaureano/go-router/const"
@@ -11,9 +10,10 @@ import (
 )
 
 type Node struct {
-	path     string
-	children []*Node
-	Method   map[_const.HTTPMethods]Method
+	path      string
+	children  []*Node
+	parameter *Node
+	Method    map[_const.HTTPMethods]Method
 }
 
 type Method struct {
@@ -44,9 +44,13 @@ func CreateTree() Tree {
 }
 
 func (t *Tree) RegisterRoute(httpMethod _const.HTTPMethods, newValue string, method http.Handler) {
-	if len(newValue) > 0 {
-		t.register(httpMethod, newValue, method)
+	if newValue == "" {
+		panic("path must not be empty")
 	}
+	if method == nil {
+		panic("handler must not be nil")
+	}
+	t.register(httpMethod, newValue, method)
 }
 
 func (t *Tree) register(httpMethod _const.HTTPMethods, path string, method http.Handler) {
@@ -58,30 +62,33 @@ func (t *Tree) register(httpMethod _const.HTTPMethods, path string, method http.
 		if _, exists := currNode.Method[httpMethod]; exists {
 			panic(fmt.Sprintf("Duplicated path: %s", path))
 		}
-		currNode.path = "/"
 		currNode.Method[httpMethod] = Method{Handler: method}
 		return
 	}
 	path = strings.Trim(path, "/")
-	validatePath(path)
-	pathVariablesName := make([]string, 0)
+	if err := validatePath(path); err != nil {
+		panic(err.Error())
+	}
+	var pathVariablesName []string
 	for _, pathSplitted := range strings.Split(path, "/") {
-		nextNode := currNode.getChild(pathSplitted)
+		isParameter := isParam(pathSplitted)
+		nodePath := pathSplitted
+		if isParameter {
+			nodePath = "{*}"
+			pathVariablesName = append(pathVariablesName, strings.Trim(pathSplitted, "{}"))
+		}
+		nextNode := currNode.getChild(nodePath)
 		if nextNode == nil {
 			nextNode = &Node{
-				path:     pathSplitted,
+				path:     nodePath,
 				children: []*Node{},
 				Method:   make(map[_const.HTTPMethods]Method),
 			}
-			if isParam(pathSplitted) {
-				currNode.children = append(currNode.children, nextNode)
+			if isParameter {
+				currNode.parameter = nextNode
 			} else {
 				currNode.children = append([]*Node{nextNode}, currNode.children...)
 			}
-		}
-		if isParam(pathSplitted) {
-			nextNode.path = "{*}"
-			pathVariablesName = append(pathVariablesName, strings.Trim(pathSplitted, "{}"))
 		}
 		currNode = nextNode
 	}
@@ -117,7 +124,7 @@ func (t *Tree) FindPath(path string) *Node {
 func (t *Tree) findPath(path string) (*Node, []string) {
 	currNode := t.root
 	if path == "/" || path == "" {
-		if currNode.path != "/" && len(currNode.Method) == 0 {
+		if len(currNode.Method) == 0 {
 			return nil, nil
 		}
 		return currNode, nil
@@ -129,6 +136,9 @@ func (t *Tree) findPath(path string) (*Node, []string) {
 	idx := 0
 	pathVariableValues := make([]string, 0, len(paths))
 	nextNode := currNode.getChild(paths[idx])
+	if nextNode == nil {
+		nextNode = currNode.parameter
+	}
 	for {
 		if nextNode == nil {
 			return nil, nil
@@ -142,6 +152,9 @@ func (t *Tree) findPath(path string) (*Node, []string) {
 		}
 		currNode = nextNode
 		nextNode = currNode.getChild(paths[idx])
+		if nextNode == nil {
+			nextNode = currNode.parameter
+		}
 	}
 }
 
@@ -166,6 +179,13 @@ func (t *Tree) Merge(tree RouterTree) {
 			}
 			childPath = strings.TrimRight(childPath, "/")
 			stack = append(stack, entry{node: child, path: childPath})
+		}
+		if current.parameter != nil {
+			childPath := currentEntry.path + "/" + current.parameter.path
+			if currentEntry.path == "/" {
+				childPath = "/" + current.parameter.path
+			}
+			stack = append(stack, entry{node: current.parameter, path: strings.TrimRight(childPath, "/")})
 		}
 	}
 }
@@ -203,37 +223,44 @@ func (n *Node) setEndpoint(httpMethod _const.HTTPMethods, handler http.Handler, 
 }
 
 func (n *Node) getChild(path string) *Node {
-
-	if len(n.children) == 0 {
-		return nil
-	}
 	for _, child := range n.children {
 		if path == child.path {
 			return child
 		}
 	}
-	if isParam(n.children[len(n.children)-1].path) {
-		return n.children[len(n.children)-1]
+	if path == "{*}" {
+		return n.parameter
 	}
 	return nil
 }
 
-func validatePath(path string) {
-	paramList := make([]string, 0)
-	for _, v := range strings.Split(path, "/") {
-		if len(v) >= 3 {
+func validatePath(path string) error {
+	paramNames := make(map[string]struct{})
+	for _, segment := range strings.Split(path, "/") {
+		if segment == "" {
+			return fmt.Errorf("path contains an empty segment")
+		}
 
-			if (v[0] == '{') != (v[len(v)-1] == '}') {
-				panic("Delimiter '{' must be closed by '}'")
+		startsWithBrace := segment[0] == '{'
+		endsWithBrace := segment[len(segment)-1] == '}'
+		if startsWithBrace || endsWithBrace {
+			if !startsWithBrace || !endsWithBrace {
+				return fmt.Errorf("Delimiter '{' must be closed by '}'")
 			}
-			if isParam(v) {
-				if slices.Contains(paramList, v) {
-					panic(fmt.Sprintf("routing pattern '%s' contains duplicate param key, '%s'", path, v))
-				}
-				paramList = append(paramList, v)
+
+			paramName := strings.TrimSuffix(strings.TrimPrefix(segment, "{"), "}")
+			if paramName == "" || strings.ContainsAny(paramName, "{}") {
+				return fmt.Errorf("invalid route parameter: %s", segment)
 			}
+			if _, exists := paramNames[paramName]; exists {
+				return fmt.Errorf("routing pattern '%s' contains duplicate param key, '%s'", path, segment)
+			}
+			paramNames[paramName] = struct{}{}
+		} else if strings.ContainsAny(segment, "{}") {
+			return fmt.Errorf("invalid route segment: %s", segment)
 		}
 	}
+	return nil
 }
 
 func isParam(path string) bool {

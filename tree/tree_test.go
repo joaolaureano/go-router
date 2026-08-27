@@ -22,10 +22,19 @@ func TestRegister_EmptyPath(t *testing.T) {
 	tree := CreateTree()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 
-	tree.RegisterRoute(_const.GET, "", handler)
+	assert.PanicsWithValue(t, "path must not be empty", func() {
+		tree.RegisterRoute(_const.GET, "", handler)
+	})
+	assert.Empty(t, tree.root.children, "Invalid registration should not create children")
+}
 
-	// Root
-	assert.Len(t, tree.root.children, 0, "Children should not be nil")
+func TestRegister_NilHandler(t *testing.T) {
+	tree := CreateTree()
+
+	assert.PanicsWithValue(t, "handler must not be nil", func() {
+		tree.RegisterRoute(_const.GET, "/path", nil)
+	})
+	assert.Empty(t, tree.root.children, "Invalid registration should not create children")
 }
 
 func TestRegister_DuplicatedPathVariable(t *testing.T) {
@@ -50,7 +59,7 @@ func TestRegister_OnlyRoot(t *testing.T) {
 	tree.RegisterRoute(_const.GET, "/", handler)
 
 	// Root
-	assert.Equal(t, "/", tree.root.path, "Path should be /")
+	assert.NotNil(t, tree.FindRoute(&context.RouterContext{}, _const.GET, "/"))
 	assert.NotNil(t, tree.root.children, "Children should not be nil")
 	assert.NotZero(t, len(tree.root.Method), "Method should not be nil")
 }
@@ -79,8 +88,9 @@ func TestRegister_SimpleTree(t *testing.T) {
 	assert.NotNil(t, firstChild.children, "Children should not be nil")
 	assert.Equal(t, "path", firstChild.path, "Path should be /path")
 	assert.Zero(t, len(firstChild.Method), "Method should be nil")
+	assert.NotNil(t, firstChild.parameter, "Parameter child should not be nil")
 	// First child node
-	secondChild := firstChild.children[0]
+	secondChild := firstChild.parameter
 	assert.NotNil(t, secondChild.children, "First child's children should not be nil")
 	assert.Equal(t, "{*}", secondChild.path, "Path should be {valid}")
 	assert.Zero(t, len(secondChild.Method), "Method should be nil")
@@ -116,15 +126,16 @@ func TestRegister_MultipleBranches(t *testing.T) {
 	assert.Zero(t, len(firstChild.Method), "Method should be nil")
 
 	// Second child
-	secondChild := firstChild.children[0]
+	secondChild := firstChild.parameter
+	assert.NotNil(t, firstChild.parameter, "Parameter child should not be nil")
 	assert.NotNil(t, secondChild.children, "First child's children should not be nil")
-	assert.Len(t, secondChild.children, 2, "First child's children should not be nil")
-	assert.Equal(t, "{*}", secondChild.path, "Path should be {valid}")
-	assert.Zero(t, len(secondChild.Method), "Method should be nil")
+	assert.Len(t, firstChild.children, 0, "First child should contain static children only")
+	assert.Equal(t, "{*}", firstChild.parameter.path, "Path should be {valid}")
+	assert.Zero(t, len(firstChild.parameter.Method), "Method should be nil")
 	//
 	//// Third child node - branching paths
-	branch1 := secondChild.children[1]
-	branch2 := secondChild.children[0]
+	branch1 := firstChild.parameter.children[1]
+	branch2 := firstChild.parameter.children[0]
 	assert.NotNil(t, branch1.children, "Second child's children should not be nil")
 	assert.NotNil(t, branch2.children, "Second child's children should not be nil")
 	assert.Equal(t, "path1", branch1.path, "Path should be /path1")
@@ -135,12 +146,25 @@ func TestRegister_MultipleBranches(t *testing.T) {
 	assert.NotZero(t, len(branch2.Method), "Method should be 1")
 }
 
-func TestValidatePath_ShouldNotPanic(t *testing.T) {
-	assert.NotPanics(t, func() { validatePath("valid/{path}") }, "Should not panics with valid path")
+func TestValidatePath_ValidPaths(t *testing.T) {
+	validPaths := []string{"valid/{path}", "users/{userID}/posts/{postID}", "health"}
+	for _, path := range validPaths {
+		assert.NoError(t, validatePath(path), path)
+	}
 }
 
-func TestValidatePath_ShouldPanic(t *testing.T) {
-	assert.Panics(t, func() { validatePath("invalid/{path") }, "Should panic with invalid path")
+func TestValidatePath_InvalidPaths(t *testing.T) {
+	invalidPaths := []string{
+		"invalid/{path",
+		"users/{}",
+		"users/{id}/posts/{id}",
+		"users//posts",
+		"users/{id}extra",
+		"users/{id}/posts}",
+	}
+	for _, path := range invalidPaths {
+		assert.Error(t, validatePath(path), path)
+	}
 }
 
 func TestFindRoute(t *testing.T) {

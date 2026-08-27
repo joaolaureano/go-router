@@ -44,6 +44,14 @@ func TestRouter_RegisterSimplePath(t *testing.T) {
 	body, _ := io.ReadAll(res.Body)
 	assert.Equal(t, "hello_world", string(body))
 }
+
+func TestRouter_RegisterNilHandler(t *testing.T) {
+	r := NewRouter()
+
+	assert.PanicsWithValue(t, "handler must not be nil", func() {
+		r.Register(_const.GET, "/path", nil)
+	})
+}
 func TestRouter_NotFound(t *testing.T) {
 	r := NewRouter()
 	path := "/not-found"

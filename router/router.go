@@ -73,6 +73,9 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (router *Router) Register(httpMethod _const.HTTPMethods, path string, method http.HandlerFunc) {
+	if method == nil {
+		panic("handler must not be nil")
+	}
 	router.mu.Lock()
 	defer router.mu.Unlock()
 	router.closed = true

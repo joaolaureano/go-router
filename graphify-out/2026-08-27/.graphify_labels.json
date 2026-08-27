@@ -1,7 +1,7 @@
 {
-  "0": "CreateTree",
+  "0": "testing.T",
   "1": "Tree",
-  "2": "testing.T",
+  "2": "NewRouter",
   "3": "RouterContext",
   "4": "Router",
   "5": "net/http.Handler",
