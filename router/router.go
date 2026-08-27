@@ -107,7 +107,7 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		// request costs an allocation, so only routes that captured something
 		// pay for the context.
 		if len(match.Params) > 0 {
-			r = context.FromParams(match.Params).WithRequest(r)
+			r = context.WithParams(r, match.Params)
 		}
 		match.Handler.ServeHTTP(w, r)
 	case routing.StatusMethodNotAllowed:

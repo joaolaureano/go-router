@@ -64,7 +64,34 @@ func FromParams(params []routing.Param) *RouterContext {
 	return &RouterContext{params: params}
 }
 
-// WithRequest returns a copy of r carrying this context.
+// routeContext carries the route variables by being a context rather than by
+// sitting inside one. context.WithValue allocates a node holding a pointer to a
+// second allocation; being the node folds the two together, and the pointer
+// handed back to FromRequest points inside this same object.
+type routeContext struct {
+	context.Context
+	routerCtx RouterContext
+}
+
+func (c *routeContext) Value(key any) any {
+	if _, ours := key.(contextKey); ours {
+		return &c.routerCtx
+	}
+	return c.Context.Value(key)
+}
+
+// WithParams returns a copy of r carrying these route variables, in a single
+// allocation.
+func WithParams(r *http.Request, params []routing.Param) *http.Request {
+	return r.WithContext(&routeContext{
+		Context:   r.Context(),
+		routerCtx: RouterContext{params: params},
+	})
+}
+
+// WithRequest returns a copy of r carrying this context. It attaches this very
+// object, not a copy, so that a Set afterwards is still visible through the
+// request -- which is why it does not use the folded form above.
 func (routerCtx *RouterContext) WithRequest(r *http.Request) *http.Request {
 	return r.WithContext(context.WithValue(r.Context(), contextKey{}, routerCtx))
 }

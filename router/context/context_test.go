@@ -1,8 +1,11 @@
 package context
 
 import (
+	"context"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/joaolaureano/go-router/routing"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -63,6 +66,27 @@ func TestFromRequestWithoutRoutingContext(t *testing.T) {
 
 	assert.False(t, ok)
 	assert.Nil(t, foundContext)
+}
+
+func TestWithParams(t *testing.T) {
+	request := WithParams(httptest.NewRequest("GET", "/", nil), []routing.Param{
+		{Name: "id", Value: "42"},
+	})
+
+	routerCtx, ok := FromRequest(request)
+
+	assert.True(t, ok)
+	assert.Equal(t, "42", routerCtx.Value("id"))
+	assert.Equal(t, "42", Param(request, "id"))
+}
+
+func TestWithParamsDelegatesTheRestOfTheContext(t *testing.T) {
+	type otherKey struct{}
+	parent := context.WithValue(context.Background(), otherKey{}, "kept")
+	request := WithParams(httptest.NewRequest("GET", "/", nil).WithContext(parent), nil)
+
+	assert.Equal(t, "kept", request.Context().Value(otherKey{}), "an unrelated value must still resolve")
+	assert.Nil(t, request.Context().Done(), "the embedded context answers the rest of the interface")
 }
 
 func TestParam(t *testing.T) {

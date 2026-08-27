@@ -16,7 +16,7 @@
   "14": "github.com/joaolaureano/go-router/tree.RouterTree",
   "15": "Go-Router",
   "16": "github.com/joaolaureano/go-router/router.Router",
-  "17": "routing.go",
+  "17": "E",
   "18": "E",
   "19": "router/errors.go",
   "20": "node",
@@ -30,6 +30,7 @@
   "28": "Method",
   "29": "segmentKind",
   "30": "routing/errors.go",
+  "31": "Param",
   "32": "E",
   "33": "tree.Param",
   "34": "Method"
