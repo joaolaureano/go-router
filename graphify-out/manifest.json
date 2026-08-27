@@ -84,9 +84,9 @@
     "semantic_hash": ""
   },
   "routing/node.go": {
-    "mtime": 1787809688.9963613,
-    "seen": 1787809719.352101,
-    "ast_hash": "65eeac9a60fe38c661df19fe21cb306c",
+    "mtime": 1787810094.0999663,
+    "seen": 1787810132.783123,
+    "ast_hash": "1e13f3bca1cbe2022a2fc249f54cb3fe",
     "semantic_hash": ""
   },
   "routing/node_test.go": {
@@ -102,9 +102,9 @@
     "semantic_hash": ""
   },
   "routing/routing_test.go": {
-    "mtime": 1787809688.997563,
-    "seen": 1787809719.352104,
-    "ast_hash": "ac7b737167583cccb9a994568b21078c",
+    "mtime": 1787810117.5867116,
+    "seen": 1787810132.783126,
+    "ast_hash": "542cbab721a0970867e0bd13bb4f1898",
     "semantic_hash": ""
   },
   "router/state.go": {

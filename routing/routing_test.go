@@ -1,6 +1,7 @@
 package routing
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -234,6 +235,44 @@ func TestTree_CloneIsIndependent(t *testing.T) {
 
 	_, status := source.Lookup(GET, "/added")
 	assert.Equal(t, StatusNotFound, status, "the source must not see what was added to the clone")
+}
+
+func TestLookup_FindsEveryChildAcrossTheBisectionThreshold(t *testing.T) {
+	// Children are kept sorted so that staticChild can bisect above a
+	// threshold. A bisection that is off by one fails silently as a 404, and
+	// only past the threshold, so this sweeps both sides of it.
+	for _, count := range []int{1, 2, 7, 8, 9, 33, 200} {
+		tree := CreateTree[http.Handler]()
+		paths := make([]string, count)
+		for i := range paths {
+			paths[i] = fmt.Sprintf("/resource%03d", i)
+			tree.RegisterRoute(GET, paths[i], handler)
+		}
+
+		for _, path := range paths {
+			_, status := tree.Lookup(GET, path)
+			assert.Equal(t, StatusFound, status, "%d children: %s", count, path)
+		}
+		_, status := tree.Lookup(GET, "/resourceZZZ")
+		assert.Equal(t, StatusNotFound, status, "%d children: unknown path", count)
+	}
+}
+
+func TestRegister_OrderDoesNotAffectMatching(t *testing.T) {
+	descending := CreateTree[http.Handler]()
+	ascending := CreateTree[http.Handler]()
+	for i := 0; i < 20; i++ {
+		descending.RegisterRoute(GET, fmt.Sprintf("/r%02d", 19-i), handler)
+		ascending.RegisterRoute(GET, fmt.Sprintf("/r%02d", i), handler)
+	}
+
+	for i := 0; i < 20; i++ {
+		path := fmt.Sprintf("/r%02d", i)
+		_, descendingStatus := descending.Lookup(GET, path)
+		_, ascendingStatus := ascending.Lookup(GET, path)
+		assert.Equal(t, StatusFound, descendingStatus, path)
+		assert.Equal(t, StatusFound, ascendingStatus, path)
+	}
 }
 
 func TestLookup(t *testing.T) {

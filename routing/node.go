@@ -58,16 +58,51 @@ func newNode[E any](path string) *node[E] {
 	}
 }
 
+// linearScanLimit is where scanning stops beating bisection. Below it the
+// branch-free walk over a handful of pointers wins; above it the comparisons
+// saved are worth the mispredictions.
+const linearScanLimit = 8
+
 // staticChild finds the child holding this exact segment. It never returns the
 // parameter or catch-all branch: a request segment that happens to read "{*}"
 // or "*" is literal text, not a request for those slots.
+//
+// children is kept sorted by addChild so that a node with many of them costs
+// log(n) comparisons rather than n. A router fanning out to fifty resources at
+// one level is ordinary, and scanning them all was the largest cost in the
+// walk by some way.
 func (n *node[E]) staticChild(path string) *node[E] {
-	for _, child := range n.children {
-		if path == child.path {
-			return child
+	children := n.children
+	if len(children) < linearScanLimit {
+		for _, child := range children {
+			if child.path == path {
+				return child
+			}
 		}
+		return nil
+	}
+
+	at := searchChildren(children, path)
+	if at < len(children) && children[at].path == path {
+		return children[at]
 	}
 	return nil
+}
+
+// searchChildren returns the position where path belongs among children, which
+// is where it is if present. Written out rather than via sort.Search so that
+// the comparison stays a direct string compare with no closure behind it.
+func searchChildren[E any](children []*node[E], path string) int {
+	low, high := 0, len(children)
+	for low < high {
+		middle := int(uint(low+high) >> 1)
+		if children[middle].path < path {
+			low = middle + 1
+		} else {
+			high = middle
+		}
+	}
+	return low
 }
 
 // childFor returns the slot a registration should descend into. Only the
@@ -94,7 +129,12 @@ func (n *node[E]) addChild(child *node[E], kind segmentKind) {
 	case wildcardSegment:
 		n.wildcard = child
 	default:
-		n.children = append(n.children, child)
+		// Kept sorted so that staticChild can bisect. Registration pays the
+		// shift; a lookup would pay for the scan on every request.
+		at := searchChildren(n.children, child.path)
+		n.children = append(n.children, nil)
+		copy(n.children[at+1:], n.children[at:])
+		n.children[at] = child
 	}
 }
 
@@ -288,7 +328,7 @@ func mergeNodes[E any](target, source *node[E], prefixVariables []string) {
 	for _, sourceChild := range source.children {
 		targetChild := target.staticChild(sourceChild.path)
 		if targetChild == nil {
-			target.children = append(target.children, cloneNode(sourceChild, prefixVariables))
+			target.addChild(cloneNode(sourceChild, prefixVariables), staticSegment)
 			continue
 		}
 		mergeNodes(targetChild, sourceChild, prefixVariables)
@@ -316,6 +356,7 @@ func cloneNode[E any](source *node[E], prefixVariables []string) *node[E] {
 	for i := range source.endpoints {
 		clone.endpoints = append(clone.endpoints, cloneEndpoint(source.endpoints[i], prefixVariables))
 	}
+	// source.children is already sorted, so copying in order preserves it.
 	for _, child := range source.children {
 		clone.children = append(clone.children, cloneNode(child, prefixVariables))
 	}
