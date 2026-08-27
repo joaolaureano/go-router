@@ -78,7 +78,7 @@ func (t *Tree) FindRoute(ctx *context.RouterContext, httpMethods _const.HTTPMeth
 	if len(value) == 0 {
 		return nil
 	}
-	node, values := t.findPath(value)
+	node, values := t.findPath(value, filterByMethod(httpMethods))
 	if node == nil {
 		return nil
 	}
@@ -93,13 +93,13 @@ func (t *Tree) FindRoute(ctx *context.RouterContext, httpMethods _const.HTTPMeth
 }
 
 func (t *Tree) FindPath(path string) *Node {
-	node, _ := t.findPath(path)
+	node, _ := t.findPath(path, filterByAnyMethod())
 	return node
 }
 
-func (t *Tree) findPath(path string) (*Node, []string) {
+func (t *Tree) findPath(path string, filter methodFilter) (*Node, []string) {
 	if path == "/" || path == "" {
-		if len(t.root.Method) == 0 {
+		if !filter.accepts(t.root) {
 			return nil, nil
 		}
 		return t.root, nil
@@ -108,7 +108,7 @@ func (t *Tree) findPath(path string) (*Node, []string) {
 		return nil, nil
 	}
 	paths := strings.Split(strings.Trim(path, "/"), "/")
-	return matchPath(t.root, paths, 0, nil)
+	return matchPath(t.root, paths, 0, nil, filter)
 }
 
 func (t *Tree) Merge(tree RouterTree) {

@@ -319,6 +319,34 @@ func TestRouter_ReturnsMethodNotAllowed(t *testing.T) {
 	assert.Equal(t, http.StatusMethodNotAllowed, response.Code)
 }
 
+func TestRouter_BacktracksWhenStaticMatchLacksMethod(t *testing.T) {
+	r := NewRouter()
+	r.Register(_const.POST, "/a/b", func(w http.ResponseWriter, r *http.Request) {})
+	r.Register(_const.GET, "/a/{id}", func(w http.ResponseWriter, r *http.Request) {
+		routerCtx, _ := context.FromRequest(r)
+		w.Write([]byte(routerCtx.Value("id")))
+	})
+
+	request := httptest.NewRequest(http.MethodGet, "/a/b", nil)
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, request)
+
+	assert.Equal(t, http.StatusOK, response.Code)
+	assert.Equal(t, "b", response.Body.String())
+}
+
+func TestRouter_ReturnsMethodNotAllowedWhenNoBranchMatchesMethod(t *testing.T) {
+	r := NewRouter()
+	r.Register(_const.POST, "/a/b", func(w http.ResponseWriter, r *http.Request) {})
+	r.Register(_const.PATCH, "/a/{id}", func(w http.ResponseWriter, r *http.Request) {})
+
+	request := httptest.NewRequest(http.MethodGet, "/a/b", nil)
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, request)
+
+	assert.Equal(t, http.StatusMethodNotAllowed, response.Code)
+}
+
 func TestRouter_MiddlewareOrder(t *testing.T) {
 	r := NewRouter()
 	order := make([]string, 0, 3)
