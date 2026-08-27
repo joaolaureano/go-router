@@ -3,7 +3,7 @@ package router
 import (
 	"net/http"
 	"net/url"
-	"sort"
+	"slices"
 	"strings"
 
 	"github.com/joaolaureano/go-router/chain"
@@ -149,7 +149,7 @@ func advertisedMethods(registered []routing.Method) string {
 	if !hasOptions {
 		advertised = append(advertised, string(OPTIONS))
 	}
-	sort.Strings(advertised)
+	slices.Sort(advertised)
 	return strings.Join(advertised, ", ")
 }
 

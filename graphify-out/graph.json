@@ -656,6 +656,17 @@
       "source_location": "L47"
     },
     {
+      "id": "chain_chain_newchain",
+      "label": "NewChain()",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": "newchain()",
+      "source_file": "chain/chain.go",
+      "source_location": "L41"
+    },
+    {
       "id": "chain_chain_sealed",
       "label": ".Sealed()",
       "_origin": "ast",
@@ -665,6 +676,83 @@
       "norm_label": ".sealed()",
       "source_file": "chain/chain.go",
       "source_location": "L24"
+    },
+    {
+      "id": "chain_chain_test",
+      "label": "chain_test.go",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": "chain_test.go",
+      "source_file": "chain/chain_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "chain_chain_test_testchain_middlewarerunsinregistrationorder",
+      "label": "TestChain_MiddlewareRunsInRegistrationOrder()",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": "testchain_middlewarerunsinregistrationorder()",
+      "source_file": "chain/chain_test.go",
+      "source_location": "L108"
+    },
+    {
+      "id": "chain_chain_test_testchain_multiplemiddleware",
+      "label": "TestChain_MultipleMiddleware()",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": "testchain_multiplemiddleware()",
+      "source_file": "chain/chain_test.go",
+      "source_location": "L48"
+    },
+    {
+      "id": "chain_chain_test_testchain_nomiddleware",
+      "label": "TestChain_NoMiddleware()",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": "testchain_nomiddleware()",
+      "source_file": "chain/chain_test.go",
+      "source_location": "L131"
+    },
+    {
+      "id": "chain_chain_test_testchain_singlemiddleware",
+      "label": "TestChain_SingleMiddleware()",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": "testchain_singlemiddleware()",
+      "source_file": "chain/chain_test.go",
+      "source_location": "L12"
+    },
+    {
+      "id": "chain_chain_test_testnewchain",
+      "label": "TestNewChain()",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": "testnewchain()",
+      "source_file": "chain/chain_test.go",
+      "source_location": "L156"
+    },
+    {
+      "id": "chain_chain_test_testnewchain_middlewares",
+      "label": "TestNewChain_Middlewares()",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": "testnewchain_middlewares()",
+      "source_file": "chain/chain_test.go",
+      "source_location": "L163"
     },
     {
       "id": "go_router_router",
@@ -722,37 +810,15 @@
       "source_location": "L72"
     },
     {
-      "id": "router_router_newprefixrouter",
-      "label": "NewPrefixRouter()",
+      "id": "router_router_group",
+      "label": ".Group()",
       "_origin": "ast",
       "community": 11,
       "community_name": "Chain",
       "file_type": "code",
-      "norm_label": "newprefixrouter()",
+      "norm_label": ".group()",
       "source_file": "router/router.go",
-      "source_location": "L51"
-    },
-    {
-      "id": "router_router_test_testnewrouterwithprefix",
-      "label": "TestNewRouterWithPrefix()",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Chain",
-      "file_type": "code",
-      "norm_label": "testnewrouterwithprefix()",
-      "source_file": "router/router_test.go",
-      "source_location": "L23"
-    },
-    {
-      "id": "router_router_test_testrouter_withpreservesprefix",
-      "label": "TestRouter_WithPreservesPrefix()",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Chain",
-      "file_type": "code",
-      "norm_label": "testrouter_withpreservesprefix()",
-      "source_file": "router/router_test.go",
-      "source_location": "L216"
+      "source_location": "L253"
     },
     {
       "id": "router_router_use",
@@ -764,6 +830,17 @@
       "norm_label": ".use()",
       "source_file": "router/router.go",
       "source_location": "L201"
+    },
+    {
+      "id": "router_router_with",
+      "label": ".With()",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": ".with()",
+      "source_file": "router/router.go",
+      "source_location": "L268"
     },
     {
       "id": "go_type_sync_rwmutex",
@@ -1099,114 +1176,15 @@
       "source_location": "L49"
     },
     {
-      "id": "chain_chain_newchain",
-      "label": "NewChain()",
+      "id": "method",
+      "label": "Method",
       "_origin": "ast",
       "community": 18,
-      "community_name": "NewChain",
+      "community_name": "Method",
       "file_type": "code",
-      "norm_label": "newchain()",
-      "source_file": "chain/chain.go",
-      "source_location": "L41"
-    },
-    {
-      "id": "chain_chain_test",
-      "label": "chain_test.go",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "NewChain",
-      "file_type": "code",
-      "norm_label": "chain_test.go",
-      "source_file": "chain/chain_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "chain_chain_test_testchain_middlewarerunsinregistrationorder",
-      "label": "TestChain_MiddlewareRunsInRegistrationOrder()",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "NewChain",
-      "file_type": "code",
-      "norm_label": "testchain_middlewarerunsinregistrationorder()",
-      "source_file": "chain/chain_test.go",
-      "source_location": "L108"
-    },
-    {
-      "id": "chain_chain_test_testchain_multiplemiddleware",
-      "label": "TestChain_MultipleMiddleware()",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "NewChain",
-      "file_type": "code",
-      "norm_label": "testchain_multiplemiddleware()",
-      "source_file": "chain/chain_test.go",
-      "source_location": "L48"
-    },
-    {
-      "id": "chain_chain_test_testchain_nomiddleware",
-      "label": "TestChain_NoMiddleware()",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "NewChain",
-      "file_type": "code",
-      "norm_label": "testchain_nomiddleware()",
-      "source_file": "chain/chain_test.go",
-      "source_location": "L131"
-    },
-    {
-      "id": "chain_chain_test_testchain_singlemiddleware",
-      "label": "TestChain_SingleMiddleware()",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "NewChain",
-      "file_type": "code",
-      "norm_label": "testchain_singlemiddleware()",
-      "source_file": "chain/chain_test.go",
-      "source_location": "L12"
-    },
-    {
-      "id": "chain_chain_test_testnewchain",
-      "label": "TestNewChain()",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "NewChain",
-      "file_type": "code",
-      "norm_label": "testnewchain()",
-      "source_file": "chain/chain_test.go",
-      "source_location": "L156"
-    },
-    {
-      "id": "chain_chain_test_testnewchain_middlewares",
-      "label": "TestNewChain_Middlewares()",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "NewChain",
-      "file_type": "code",
-      "norm_label": "testnewchain_middlewares()",
-      "source_file": "chain/chain_test.go",
-      "source_location": "L163"
-    },
-    {
-      "id": "router_router_group",
-      "label": ".Group()",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "NewChain",
-      "file_type": "code",
-      "norm_label": ".group()",
-      "source_file": "router/router.go",
-      "source_location": "L253"
-    },
-    {
-      "id": "router_router_with",
-      "label": ".With()",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "NewChain",
-      "file_type": "code",
-      "norm_label": ".with()",
-      "source_file": "router/router.go",
-      "source_location": "L268"
+      "norm_label": "method",
+      "source_file": "",
+      "source_location": ""
     },
     {
       "id": "router_errors",
@@ -2199,17 +2177,6 @@
       "source_location": ""
     },
     {
-      "id": "router_router_go_method",
-      "label": "Method",
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "Method",
-      "file_type": "code",
-      "norm_label": "method",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "segmentkind",
       "label": "segmentKind",
       "_origin": "ast",
@@ -2661,17 +2628,6 @@
       "source_location": ""
     },
     {
-      "id": "method",
-      "label": "Method",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Router",
-      "file_type": "code",
-      "norm_label": "method",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "router_router",
       "label": "Router",
       "_origin": "ast",
@@ -2738,6 +2694,17 @@
       "source_location": "L173"
     },
     {
+      "id": "router_router_go_method",
+      "label": "Method",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "Router",
+      "file_type": "code",
+      "norm_label": "method",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "router_router_head",
       "label": ".Head()",
       "_origin": "ast",
@@ -2769,6 +2736,17 @@
       "norm_label": ".mount()",
       "source_file": "router/router.go",
       "source_location": "L231"
+    },
+    {
+      "id": "router_router_newprefixrouter",
+      "label": "NewPrefixRouter()",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "Router",
+      "file_type": "code",
+      "norm_label": "newprefixrouter()",
+      "source_file": "router/router.go",
+      "source_location": "L51"
     },
     {
       "id": "router_router_notfound",
@@ -2846,6 +2824,28 @@
       "norm_label": ".servehttp()",
       "source_file": "router/router.go",
       "source_location": "L81"
+    },
+    {
+      "id": "router_router_test_testnewrouterwithprefix",
+      "label": "TestNewRouterWithPrefix()",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "Router",
+      "file_type": "code",
+      "norm_label": "testnewrouterwithprefix()",
+      "source_file": "router/router_test.go",
+      "source_location": "L23"
+    },
+    {
+      "id": "router_router_test_testrouter_withpreservesprefix",
+      "label": "TestRouter_WithPreservesPrefix()",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "Router",
+      "file_type": "code",
+      "norm_label": "testrouter_withpreservesprefix()",
+      "source_file": "router/router_test.go",
+      "source_location": "L216"
     },
     {
       "id": "router_state",
@@ -4946,7 +4946,7 @@
     },
     {
       "source": "router_router_register",
-      "target": "method",
+      "target": "router_router_go_method",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -10639,5 +10639,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "f71f73094036cf839789d2295ea660f050fafe8e"
+  "built_at_commit": "97cbe50918cbc387765c73c0a7b21d64faaf6fd8"
 }
