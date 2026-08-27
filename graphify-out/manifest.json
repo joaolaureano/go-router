@@ -30,10 +30,10 @@
     "semantic_hash": "e16c16d7005090c6ec9fe44639bc12f3"
   },
   "gorouter.go": {
-    "mtime": 1787796509.465186,
-    "seen": 1787796660.369449,
-    "ast_hash": "83cd82189e82950e3bb0e79c49687522",
-    "semantic_hash": "83cd82189e82950e3bb0e79c49687522"
+    "mtime": 1787803892.4669218,
+    "seen": 1787803904.798503,
+    "ast_hash": "a28c9d5b7c4f446baaa8a8175d82f5f5",
+    "semantic_hash": ""
   },
   "router/context/context.go": {
     "mtime": 1787803023.936577,
