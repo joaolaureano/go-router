@@ -2,6 +2,7 @@ package routing
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 )
 
@@ -188,7 +189,10 @@ func splitSegments(path string) []string {
 }
 
 func validateSegments(path string, segments []string) error {
-	paramNames := make(map[string]struct{})
+	// A slice, not a set: a path declares a handful of variables, and scanning a
+	// few short strings costs less than the map this used to allocate on every
+	// registration.
+	var paramNames []string
 	for i, segment := range segments {
 		if segment == "" {
 			return fmt.Errorf("%w: %s contains an empty segment", ErrInvalidPattern, path)
@@ -215,10 +219,10 @@ func validateSegments(path string, segments []string) error {
 			if paramName == WildcardParam {
 				return fmt.Errorf("%w: %q is reserved for the catch-all and cannot name a parameter", ErrInvalidPattern, WildcardParam)
 			}
-			if _, exists := paramNames[paramName]; exists {
+			if slices.Contains(paramNames, paramName) {
 				return fmt.Errorf("%w: %s declares %q twice", ErrInvalidPattern, path, segment)
 			}
-			paramNames[paramName] = struct{}{}
+			paramNames = append(paramNames, paramName)
 		} else if strings.ContainsAny(segment, "{}") {
 			return fmt.Errorf("%w: invalid segment %q in %s", ErrInvalidPattern, segment, path)
 		}

@@ -6,9 +6,9 @@
     "semantic_hash": "d8f0ed28b1d58c40ad91cf55b7411a48"
   },
   "chain/chain.go": {
-    "mtime": 1787804132.875845,
-    "seen": 1787804152.251273,
-    "ast_hash": "ce66fb13afe482c8b01be046627d234a",
+    "mtime": 1787811000.9166665,
+    "seen": 1787811066.639356,
+    "ast_hash": "d87c4a99a567d91045fe821a05b5f780",
     "semantic_hash": ""
   },
   "chain/chain_test.go": {
@@ -48,9 +48,9 @@
     "semantic_hash": ""
   },
   "router/router_test.go": {
-    "mtime": 1787809069.578236,
-    "seen": 1787809084.723698,
-    "ast_hash": "5030d051536d2bc10521a62623fbed01",
+    "mtime": 1787811055.171624,
+    "seen": 1787811066.639364,
+    "ast_hash": "442757305357965e34a96a524ebb0e3f",
     "semantic_hash": ""
   },
   "README.md": {
@@ -84,9 +84,9 @@
     "semantic_hash": ""
   },
   "routing/node.go": {
-    "mtime": 1787810914.9541945,
-    "seen": 1787810981.946031,
-    "ast_hash": "b25e24b9b69be39a3b312bc08bfef219",
+    "mtime": 1787833729.5068166,
+    "seen": 1787833808.501672,
+    "ast_hash": "0858e5e4545eb5b95823d3694c4bc513",
     "semantic_hash": ""
   },
   "routing/node_test.go": {
@@ -102,15 +102,21 @@
     "semantic_hash": ""
   },
   "routing/routing_test.go": {
-    "mtime": 1787810117.5867116,
-    "seen": 1787810132.783126,
-    "ast_hash": "542cbab721a0970867e0bd13bb4f1898",
+    "mtime": 1787811015.9553711,
+    "seen": 1787811066.63937,
+    "ast_hash": "7c53de13b8a0738a6336ce55fc0aaaff",
     "semantic_hash": ""
   },
   "router/state.go": {
     "mtime": 1787807918.703528,
     "seen": 1787807957.988064,
     "ast_hash": "ad37b670030585b855ccea3b1cc381ec",
+    "semantic_hash": ""
+  },
+  "router/zz_bench_test.go": {
+    "mtime": 1787833574.2460155,
+    "seen": 1787833808.5016682,
+    "ast_hash": "5846c1b1c90ff38fb7f7f6063ca30b00",
     "semantic_hash": ""
   }
 }

@@ -4,77 +4,11 @@
   "graph": {},
   "nodes": [
     {
-      "id": "go_type_testing_t",
-      "label": "testing.T",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "testing.t",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "routing_node_test",
-      "label": "node_test.go",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "node_test.go",
-      "source_file": "routing/node_test.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "routing_node_test_testnewnodeinitializesinvariantstate",
-      "label": "TestNewNodeInitializesInvariantState()",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "testnewnodeinitializesinvariantstate()",
-      "source_file": "routing/node_test.go",
-      "source_location": "L10"
-    },
-    {
-      "id": "routing_node_test_testnodeaddchildrejectsnil",
-      "label": "TestNodeAddChildRejectsNil()",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "testnodeaddchildrejectsnil()",
-      "source_file": "routing/node_test.go",
-      "source_location": "L39"
-    },
-    {
-      "id": "routing_node_test_testnodeaddchildseparatesthethreeslots",
-      "label": "TestNodeAddChildSeparatesTheThreeSlots()",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "testnodeaddchildseparatesthethreeslots()",
-      "source_file": "routing/node_test.go",
-      "source_location": "L19"
-    },
-    {
-      "id": "routing_node_test_testnodesetendpoint",
-      "label": "TestNodeSetEndpoint()",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "testing.T",
-      "file_type": "code",
-      "norm_label": "testnodesetendpoint()",
-      "source_file": "routing/node_test.go",
-      "source_location": "L47"
-    },
-    {
       "id": "routing_routing_createtree",
       "label": "CreateTree()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "createtree()",
       "source_file": "routing/routing.go",
@@ -85,7 +19,7 @@
       "label": "routing_test.go",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "routing_test.go",
       "source_file": "routing/routing_test.go",
@@ -96,7 +30,7 @@
       "label": "assertFound()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "assertfound()",
       "source_file": "routing/routing_test.go",
@@ -107,7 +41,7 @@
       "label": "assertPanicsWith()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "assertpanicswith()",
       "source_file": "routing/routing_test.go",
@@ -118,7 +52,7 @@
       "label": "Method",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "method",
       "source_file": "",
@@ -129,7 +63,7 @@
       "label": "TestCreateTree()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testcreatetree()",
       "source_file": "routing/routing_test.go",
@@ -140,7 +74,7 @@
       "label": "TestIsParam()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testisparam()",
       "source_file": "routing/routing_test.go",
@@ -151,7 +85,7 @@
       "label": "TestLookup()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testlookup()",
       "source_file": "routing/routing_test.go",
@@ -162,7 +96,7 @@
       "label": "TestLookup_AllowCollectsEveryBranchThatEndsThePath()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testlookup_allowcollectseverybranchthatendsthepath()",
       "source_file": "routing/routing_test.go",
@@ -173,7 +107,7 @@
       "label": "TestLookup_CapturesParameters()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testlookup_capturesparameters()",
       "source_file": "routing/routing_test.go",
@@ -184,7 +118,7 @@
       "label": "TestLookup_CatchAll()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testlookup_catchall()",
       "source_file": "routing/routing_test.go",
@@ -195,7 +129,7 @@
       "label": "TestLookup_CatchAllAfterParameters()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testlookup_catchallafterparameters()",
       "source_file": "routing/routing_test.go",
@@ -206,7 +140,7 @@
       "label": "TestLookup_CatchAllIsMethodAware()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testlookup_catchallismethodaware()",
       "source_file": "routing/routing_test.go",
@@ -217,7 +151,7 @@
       "label": "TestLookup_CatchAllYieldsToStaticAndParameter()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testlookup_catchallyieldstostaticandparameter()",
       "source_file": "routing/routing_test.go",
@@ -228,7 +162,7 @@
       "label": "TestLookup_DiscardsValuesFromAbandonedBranches()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testlookup_discardsvaluesfromabandonedbranches()",
       "source_file": "routing/routing_test.go",
@@ -239,7 +173,7 @@
       "label": "TestLookup_EmptyTree()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testlookup_emptytree()",
       "source_file": "routing/routing_test.go",
@@ -250,7 +184,7 @@
       "label": "TestLookup_FallsBackToParameterAfterStaticBranchFails()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testlookup_fallsbacktoparameterafterstaticbranchfails()",
       "source_file": "routing/routing_test.go",
@@ -261,7 +195,7 @@
       "label": "TestLookup_FindsEveryChildAcrossTheBisectionThreshold()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testlookup_findseverychildacrossthebisectionthreshold()",
       "source_file": "routing/routing_test.go",
@@ -272,7 +206,7 @@
       "label": "TestLookup_IntermediateNodeIsNotAnEndpoint()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testlookup_intermediatenodeisnotanendpoint()",
       "source_file": "routing/routing_test.go",
@@ -283,7 +217,7 @@
       "label": "TestLookup_PathRegisteredUnderAnotherMethod()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testlookup_pathregisteredunderanothermethod()",
       "source_file": "routing/routing_test.go",
@@ -294,7 +228,7 @@
       "label": "TestLookup_Root()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testlookup_root()",
       "source_file": "routing/routing_test.go",
@@ -305,7 +239,7 @@
       "label": "TestLookup_RootRegisteredUnderAnotherMethod()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testlookup_rootregisteredunderanothermethod()",
       "source_file": "routing/routing_test.go",
@@ -316,7 +250,7 @@
       "label": "TestLookup_UnknownPath()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testlookup_unknownpath()",
       "source_file": "routing/routing_test.go",
@@ -327,7 +261,7 @@
       "label": "TestLookup_UnregisteredRoot()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testlookup_unregisteredroot()",
       "source_file": "routing/routing_test.go",
@@ -338,7 +272,7 @@
       "label": "TestRegister_CatchAllMustBeLast()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testregister_catchallmustbelast()",
       "source_file": "routing/routing_test.go",
@@ -349,7 +283,7 @@
       "label": "TestRegister_DuplicatedPath()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testregister_duplicatedpath()",
       "source_file": "routing/routing_test.go",
@@ -360,7 +294,7 @@
       "label": "TestRegister_DuplicatedPathVariable()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testregister_duplicatedpathvariable()",
       "source_file": "routing/routing_test.go",
@@ -371,7 +305,7 @@
       "label": "TestRegister_EmptyPath()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testregister_emptypath()",
       "source_file": "routing/routing_test.go",
@@ -382,7 +316,7 @@
       "label": "TestRegister_MultipleBranches()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testregister_multiplebranches()",
       "source_file": "routing/routing_test.go",
@@ -393,7 +327,7 @@
       "label": "TestRegister_NilHandler()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testregister_nilhandler()",
       "source_file": "routing/routing_test.go",
@@ -404,7 +338,7 @@
       "label": "TestRegister_OnlyRoot()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testregister_onlyroot()",
       "source_file": "routing/routing_test.go",
@@ -415,7 +349,7 @@
       "label": "TestRegister_OrderDoesNotAffectMatching()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testregister_orderdoesnotaffectmatching()",
       "source_file": "routing/routing_test.go",
@@ -426,7 +360,7 @@
       "label": "TestRegister_PanicInvalidPath()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testregister_panicinvalidpath()",
       "source_file": "routing/routing_test.go",
@@ -437,7 +371,7 @@
       "label": "TestRegister_PanicsCarryDistinguishableErrors()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testregister_panicscarrydistinguishableerrors()",
       "source_file": "routing/routing_test.go",
@@ -448,7 +382,7 @@
       "label": "TestRegister_RootPreservesRoutesAndMethods()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testregister_rootpreservesroutesandmethods()",
       "source_file": "routing/routing_test.go",
@@ -459,7 +393,7 @@
       "label": "TestRegister_SimpleTree()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testregister_simpletree()",
       "source_file": "routing/routing_test.go",
@@ -470,7 +404,7 @@
       "label": "TestRegister_WildcardNameIsReserved()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testregister_wildcardnameisreserved()",
       "source_file": "routing/routing_test.go",
@@ -481,7 +415,7 @@
       "label": "TestTree_CloneIsIndependent()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testtree_cloneisindependent()",
       "source_file": "routing/routing_test.go",
@@ -492,7 +426,7 @@
       "label": "TestTree_Merge()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testtree_merge()",
       "source_file": "routing/routing_test.go",
@@ -503,7 +437,7 @@
       "label": "TestTree_MergeCopiesRoutesWithoutRebuildingPaths()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testtree_mergecopiesrouteswithoutrebuildingpaths()",
       "source_file": "routing/routing_test.go",
@@ -514,7 +448,7 @@
       "label": "TestTree_MergeKeepsExistingRoute()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testtree_mergekeepsexistingroute()",
       "source_file": "routing/routing_test.go",
@@ -525,7 +459,7 @@
       "label": "TestTree_MergeWithItselfIsNoOp()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testtree_mergewithitselfisnoop()",
       "source_file": "routing/routing_test.go",
@@ -536,7 +470,7 @@
       "label": "TestTree_ResolvesToAnyEndpointType()",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "testtree_resolvestoanyendpointtype()",
       "source_file": "routing/routing_test.go",
@@ -547,7 +481,7 @@
       "label": "Tree",
       "_origin": "ast",
       "community": 0,
-      "community_name": "testing.T",
+      "community_name": "routing_test.go",
       "file_type": "code",
       "norm_label": "tree",
       "source_file": "",
@@ -601,88 +535,22 @@
       "source_location": "L10"
     },
     {
-      "id": "chain_chain",
-      "label": "Chain",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Chain",
-      "file_type": "code",
-      "norm_label": "chain",
-      "source_file": "chain/chain.go",
-      "source_location": "L12"
-    },
-    {
-      "id": "chain_chain_add",
-      "label": ".Add()",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Chain",
-      "file_type": "code",
-      "norm_label": ".add()",
-      "source_file": "chain/chain.go",
-      "source_location": "L17"
-    },
-    {
-      "id": "chain_chain_buildhandler",
-      "label": ".BuildHandler()",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Chain",
-      "file_type": "code",
-      "norm_label": ".buildhandler()",
-      "source_file": "chain/chain.go",
-      "source_location": "L28"
-    },
-    {
-      "id": "chain_chain_go_chain_middleware",
-      "label": "Middleware",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Chain",
-      "file_type": "code",
-      "norm_label": "middleware",
-      "source_file": "chain/chain.go",
-      "source_location": "L5"
-    },
-    {
-      "id": "chain_chain_middlewares",
-      "label": ".Middlewares()",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Chain",
-      "file_type": "code",
-      "norm_label": ".middlewares()",
-      "source_file": "chain/chain.go",
-      "source_location": "L47"
-    },
-    {
       "id": "chain_chain_newchain",
       "label": "NewChain()",
       "_origin": "ast",
       "community": 11,
-      "community_name": "Chain",
+      "community_name": "NewChain",
       "file_type": "code",
       "norm_label": "newchain()",
       "source_file": "chain/chain.go",
-      "source_location": "L41"
-    },
-    {
-      "id": "chain_chain_sealed",
-      "label": ".Sealed()",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Chain",
-      "file_type": "code",
-      "norm_label": ".sealed()",
-      "source_file": "chain/chain.go",
-      "source_location": "L24"
+      "source_location": "L46"
     },
     {
       "id": "chain_chain_test",
       "label": "chain_test.go",
       "_origin": "ast",
       "community": 11,
-      "community_name": "Chain",
+      "community_name": "NewChain",
       "file_type": "code",
       "norm_label": "chain_test.go",
       "source_file": "chain/chain_test.go",
@@ -693,7 +561,7 @@
       "label": "TestChain_MiddlewareRunsInRegistrationOrder()",
       "_origin": "ast",
       "community": 11,
-      "community_name": "Chain",
+      "community_name": "NewChain",
       "file_type": "code",
       "norm_label": "testchain_middlewarerunsinregistrationorder()",
       "source_file": "chain/chain_test.go",
@@ -704,7 +572,7 @@
       "label": "TestChain_MultipleMiddleware()",
       "_origin": "ast",
       "community": 11,
-      "community_name": "Chain",
+      "community_name": "NewChain",
       "file_type": "code",
       "norm_label": "testchain_multiplemiddleware()",
       "source_file": "chain/chain_test.go",
@@ -715,7 +583,7 @@
       "label": "TestChain_NoMiddleware()",
       "_origin": "ast",
       "community": 11,
-      "community_name": "Chain",
+      "community_name": "NewChain",
       "file_type": "code",
       "norm_label": "testchain_nomiddleware()",
       "source_file": "chain/chain_test.go",
@@ -726,7 +594,7 @@
       "label": "TestChain_SingleMiddleware()",
       "_origin": "ast",
       "community": 11,
-      "community_name": "Chain",
+      "community_name": "NewChain",
       "file_type": "code",
       "norm_label": "testchain_singlemiddleware()",
       "source_file": "chain/chain_test.go",
@@ -737,7 +605,7 @@
       "label": "TestNewChain()",
       "_origin": "ast",
       "community": 11,
-      "community_name": "Chain",
+      "community_name": "NewChain",
       "file_type": "code",
       "norm_label": "testnewchain()",
       "source_file": "chain/chain_test.go",
@@ -748,95 +616,29 @@
       "label": "TestNewChain_Middlewares()",
       "_origin": "ast",
       "community": 11,
-      "community_name": "Chain",
+      "community_name": "NewChain",
       "file_type": "code",
       "norm_label": "testnewchain_middlewares()",
       "source_file": "chain/chain_test.go",
       "source_location": "L163"
     },
     {
-      "id": "go_router_router",
-      "label": "Router",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Chain",
-      "file_type": "code",
-      "norm_label": "router",
-      "source_file": "gorouter.go",
-      "source_location": "L14"
-    },
-    {
-      "id": "go_type_net_http_handler",
-      "label": "net/http.Handler",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Chain",
-      "file_type": "code",
-      "norm_label": "net/http.handler",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "gorouter",
-      "label": "gorouter.go",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Chain",
-      "file_type": "code",
-      "norm_label": "gorouter.go",
-      "source_file": "gorouter.go",
-      "source_location": "L1"
-    },
-    {
-      "id": "gorouter_newprefixrouter",
-      "label": "NewPrefixRouter()",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Chain",
-      "file_type": "code",
-      "norm_label": "newprefixrouter()",
-      "source_file": "gorouter.go",
-      "source_location": "L77"
-    },
-    {
-      "id": "gorouter_newrouter",
-      "label": "NewRouter()",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Chain",
-      "file_type": "code",
-      "norm_label": "newrouter()",
-      "source_file": "gorouter.go",
-      "source_location": "L72"
-    },
-    {
       "id": "router_router_group",
       "label": ".Group()",
       "_origin": "ast",
       "community": 11,
-      "community_name": "Chain",
+      "community_name": "NewChain",
       "file_type": "code",
       "norm_label": ".group()",
       "source_file": "router/router.go",
       "source_location": "L253"
     },
     {
-      "id": "router_router_use",
-      "label": ".Use()",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Chain",
-      "file_type": "code",
-      "norm_label": ".use()",
-      "source_file": "router/router.go",
-      "source_location": "L201"
-    },
-    {
       "id": "router_router_with",
       "label": ".With()",
       "_origin": "ast",
       "community": 11,
-      "community_name": "Chain",
+      "community_name": "NewChain",
       "file_type": "code",
       "norm_label": ".with()",
       "source_file": "router/router.go",
@@ -1176,15 +978,158 @@
       "source_location": "L49"
     },
     {
-      "id": "method",
-      "label": "Method",
+      "id": "chain_chain",
+      "label": "Chain",
       "_origin": "ast",
       "community": 18,
-      "community_name": "Method",
+      "community_name": "Chain",
       "file_type": "code",
-      "norm_label": "method",
+      "norm_label": "chain",
+      "source_file": "chain/chain.go",
+      "source_location": "L15"
+    },
+    {
+      "id": "chain_chain_add",
+      "label": ".Add()",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": ".add()",
+      "source_file": "chain/chain.go",
+      "source_location": "L20"
+    },
+    {
+      "id": "chain_chain_buildhandler",
+      "label": ".BuildHandler()",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": ".buildhandler()",
+      "source_file": "chain/chain.go",
+      "source_location": "L31"
+    },
+    {
+      "id": "chain_chain_middlewares",
+      "label": ".Middlewares()",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": ".middlewares()",
+      "source_file": "chain/chain.go",
+      "source_location": "L52"
+    },
+    {
+      "id": "chain_chain_sealed",
+      "label": ".Sealed()",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": ".sealed()",
+      "source_file": "chain/chain.go",
+      "source_location": "L27"
+    },
+    {
+      "id": "chain_middleware",
+      "label": "Middleware",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": "middleware",
+      "source_file": "chain/chain.go",
+      "source_location": "L8"
+    },
+    {
+      "id": "go_router_router",
+      "label": "Router",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": "router",
+      "source_file": "gorouter.go",
+      "source_location": "L14"
+    },
+    {
+      "id": "go_type_net_http_handler",
+      "label": "net/http.Handler",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": "net/http.handler",
       "source_file": "",
       "source_location": ""
+    },
+    {
+      "id": "gorouter",
+      "label": "gorouter.go",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": "gorouter.go",
+      "source_file": "gorouter.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "gorouter_newprefixrouter",
+      "label": "NewPrefixRouter()",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": "newprefixrouter()",
+      "source_file": "gorouter.go",
+      "source_location": "L77"
+    },
+    {
+      "id": "gorouter_newrouter",
+      "label": "NewRouter()",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": "newrouter()",
+      "source_file": "gorouter.go",
+      "source_location": "L72"
+    },
+    {
+      "id": "router_router_newprefixrouter",
+      "label": "NewPrefixRouter()",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": "newprefixrouter()",
+      "source_file": "router/router.go",
+      "source_location": "L51"
+    },
+    {
+      "id": "router_router_newrouter",
+      "label": "NewRouter()",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": "newrouter()",
+      "source_file": "router/router.go",
+      "source_location": "L47"
+    },
+    {
+      "id": "router_router_use",
+      "label": ".Use()",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Chain",
+      "file_type": "code",
+      "norm_label": ".use()",
+      "source_file": "router/router.go",
+      "source_location": "L201"
     },
     {
       "id": "router_errors",
@@ -1202,9 +1147,20 @@
       "label": "net/http/httptest.Server",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "net/http/httptest.server",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "go_type_testing_t",
+      "label": "testing.T",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testing.t",
       "source_file": "",
       "source_location": ""
     },
@@ -1213,29 +1169,29 @@
       "label": "Param()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "param()",
       "source_file": "router/context/context.go",
       "source_location": "L107"
     },
     {
-      "id": "router_router_newrouter",
-      "label": "NewRouter()",
+      "id": "router_context_context_test_testparam",
+      "label": "TestParam()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
-      "norm_label": "newrouter()",
-      "source_file": "router/router.go",
-      "source_location": "L47"
+      "norm_label": "testparam()",
+      "source_file": "router/context/context_test.go",
+      "source_location": "L92"
     },
     {
       "id": "router_router_test",
       "label": "router_test.go",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "router_test.go",
       "source_file": "router/router_test.go",
@@ -1246,73 +1202,95 @@
       "label": "setup()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "setup()",
       "source_file": "router/router_test.go",
-      "source_location": "L871"
+      "source_location": "L864"
     },
     {
       "id": "router_router_test_testnewrouter",
       "label": "TestNewRouter()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testnewrouter()",
       "source_file": "router/router_test.go",
       "source_location": "L16"
     },
     {
+      "id": "router_router_test_testnewrouterwithprefix",
+      "label": "TestNewRouterWithPrefix()",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testnewrouterwithprefix()",
+      "source_file": "router/router_test.go",
+      "source_location": "L23"
+    },
+    {
       "id": "router_router_test_testrouter_answersoptionsautomatically",
       "label": "TestRouter_AnswersOptionsAutomatically()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_answersoptionsautomatically()",
       "source_file": "router/router_test.go",
-      "source_location": "L653"
+      "source_location": "L650"
+    },
+    {
+      "id": "router_router_test_testrouter_backtrackswhenstaticmatchlacksmethod",
+      "label": "TestRouter_BacktracksWhenStaticMatchLacksMethod()",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testrouter_backtrackswhenstaticmatchlacksmethod()",
+      "source_file": "router/router_test.go",
+      "source_location": "L813"
     },
     {
       "id": "router_router_test_testrouter_catchallroute",
       "label": "TestRouter_CatchAllRoute()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_catchallroute()",
       "source_file": "router/router_test.go",
-      "source_location": "L535"
+      "source_location": "L532"
     },
     {
       "id": "router_router_test_testrouter_catchallundergroup",
       "label": "TestRouter_CatchAllUnderGroup()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_catchallundergroup()",
       "source_file": "router/router_test.go",
-      "source_location": "L557"
+      "source_location": "L554"
     },
     {
       "id": "router_router_test_testrouter_decodesescapesinsegments",
       "label": "TestRouter_DecodesEscapesInSegments()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_decodesescapesinsegments()",
       "source_file": "router/router_test.go",
-      "source_location": "L584"
+      "source_location": "L581"
     },
     {
       "id": "router_router_test_testrouter_group",
       "label": "TestRouter_Group()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_group()",
       "source_file": "router/router_test.go",
@@ -1323,227 +1301,227 @@
       "label": "TestRouter_GroupAcceptsMiddlewareAfterSiblingRoute()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_groupacceptsmiddlewareaftersiblingroute()",
       "source_file": "router/router_test.go",
-      "source_location": "L310"
+      "source_location": "L307"
     },
     {
       "id": "router_router_test_testrouter_groupmethodnotallowedreachesservingrouter",
       "label": "TestRouter_GroupMethodNotAllowedReachesServingRouter()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_groupmethodnotallowedreachesservingrouter()",
       "source_file": "router/router_test.go",
-      "source_location": "L412"
+      "source_location": "L409"
     },
     {
       "id": "router_router_test_testrouter_groupnotfoundreachesservingrouter",
       "label": "TestRouter_GroupNotFoundReachesServingRouter()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_groupnotfoundreachesservingrouter()",
       "source_file": "router/router_test.go",
-      "source_location": "L322"
+      "source_location": "L319"
     },
     {
       "id": "router_router_test_testrouter_grouprejectsmiddlewareafteritsfirstroute",
       "label": "TestRouter_GroupRejectsMiddlewareAfterItsFirstRoute()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_grouprejectsmiddlewareafteritsfirstroute()",
       "source_file": "router/router_test.go",
-      "source_location": "L299"
+      "source_location": "L296"
     },
     {
       "id": "router_router_test_testrouter_groupresultisusableafterthecallback",
       "label": "TestRouter_GroupResultIsUsableAfterTheCallback()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_groupresultisusableafterthecallback()",
       "source_file": "router/router_test.go",
-      "source_location": "L361"
+      "source_location": "L358"
     },
     {
       "id": "router_router_test_testrouter_headfallsbacktoget",
       "label": "TestRouter_HeadFallsBackToGet()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_headfallsbacktoget()",
       "source_file": "router/router_test.go",
-      "source_location": "L617"
+      "source_location": "L614"
     },
     {
       "id": "router_router_test_testrouter_headprefersitsownroute",
       "label": "TestRouter_HeadPrefersItsOwnRoute()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_headprefersitsownroute()",
       "source_file": "router/router_test.go",
-      "source_location": "L631"
+      "source_location": "L628"
     },
     {
       "id": "router_router_test_testrouter_headwithoutgetisstillmethodnotallowed",
       "label": "TestRouter_HeadWithoutGetIsStillMethodNotAllowed()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_headwithoutgetisstillmethodnotallowed()",
       "source_file": "router/router_test.go",
-      "source_location": "L642"
+      "source_location": "L639"
     },
     {
       "id": "router_router_test_testrouter_malformedescapedoesnotroute",
       "label": "TestRouter_MalformedEscapeDoesNotRoute()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_malformedescapedoesnotroute()",
       "source_file": "router/router_test.go",
-      "source_location": "L606"
+      "source_location": "L603"
     },
     {
       "id": "router_router_test_testrouter_methodnotallowedhandlerisconfigurable",
       "label": "TestRouter_MethodNotAllowedHandlerIsConfigurable()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_methodnotallowedhandlerisconfigurable()",
       "source_file": "router/router_test.go",
-      "source_location": "L395"
+      "source_location": "L392"
     },
     {
       "id": "router_router_test_testrouter_methodnotallowedlistseveryregisteredmethod",
       "label": "TestRouter_MethodNotAllowedListsEveryRegisteredMethod()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_methodnotallowedlistseveryregisteredmethod()",
       "source_file": "router/router_test.go",
-      "source_location": "L794"
+      "source_location": "L787"
     },
     {
       "id": "router_router_test_testrouter_methodnotallowednilhandler",
       "label": "TestRouter_MethodNotAllowedNilHandler()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_methodnotallowednilhandler()",
       "source_file": "router/router_test.go",
-      "source_location": "L428"
+      "source_location": "L425"
     },
     {
       "id": "router_router_test_testrouter_methodnotallowedspanseverymatchingbranch",
       "label": "TestRouter_MethodNotAllowedSpansEveryMatchingBranch()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_methodnotallowedspanseverymatchingbranch()",
       "source_file": "router/router_test.go",
-      "source_location": "L807"
+      "source_location": "L800"
     },
     {
       "id": "router_router_test_testrouter_middlewareorder",
       "label": "TestRouter_MiddlewareOrder()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_middlewareorder()",
       "source_file": "router/router_test.go",
-      "source_location": "L848"
+      "source_location": "L841"
     },
     {
       "id": "router_router_test_testrouter_mount",
       "label": "TestRouter_Mount()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_mount()",
       "source_file": "router/router_test.go",
-      "source_location": "L464"
+      "source_location": "L461"
     },
     {
       "id": "router_router_test_testrouter_mountkeepsexistingrouteonconflict",
       "label": "TestRouter_MountKeepsExistingRouteOnConflict()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_mountkeepsexistingrouteonconflict()",
       "source_file": "router/router_test.go",
-      "source_location": "L513"
+      "source_location": "L510"
     },
     {
       "id": "router_router_test_testrouter_mountkeepsmountedmiddleware",
       "label": "TestRouter_MountKeepsMountedMiddleware()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_mountkeepsmountedmiddleware()",
       "source_file": "router/router_test.go",
-      "source_location": "L478"
+      "source_location": "L475"
     },
     {
       "id": "router_router_test_testrouter_mountrejectssharedtree",
       "label": "TestRouter_MountRejectsSharedTree()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_mountrejectssharedtree()",
       "source_file": "router/router_test.go",
-      "source_location": "L527"
+      "source_location": "L524"
     },
     {
       "id": "router_router_test_testrouter_mountunderparameterisedprefix",
       "label": "TestRouter_MountUnderParameterisedPrefix()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_mountunderparameterisedprefix()",
       "source_file": "router/router_test.go",
-      "source_location": "L497"
+      "source_location": "L494"
     },
     {
       "id": "router_router_test_testrouter_mountwhileserving",
       "label": "TestRouter_MountWhileServing()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_mountwhileserving()",
       "source_file": "router/router_test.go",
-      "source_location": "L722"
+      "source_location": "L715"
     },
     {
       "id": "router_router_test_testrouter_nestedgroupscomposeprefixes",
       "label": "TestRouter_NestedGroupsComposePrefixes()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_nestedgroupscomposeprefixes()",
       "source_file": "router/router_test.go",
@@ -1554,7 +1532,7 @@
       "label": "TestRouter_NotFound()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_notfound()",
       "source_file": "router/router_test.go",
@@ -1565,51 +1543,51 @@
       "label": "TestRouter_NotFoundNilHandler()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_notfoundnilhandler()",
       "source_file": "router/router_test.go",
-      "source_location": "L340"
+      "source_location": "L337"
     },
     {
       "id": "router_router_test_testrouter_optionsonunknownpathisstillnotfound",
       "label": "TestRouter_OptionsOnUnknownPathIsStillNotFound()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_optionsonunknownpathisstillnotfound()",
       "source_file": "router/router_test.go",
-      "source_location": "L678"
+      "source_location": "L675"
     },
     {
       "id": "router_router_test_testrouter_optionsprefersitsownroute",
       "label": "TestRouter_OptionsPrefersItsOwnRoute()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_optionsprefersitsownroute()",
       "source_file": "router/router_test.go",
-      "source_location": "L665"
+      "source_location": "L662"
     },
     {
       "id": "router_router_test_testrouter_percentencodedslashstaysinsideonevariable",
       "label": "TestRouter_PercentEncodedSlashStaysInsideOneVariable()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_percentencodedslashstaysinsideonevariable()",
       "source_file": "router/router_test.go",
-      "source_location": "L571"
+      "source_location": "L568"
     },
     {
       "id": "router_router_test_testrouter_registerbeforemiddleware",
       "label": "TestRouter_RegisterBeforeMiddleware()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_registerbeforemiddleware()",
       "source_file": "router/router_test.go",
@@ -1620,7 +1598,7 @@
       "label": "TestRouter_RegisterCaptureMultiplePathVariable()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_registercapturemultiplepathvariable()",
       "source_file": "router/router_test.go",
@@ -1631,7 +1609,7 @@
       "label": "TestRouter_RegisterCapturePathVariable()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_registercapturepathvariable()",
       "source_file": "router/router_test.go",
@@ -1642,7 +1620,7 @@
       "label": "TestRouter_RegisterMultiplePath()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_registermultiplepath()",
       "source_file": "router/router_test.go",
@@ -1653,7 +1631,7 @@
       "label": "TestRouter_RegisterNilHandler()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_registernilhandler()",
       "source_file": "router/router_test.go",
@@ -1664,29 +1642,29 @@
       "label": "TestRouter_RegisterPathWithQueryString()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_registerpathwithquerystring()",
       "source_file": "router/router_test.go",
-      "source_location": "L751"
+      "source_location": "L744"
     },
     {
       "id": "router_router_test_testrouter_registerrootpreservesexistingroutes",
       "label": "TestRouter_RegisterRootPreservesExistingRoutes()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_registerrootpreservesexistingroutes()",
       "source_file": "router/router_test.go",
-      "source_location": "L765"
+      "source_location": "L758"
     },
     {
       "id": "router_router_test_testrouter_registersimplepath",
       "label": "TestRouter_RegisterSimplePath()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_registersimplepath()",
       "source_file": "router/router_test.go",
@@ -1697,18 +1675,18 @@
       "label": "TestRouter_RegistersWhileServing()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_registerswhileserving()",
       "source_file": "router/router_test.go",
-      "source_location": "L688"
+      "source_location": "L685"
     },
     {
       "id": "router_router_test_testrouter_registerwithmiddleware",
       "label": "TestRouter_RegisterWithMiddleware()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_registerwithmiddleware()",
       "source_file": "router/router_test.go",
@@ -1719,77 +1697,165 @@
       "label": "TestRouter_ReturnsMethodNotAllowed()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_returnsmethodnotallowed()",
       "source_file": "router/router_test.go",
-      "source_location": "L782"
+      "source_location": "L775"
     },
     {
       "id": "router_router_test_testrouter_returnsmethodnotallowedwhennobranchmatchesmethod",
       "label": "TestRouter_ReturnsMethodNotAllowedWhenNoBranchMatchesMethod()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_returnsmethodnotallowedwhennobranchmatchesmethod()",
       "source_file": "router/router_test.go",
-      "source_location": "L836"
+      "source_location": "L829"
+    },
+    {
+      "id": "router_router_test_testrouter_routewithoutvariablescarriesnocontext",
+      "label": "TestRouter_RouteWithoutVariablesCarriesNoContext()",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testrouter_routewithoutvariablescarriesnocontext()",
+      "source_file": "router/router_test.go",
+      "source_location": "L376"
     },
     {
       "id": "router_router_test_testrouter_staticrouteallocatesnothing",
       "label": "TestRouter_StaticRouteAllocatesNothing()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_staticrouteallocatesnothing()",
       "source_file": "router/router_test.go",
-      "source_location": "L738"
+      "source_location": "L731"
     },
     {
       "id": "router_router_test_testrouter_supportsconcurrentregistrationandserving",
       "label": "TestRouter_SupportsConcurrentRegistrationAndServing()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_supportsconcurrentregistrationandserving()",
       "source_file": "router/router_test.go",
       "source_location": "L230"
     },
     {
+      "id": "router_router_test_testrouter_treatsparametersyntaxinrequestpathasliteral",
+      "label": "TestRouter_TreatsParameterSyntaxInRequestPathAsLiteral()",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testrouter_treatsparametersyntaxinrequestpathasliteral()",
+      "source_file": "router/router_test.go",
+      "source_location": "L343"
+    },
+    {
       "id": "router_router_test_testrouter_verbshortcuts",
       "label": "TestRouter_VerbShortcuts()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_verbshortcuts()",
       "source_file": "router/router_test.go",
-      "source_location": "L434"
+      "source_location": "L431"
     },
     {
       "id": "router_router_test_testrouter_with",
       "label": "TestRouter_With()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_with()",
       "source_file": "router/router_test.go",
-      "source_location": "L252"
+      "source_location": "L249"
     },
     {
       "id": "router_router_test_testrouter_withinheritsparentmiddleware",
       "label": "TestRouter_WithInheritsParentMiddleware()",
       "_origin": "ast",
       "community": 2,
-      "community_name": "NewRouter",
+      "community_name": "testing.T",
       "file_type": "code",
       "norm_label": "testrouter_withinheritsparentmiddleware()",
       "source_file": "router/router_test.go",
-      "source_location": "L277"
+      "source_location": "L274"
+    },
+    {
+      "id": "router_router_test_testrouter_withpreservesprefix",
+      "label": "TestRouter_WithPreservesPrefix()",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testrouter_withpreservesprefix()",
+      "source_file": "router/router_test.go",
+      "source_location": "L216"
+    },
+    {
+      "id": "routing_node_test",
+      "label": "node_test.go",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "node_test.go",
+      "source_file": "routing/node_test.go",
+      "source_location": "L1"
+    },
+    {
+      "id": "routing_node_test_testnewnodeinitializesinvariantstate",
+      "label": "TestNewNodeInitializesInvariantState()",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testnewnodeinitializesinvariantstate()",
+      "source_file": "routing/node_test.go",
+      "source_location": "L10"
+    },
+    {
+      "id": "routing_node_test_testnodeaddchildrejectsnil",
+      "label": "TestNodeAddChildRejectsNil()",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testnodeaddchildrejectsnil()",
+      "source_file": "routing/node_test.go",
+      "source_location": "L39"
+    },
+    {
+      "id": "routing_node_test_testnodeaddchildseparatesthethreeslots",
+      "label": "TestNodeAddChildSeparatesTheThreeSlots()",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testnodeaddchildseparatesthethreeslots()",
+      "source_file": "routing/node_test.go",
+      "source_location": "L19"
+    },
+    {
+      "id": "routing_node_test_testnodesetendpoint",
+      "label": "TestNodeSetEndpoint()",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "testing.T",
+      "file_type": "code",
+      "norm_label": "testnodesetendpoint()",
+      "source_file": "routing/node_test.go",
+      "source_location": "L47"
     },
     {
       "id": "e",
@@ -1799,6 +1865,17 @@
       "community_name": "node",
       "file_type": "code",
       "norm_label": "e",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "method",
+      "label": "Method",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "node",
+      "file_type": "code",
+      "norm_label": "method",
       "source_file": "",
       "source_location": ""
     },
@@ -1833,7 +1910,7 @@
       "file_type": "code",
       "norm_label": "lookup",
       "source_file": "routing/node.go",
-      "source_location": "L170"
+      "source_location": "L166"
     },
     {
       "id": "routing_lookup_allowedmethods",
@@ -1844,7 +1921,7 @@
       "file_type": "code",
       "norm_label": ".allowedmethods()",
       "source_file": "routing/node.go",
-      "source_location": "L225"
+      "source_location": "L226"
     },
     {
       "id": "routing_lookup_capture",
@@ -1855,7 +1932,7 @@
       "file_type": "code",
       "norm_label": ".capture()",
       "source_file": "routing/node.go",
-      "source_location": "L210"
+      "source_location": "L211"
     },
     {
       "id": "routing_lookup_uncapture",
@@ -1866,7 +1943,7 @@
       "file_type": "code",
       "norm_label": ".uncapture()",
       "source_file": "routing/node.go",
-      "source_location": "L219"
+      "source_location": "L220"
     },
     {
       "id": "routing_node",
@@ -1888,7 +1965,7 @@
       "file_type": "code",
       "norm_label": "cloneendpoint()",
       "source_file": "routing/node.go",
-      "source_location": "L372"
+      "source_location": "L368"
     },
     {
       "id": "routing_node_clonenode",
@@ -1899,7 +1976,7 @@
       "file_type": "code",
       "norm_label": "clonenode()",
       "source_file": "routing/node.go",
-      "source_location": "L354"
+      "source_location": "L350"
     },
     {
       "id": "routing_node_e",
@@ -1946,17 +2023,6 @@
       "source_location": "L45"
     },
     {
-      "id": "routing_node_e_hasanymethod",
-      "label": ".hasAnyMethod()",
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "node",
-      "file_type": "code",
-      "norm_label": ".hasanymethod()",
-      "source_file": "routing/node.go",
-      "source_location": "L158"
-    },
-    {
       "id": "routing_node_e_hasmethod",
       "label": ".hasMethod()",
       "_origin": "ast",
@@ -1976,7 +2042,7 @@
       "file_type": "code",
       "norm_label": ".match()",
       "source_file": "routing/node.go",
-      "source_location": "L260"
+      "source_location": "L256"
     },
     {
       "id": "routing_node_e_matchwildcard",
@@ -1987,7 +2053,7 @@
       "file_type": "code",
       "norm_label": ".matchwildcard()",
       "source_file": "routing/node.go",
-      "source_location": "L300"
+      "source_location": "L296"
     },
     {
       "id": "routing_node_e_recordallowed",
@@ -2023,17 +2089,6 @@
       "source_location": "L74"
     },
     {
-      "id": "routing_node_go_method",
-      "label": "Method",
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "node",
-      "file_type": "code",
-      "norm_label": "method",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "routing_node_mergebranch",
       "label": "mergeBranch()",
       "_origin": "ast",
@@ -2042,7 +2097,7 @@
       "file_type": "code",
       "norm_label": "mergebranch()",
       "source_file": "routing/node.go",
-      "source_location": "L343"
+      "source_location": "L339"
     },
     {
       "id": "routing_node_mergenodes",
@@ -2053,7 +2108,7 @@
       "file_type": "code",
       "norm_label": "mergenodes()",
       "source_file": "routing/node.go",
-      "source_location": "L321"
+      "source_location": "L317"
     },
     {
       "id": "routing_node_newnode",
@@ -2086,7 +2141,7 @@
       "file_type": "code",
       "norm_label": "segmentend()",
       "source_file": "routing/node.go",
-      "source_location": "L194"
+      "source_location": "L195"
     },
     {
       "id": "routing_segmentkind",
@@ -2173,6 +2228,17 @@
       "community_name": "github.com/joaolaureano/go-router/tree.Param",
       "file_type": "code",
       "norm_label": "github.com/joaolaureano/go-router/tree.param",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "routing_node_go_method",
+      "label": "Method",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "Method",
+      "file_type": "code",
+      "norm_label": "method",
       "source_file": "",
       "source_location": ""
     },
@@ -2419,17 +2485,6 @@
       "source_location": "L64"
     },
     {
-      "id": "router_context_context_test_testparam",
-      "label": "TestParam()",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "FromRequest",
-      "file_type": "code",
-      "norm_label": "testparam()",
-      "source_file": "router/context/context_test.go",
-      "source_location": "L92"
-    },
-    {
       "id": "router_context_context_test_testwithparams",
       "label": "TestWithParams()",
       "_origin": "ast",
@@ -2472,39 +2527,6 @@
       "norm_label": "withparams()",
       "source_file": "router/context/context.go",
       "source_location": "L85"
-    },
-    {
-      "id": "router_router_test_testrouter_backtrackswhenstaticmatchlacksmethod",
-      "label": "TestRouter_BacktracksWhenStaticMatchLacksMethod()",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "FromRequest",
-      "file_type": "code",
-      "norm_label": "testrouter_backtrackswhenstaticmatchlacksmethod()",
-      "source_file": "router/router_test.go",
-      "source_location": "L820"
-    },
-    {
-      "id": "router_router_test_testrouter_routewithoutvariablescarriesnocontext",
-      "label": "TestRouter_RouteWithoutVariablesCarriesNoContext()",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "FromRequest",
-      "file_type": "code",
-      "norm_label": "testrouter_routewithoutvariablescarriesnocontext()",
-      "source_file": "router/router_test.go",
-      "source_location": "L379"
-    },
-    {
-      "id": "router_router_test_testrouter_treatsparametersyntaxinrequestpathasliteral",
-      "label": "TestRouter_TreatsParameterSyntaxInRequestPathAsLiteral()",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "FromRequest",
-      "file_type": "code",
-      "norm_label": "testrouter_treatsparametersyntaxinrequestpathasliteral()",
-      "source_file": "router/router_test.go",
-      "source_location": "L346"
     },
     {
       "id": "routing_errors",
@@ -2738,17 +2760,6 @@
       "source_location": "L231"
     },
     {
-      "id": "router_router_newprefixrouter",
-      "label": "NewPrefixRouter()",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Router",
-      "file_type": "code",
-      "norm_label": "newprefixrouter()",
-      "source_file": "router/router.go",
-      "source_location": "L51"
-    },
-    {
       "id": "router_router_notfound",
       "label": ".NotFound()",
       "_origin": "ast",
@@ -2824,28 +2835,6 @@
       "norm_label": ".servehttp()",
       "source_file": "router/router.go",
       "source_location": "L81"
-    },
-    {
-      "id": "router_router_test_testnewrouterwithprefix",
-      "label": "TestNewRouterWithPrefix()",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Router",
-      "file_type": "code",
-      "norm_label": "testnewrouterwithprefix()",
-      "source_file": "router/router_test.go",
-      "source_location": "L23"
-    },
-    {
-      "id": "router_router_test_testrouter_withpreservesprefix",
-      "label": "TestRouter_WithPreservesPrefix()",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Router",
-      "file_type": "code",
-      "norm_label": "testrouter_withpreservesprefix()",
-      "source_file": "router/router_test.go",
-      "source_location": "L216"
     },
     {
       "id": "router_state",
@@ -3321,7 +3310,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "router/router_test.go",
-      "source_location": "L824",
+      "source_location": "L817",
       "weight": 1.0
     },
     {
@@ -3333,7 +3322,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "router/router_test.go",
-      "source_location": "L538",
+      "source_location": "L535",
       "weight": 1.0
     },
     {
@@ -3345,7 +3334,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "router/router_test.go",
-      "source_location": "L561",
+      "source_location": "L558",
       "weight": 1.0
     },
     {
@@ -3357,7 +3346,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "router/router_test.go",
-      "source_location": "L587",
+      "source_location": "L584",
       "weight": 1.0
     },
     {
@@ -3381,7 +3370,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "router/router_test.go",
-      "source_location": "L500",
+      "source_location": "L497",
       "weight": 1.0
     },
     {
@@ -3405,7 +3394,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "router/router_test.go",
-      "source_location": "L574",
+      "source_location": "L571",
       "weight": 1.0
     },
     {
@@ -3489,7 +3478,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "router/router_test.go",
-      "source_location": "L710",
+      "source_location": "L703",
       "weight": 1.0
     },
     {
@@ -3513,7 +3502,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "router/router_test.go",
-      "source_location": "L384",
+      "source_location": "L381",
       "weight": 1.0
     },
     {
@@ -3525,7 +3514,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "router/router_test.go",
-      "source_location": "L349",
+      "source_location": "L346",
       "weight": 1.0
     },
     {
@@ -3537,7 +3526,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "router/router_test.go",
-      "source_location": "L265",
+      "source_location": "L262",
       "weight": 1.0
     },
     {
@@ -3561,7 +3550,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L357",
+      "source_location": "L353",
       "weight": 1.0
     },
     {
@@ -3609,7 +3598,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L262",
+      "source_location": "L258",
       "weight": 1.0
     },
     {
@@ -3621,7 +3610,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L265",
+      "source_location": "L261",
       "weight": 1.0
     },
     {
@@ -3633,7 +3622,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L266",
+      "source_location": "L262",
       "weight": 1.0
     },
     {
@@ -3645,7 +3634,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L280",
+      "source_location": "L276",
       "weight": 1.0
     },
     {
@@ -3657,7 +3646,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L287",
+      "source_location": "L283",
       "weight": 1.0
     },
     {
@@ -3669,7 +3658,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L291",
+      "source_location": "L287",
       "weight": 1.0
     },
     {
@@ -3681,7 +3670,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L310",
+      "source_location": "L306",
       "weight": 1.0
     },
     {
@@ -3693,7 +3682,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L311",
+      "source_location": "L307",
       "weight": 1.0
     },
     {
@@ -3705,7 +3694,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L314",
+      "source_location": "L310",
       "weight": 1.0
     },
     {
@@ -3717,19 +3706,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L315",
-      "weight": 1.0
-    },
-    {
-      "source": "routing_node_e_recordallowed",
-      "target": "routing_node_e_hasanymethod",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "routing/node.go",
-      "source_location": "L238",
+      "source_location": "L311",
       "weight": 1.0
     },
     {
@@ -3765,7 +3742,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L348",
+      "source_location": "L344",
       "weight": 1.0
     },
     {
@@ -3777,7 +3754,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L351",
+      "source_location": "L347",
       "weight": 1.0
     },
     {
@@ -3789,7 +3766,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L323",
+      "source_location": "L319",
       "weight": 1.0
     },
     {
@@ -3801,7 +3778,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L324",
+      "source_location": "L320",
       "weight": 1.0
     },
     {
@@ -3813,7 +3790,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L329",
+      "source_location": "L325",
       "weight": 1.0
     },
     {
@@ -3825,7 +3802,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L331",
+      "source_location": "L327",
       "weight": 1.0
     },
     {
@@ -3837,7 +3814,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "routing/node.go",
-      "source_location": "L331",
+      "source_location": "L327",
       "weight": 1.0
     },
     {
@@ -4053,7 +4030,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "chain/chain.go",
-      "source_location": "L13",
+      "source_location": "L16",
       "weight": 1.0
     },
     {
@@ -4105,18 +4082,6 @@
       "weight": 1.0
     },
     {
-      "source": "router_router",
-      "target": "chain_chain_go_chain_middleware",
-      "relation": "references",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "field",
-      "source_file": "router/router.go",
-      "source_location": "L43",
-      "weight": 1.0
-    },
-    {
       "source": "router_state",
       "target": "go_type_sync_mutex",
       "relation": "references",
@@ -4154,7 +4119,7 @@
     },
     {
       "source": "routing_endpoint",
-      "target": "routing_node_go_method",
+      "target": "method",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -4185,19 +4150,19 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "routing/node.go",
-      "source_location": "L178",
+      "source_location": "L174",
       "weight": 1.0
     },
     {
       "source": "routing_lookup",
-      "target": "routing_node_go_method",
+      "target": "method",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "routing/node.go",
-      "source_location": "L185",
+      "source_location": "L186",
       "weight": 1.0
     },
     {
@@ -4293,7 +4258,7 @@
       "confidence_score": 1.0,
       "context": "generic_arg",
       "source_file": "routing/node.go",
-      "source_location": "L372",
+      "source_location": "L368",
       "weight": 1.0
     },
     {
@@ -4305,7 +4270,7 @@
       "confidence_score": 1.0,
       "context": "generic_arg",
       "source_file": "routing/node.go",
-      "source_location": "L354",
+      "source_location": "L350",
       "weight": 1.0
     },
     {
@@ -4353,7 +4318,7 @@
       "confidence_score": 1.0,
       "context": "generic_arg",
       "source_file": "routing/node.go",
-      "source_location": "L260",
+      "source_location": "L256",
       "weight": 1.0
     },
     {
@@ -4365,7 +4330,7 @@
       "confidence_score": 1.0,
       "context": "generic_arg",
       "source_file": "routing/node.go",
-      "source_location": "L300",
+      "source_location": "L296",
       "weight": 1.0
     },
     {
@@ -4389,7 +4354,7 @@
       "confidence_score": 1.0,
       "context": "generic_arg",
       "source_file": "routing/node.go",
-      "source_location": "L343",
+      "source_location": "L339",
       "weight": 1.0
     },
     {
@@ -4401,7 +4366,7 @@
       "confidence_score": 1.0,
       "context": "generic_arg",
       "source_file": "routing/node.go",
-      "source_location": "L321",
+      "source_location": "L317",
       "weight": 1.0
     },
     {
@@ -4545,7 +4510,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "chain/chain.go",
-      "source_location": "L17",
+      "source_location": "L20",
       "weight": 1.0
     },
     {
@@ -4989,7 +4954,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L871",
+      "source_location": "L864",
       "weight": 1.0
     },
     {
@@ -5025,7 +4990,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L653",
+      "source_location": "L650",
       "weight": 1.0
     },
     {
@@ -5037,7 +5002,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L820",
+      "source_location": "L813",
       "weight": 1.0
     },
     {
@@ -5049,7 +5014,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L535",
+      "source_location": "L532",
       "weight": 1.0
     },
     {
@@ -5061,7 +5026,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L557",
+      "source_location": "L554",
       "weight": 1.0
     },
     {
@@ -5073,7 +5038,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L584",
+      "source_location": "L581",
       "weight": 1.0
     },
     {
@@ -5097,7 +5062,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L310",
+      "source_location": "L307",
       "weight": 1.0
     },
     {
@@ -5109,7 +5074,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L412",
+      "source_location": "L409",
       "weight": 1.0
     },
     {
@@ -5121,7 +5086,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L322",
+      "source_location": "L319",
       "weight": 1.0
     },
     {
@@ -5133,7 +5098,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L299",
+      "source_location": "L296",
       "weight": 1.0
     },
     {
@@ -5145,7 +5110,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L361",
+      "source_location": "L358",
       "weight": 1.0
     },
     {
@@ -5157,7 +5122,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L617",
+      "source_location": "L614",
       "weight": 1.0
     },
     {
@@ -5169,7 +5134,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L631",
+      "source_location": "L628",
       "weight": 1.0
     },
     {
@@ -5181,7 +5146,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L642",
+      "source_location": "L639",
       "weight": 1.0
     },
     {
@@ -5193,7 +5158,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L606",
+      "source_location": "L603",
       "weight": 1.0
     },
     {
@@ -5205,7 +5170,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L395",
+      "source_location": "L392",
       "weight": 1.0
     },
     {
@@ -5217,7 +5182,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L794",
+      "source_location": "L787",
       "weight": 1.0
     },
     {
@@ -5229,7 +5194,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L428",
+      "source_location": "L425",
       "weight": 1.0
     },
     {
@@ -5241,7 +5206,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L807",
+      "source_location": "L800",
       "weight": 1.0
     },
     {
@@ -5253,7 +5218,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L848",
+      "source_location": "L841",
       "weight": 1.0
     },
     {
@@ -5265,7 +5230,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L464",
+      "source_location": "L461",
       "weight": 1.0
     },
     {
@@ -5277,7 +5242,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L513",
+      "source_location": "L510",
       "weight": 1.0
     },
     {
@@ -5289,7 +5254,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L478",
+      "source_location": "L475",
       "weight": 1.0
     },
     {
@@ -5301,7 +5266,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L527",
+      "source_location": "L524",
       "weight": 1.0
     },
     {
@@ -5313,7 +5278,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L497",
+      "source_location": "L494",
       "weight": 1.0
     },
     {
@@ -5325,7 +5290,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L722",
+      "source_location": "L715",
       "weight": 1.0
     },
     {
@@ -5361,7 +5326,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L340",
+      "source_location": "L337",
       "weight": 1.0
     },
     {
@@ -5373,7 +5338,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L678",
+      "source_location": "L675",
       "weight": 1.0
     },
     {
@@ -5385,7 +5350,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L665",
+      "source_location": "L662",
       "weight": 1.0
     },
     {
@@ -5397,7 +5362,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L571",
+      "source_location": "L568",
       "weight": 1.0
     },
     {
@@ -5469,7 +5434,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L751",
+      "source_location": "L744",
       "weight": 1.0
     },
     {
@@ -5481,7 +5446,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L765",
+      "source_location": "L758",
       "weight": 1.0
     },
     {
@@ -5505,7 +5470,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L688",
+      "source_location": "L685",
       "weight": 1.0
     },
     {
@@ -5529,7 +5494,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L782",
+      "source_location": "L775",
       "weight": 1.0
     },
     {
@@ -5541,7 +5506,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L836",
+      "source_location": "L829",
       "weight": 1.0
     },
     {
@@ -5553,7 +5518,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L379",
+      "source_location": "L376",
       "weight": 1.0
     },
     {
@@ -5565,7 +5530,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L738",
+      "source_location": "L731",
       "weight": 1.0
     },
     {
@@ -5589,7 +5554,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L346",
+      "source_location": "L343",
       "weight": 1.0
     },
     {
@@ -5601,7 +5566,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L434",
+      "source_location": "L431",
       "weight": 1.0
     },
     {
@@ -5613,7 +5578,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L252",
+      "source_location": "L249",
       "weight": 1.0
     },
     {
@@ -5625,7 +5590,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "router/router_test.go",
-      "source_location": "L277",
+      "source_location": "L274",
       "weight": 1.0
     },
     {
@@ -5738,7 +5703,7 @@
     },
     {
       "source": "routing_node_e_find",
-      "target": "routing_node_go_method",
+      "target": "method",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -5750,7 +5715,7 @@
     },
     {
       "source": "routing_node_e_hasmethod",
-      "target": "routing_node_go_method",
+      "target": "method",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -5769,7 +5734,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "routing/node.go",
-      "source_location": "L260",
+      "source_location": "L256",
       "weight": 1.0
     },
     {
@@ -5781,7 +5746,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "routing/node.go",
-      "source_location": "L300",
+      "source_location": "L296",
       "weight": 1.0
     },
     {
@@ -5810,7 +5775,7 @@
     },
     {
       "source": "routing_node_e_setendpoint",
-      "target": "routing_node_go_method",
+      "target": "method",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -6501,7 +6466,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "chain/chain.go",
-      "source_location": "L28",
+      "source_location": "L31",
       "weight": 1.0
     },
     {
@@ -6513,7 +6478,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "chain/chain.go",
-      "source_location": "L47",
+      "source_location": "L52",
       "weight": 1.0
     },
     {
@@ -6621,19 +6586,19 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "router/router_test.go",
-      "source_location": "L871",
+      "source_location": "L864",
       "weight": 1.0
     },
     {
       "source": "routing_lookup_allowedmethods",
-      "target": "routing_node_go_method",
+      "target": "method",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "routing/node.go",
-      "source_location": "L225",
+      "source_location": "L226",
       "weight": 1.0
     },
     {
@@ -6645,7 +6610,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "routing/node.go",
-      "source_location": "L372",
+      "source_location": "L368",
       "weight": 1.0
     },
     {
@@ -6681,7 +6646,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "routing/node.go",
-      "source_location": "L260",
+      "source_location": "L256",
       "weight": 1.0
     },
     {
@@ -6693,7 +6658,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "routing/node.go",
-      "source_location": "L300",
+      "source_location": "L296",
       "weight": 1.0
     },
     {
@@ -6824,7 +6789,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "chain/chain.go",
-      "source_location": "L12",
+      "source_location": "L15",
       "weight": 1.0
     },
     {
@@ -6835,18 +6800,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "chain/chain.go",
-      "source_location": "L41",
+      "source_location": "L46",
       "weight": 1.0
     },
     {
       "source": "chain_chain",
-      "target": "chain_chain_go_chain_middleware",
+      "target": "chain_middleware",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "chain/chain.go",
-      "source_location": "L5",
+      "source_location": "L8",
       "weight": 1.0
     },
     {
@@ -7396,7 +7361,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L252",
+      "source_location": "L249",
       "weight": 1.0
     },
     {
@@ -7407,7 +7372,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L277",
+      "source_location": "L274",
       "weight": 1.0
     },
     {
@@ -7418,7 +7383,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L299",
+      "source_location": "L296",
+      "weight": 1.0
+    },
+    {
+      "source": "router_router_test",
+      "target": "router_router_test_testrouter_groupacceptsmiddlewareaftersiblingroute",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "router/router_test.go",
+      "source_location": "L307",
       "weight": 1.0
     },
     {
@@ -7434,24 +7410,13 @@
     },
     {
       "source": "router_router_test",
-      "target": "router_router_test_testrouter_groupacceptsmiddlewareaftersiblingroute",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "router/router_test.go",
-      "source_location": "L310",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test",
       "target": "router_router_test_testrouter_groupnotfoundreachesservingrouter",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L322",
+      "source_location": "L319",
       "weight": 1.0
     },
     {
@@ -7462,7 +7427,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L340",
+      "source_location": "L337",
       "weight": 1.0
     },
     {
@@ -7473,7 +7438,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L346",
+      "source_location": "L343",
       "weight": 1.0
     },
     {
@@ -7484,7 +7449,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L361",
+      "source_location": "L358",
       "weight": 1.0
     },
     {
@@ -7495,7 +7460,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L379",
+      "source_location": "L376",
       "weight": 1.0
     },
     {
@@ -7506,7 +7471,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L395",
+      "source_location": "L392",
       "weight": 1.0
     },
     {
@@ -7517,7 +7482,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L412",
+      "source_location": "L409",
       "weight": 1.0
     },
     {
@@ -7528,7 +7493,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L428",
+      "source_location": "L425",
       "weight": 1.0
     },
     {
@@ -7539,7 +7504,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L434",
+      "source_location": "L431",
       "weight": 1.0
     },
     {
@@ -7550,7 +7515,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L464",
+      "source_location": "L461",
       "weight": 1.0
     },
     {
@@ -7572,7 +7537,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L478",
+      "source_location": "L475",
       "weight": 1.0
     },
     {
@@ -7583,7 +7548,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L497",
+      "source_location": "L494",
       "weight": 1.0
     },
     {
@@ -7594,7 +7559,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L513",
+      "source_location": "L510",
       "weight": 1.0
     },
     {
@@ -7605,7 +7570,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L527",
+      "source_location": "L524",
       "weight": 1.0
     },
     {
@@ -7616,7 +7581,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L535",
+      "source_location": "L532",
       "weight": 1.0
     },
     {
@@ -7638,7 +7603,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L557",
+      "source_location": "L554",
       "weight": 1.0
     },
     {
@@ -7649,7 +7614,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L571",
+      "source_location": "L568",
       "weight": 1.0
     },
     {
@@ -7660,7 +7625,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L584",
+      "source_location": "L581",
       "weight": 1.0
     },
     {
@@ -7671,7 +7636,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L606",
+      "source_location": "L603",
       "weight": 1.0
     },
     {
@@ -7682,7 +7647,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L617",
+      "source_location": "L614",
       "weight": 1.0
     },
     {
@@ -7693,7 +7658,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L631",
+      "source_location": "L628",
       "weight": 1.0
     },
     {
@@ -7704,7 +7669,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L642",
+      "source_location": "L639",
       "weight": 1.0
     },
     {
@@ -7715,7 +7680,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L653",
+      "source_location": "L650",
       "weight": 1.0
     },
     {
@@ -7726,7 +7691,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L665",
+      "source_location": "L662",
       "weight": 1.0
     },
     {
@@ -7737,7 +7702,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L678",
+      "source_location": "L675",
       "weight": 1.0
     },
     {
@@ -7748,7 +7713,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L688",
+      "source_location": "L685",
       "weight": 1.0
     },
     {
@@ -7770,7 +7735,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L722",
+      "source_location": "L715",
       "weight": 1.0
     },
     {
@@ -7781,7 +7746,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L738",
+      "source_location": "L731",
       "weight": 1.0
     },
     {
@@ -7792,7 +7757,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L751",
+      "source_location": "L744",
       "weight": 1.0
     },
     {
@@ -7803,7 +7768,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L765",
+      "source_location": "L758",
       "weight": 1.0
     },
     {
@@ -7814,7 +7779,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L782",
+      "source_location": "L775",
       "weight": 1.0
     },
     {
@@ -7825,7 +7790,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L794",
+      "source_location": "L787",
       "weight": 1.0
     },
     {
@@ -7836,7 +7801,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L807",
+      "source_location": "L800",
       "weight": 1.0
     },
     {
@@ -7847,7 +7812,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L820",
+      "source_location": "L813",
       "weight": 1.0
     },
     {
@@ -7858,7 +7823,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L836",
+      "source_location": "L829",
       "weight": 1.0
     },
     {
@@ -7869,7 +7834,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L848",
+      "source_location": "L841",
       "weight": 1.0
     },
     {
@@ -7880,7 +7845,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "router/router_test.go",
-      "source_location": "L871",
+      "source_location": "L864",
       "weight": 1.0
     },
     {
@@ -7946,7 +7911,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/node.go",
-      "source_location": "L170",
+      "source_location": "L166",
       "weight": 1.0
     },
     {
@@ -7957,7 +7922,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/node.go",
-      "source_location": "L194",
+      "source_location": "L195",
       "weight": 1.0
     },
     {
@@ -7979,7 +7944,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/node.go",
-      "source_location": "L321",
+      "source_location": "L317",
       "weight": 1.0
     },
     {
@@ -7990,7 +7955,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/node.go",
-      "source_location": "L343",
+      "source_location": "L339",
       "weight": 1.0
     },
     {
@@ -8001,7 +7966,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/node.go",
-      "source_location": "L354",
+      "source_location": "L350",
       "weight": 1.0
     },
     {
@@ -8012,7 +7977,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/node.go",
-      "source_location": "L372",
+      "source_location": "L368",
       "weight": 1.0
     },
     {
@@ -8705,7 +8670,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "chain/chain.go",
-      "source_location": "L17",
+      "source_location": "L20",
       "weight": 1.0
     },
     {
@@ -8716,7 +8681,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "chain/chain.go",
-      "source_location": "L24",
+      "source_location": "L27",
       "weight": 1.0
     },
     {
@@ -8727,7 +8692,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "chain/chain.go",
-      "source_location": "L28",
+      "source_location": "L31",
       "weight": 1.0
     },
     {
@@ -8738,7 +8703,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "chain/chain.go",
-      "source_location": "L47",
+      "source_location": "L52",
       "weight": 1.0
     },
     {
@@ -9046,7 +9011,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/node.go",
-      "source_location": "L210",
+      "source_location": "L211",
       "weight": 1.0
     },
     {
@@ -9057,7 +9022,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/node.go",
-      "source_location": "L219",
+      "source_location": "L220",
       "weight": 1.0
     },
     {
@@ -9068,7 +9033,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/node.go",
-      "source_location": "L225",
+      "source_location": "L226",
       "weight": 1.0
     },
     {
@@ -9117,17 +9082,6 @@
     },
     {
       "source": "routing_node_e",
-      "target": "routing_node_e_hasanymethod",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "routing/node.go",
-      "source_location": "L158",
-      "weight": 1.0
-    },
-    {
-      "source": "routing_node_e",
       "target": "routing_node_e_recordallowed",
       "relation": "method",
       "_origin": "ast",
@@ -9145,7 +9099,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/node.go",
-      "source_location": "L260",
+      "source_location": "L256",
       "weight": 1.0
     },
     {
@@ -9156,7 +9110,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "routing/node.go",
-      "source_location": "L300",
+      "source_location": "L296",
       "weight": 1.0
     },
     {
@@ -9459,654 +9413,6 @@
       "context": "call",
       "source_file": "router/router.go",
       "source_location": "L55",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testnewrouter",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L17",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testnewrouterwithprefix",
-      "target": "router_router_newprefixrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L24",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_answersoptionsautomatically",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L654",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_backtrackswhenstaticmatchlacksmethod",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L821",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_catchallroute",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L536",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_catchallundergroup",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L558",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_decodesescapesinsegments",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L585",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_group",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L164",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_groupacceptsmiddlewareaftersiblingroute",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L311",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_groupmethodnotallowedreachesservingrouter",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L413",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_groupnotfoundreachesservingrouter",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L323",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_grouprejectsmiddlewareafteritsfirstroute",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L300",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_groupresultisusableafterthecallback",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L362",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_headfallsbacktoget",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L618",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_headprefersitsownroute",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L632",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_headwithoutgetisstillmethodnotallowed",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L643",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_malformedescapedoesnotroute",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L607",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_methodnotallowedhandlerisconfigurable",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L396",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_methodnotallowedlistseveryregisteredmethod",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L795",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_methodnotallowednilhandler",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L429",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_methodnotallowedspanseverymatchingbranch",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L808",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_middlewareorder",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L849",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_mount",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L465",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_mountkeepsexistingrouteonconflict",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L514",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_mountkeepsmountedmiddleware",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L479",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_mountrejectssharedtree",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L528",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_mountunderparameterisedprefix",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L498",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_mountwhileserving",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L723",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_nestedgroupscomposeprefixes",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L199",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_notfound",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L55",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_notfoundnilhandler",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L341",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_optionsonunknownpathisstillnotfound",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L679",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_optionsprefersitsownroute",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L666",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_percentencodedslashstaysinsideonevariable",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L572",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_registerbeforemiddleware",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L93",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_registercapturemultiplepathvariable",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L126",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_registercapturepathvariable",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L110",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_registermultiplepath",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L142",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_registernilhandler",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L48",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_registerpathwithquerystring",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L752",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_registerrootpreservesexistingroutes",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L766",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_registersimplepath",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L32",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_registerswhileserving",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L689",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_registerwithmiddleware",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L70",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_returnsmethodnotallowed",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L783",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_returnsmethodnotallowedwhennobranchmatchesmethod",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L837",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_routewithoutvariablescarriesnocontext",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L380",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_staticrouteallocatesnothing",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L739",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_supportsconcurrentregistrationandserving",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L231",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_treatsparametersyntaxinrequestpathasliteral",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L347",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_verbshortcuts",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L435",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_with",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L253",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_withinheritsparentmiddleware",
-      "target": "router_router_newrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L278",
-      "weight": 1.0
-    },
-    {
-      "source": "router_router_test_testrouter_withpreservesprefix",
-      "target": "router_router_newprefixrouter",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "router/router_test.go",
-      "source_location": "L217",
       "weight": 1.0
     },
     {
@@ -10639,5 +9945,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "97cbe50918cbc387765c73c0a7b21d64faaf6fd8"
+  "built_at_commit": "f89ed9fccdfe4f732164eb825f59217e4d647874"
 }
