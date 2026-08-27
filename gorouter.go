@@ -29,7 +29,7 @@ type Router interface {
 	// Group creates a subgroup of routes with a common prefix.
 	// It takes a prefix string and a function that operates on a router.Router as parameters.
 	// This method allows organizing routes under a shared path prefix.
-	Group(prefix string, fn func(r router.Router)) router.Router
+	Group(prefix string, fn func(r *router.Router)) *router.Router
 
 	// With adds one or multiple middleware functions to a specific set of routes.
 	// It takes one or more middleware functions as parameters and returns a pointer to the router.Router.

@@ -29,7 +29,7 @@ The project was developed for the purpose of learning and experimenting with the
         r.Register(router.GET, "/ping", func(writer http.ResponseWriter, request *http.Request) {
             writer.Write([]byte("pong"))
         })
-        r.Group("/{id}", func(r router.Router) {
+        r.Group("/{id}", func(r *router.Router) {
             r.Use(func(next http.Handler) http.Handler {
                 return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
                     next.ServeHTTP(writer, request)
@@ -50,7 +50,7 @@ You can find more at folder ```.example/```
 - `Register(httpMethod router.Method, path string, method http.HandlerFunc)`: Registers an HTTP method for a specific path.
 - `Use(middleware func(http.Handler) http.Handler)`: Uses middleware to handle HTTP requests.
 - `NotFound(notFoundFn http.HandlerFunc)`: Sets a handler for requests on non-existent routes.
-- `Group(prefix string, fn func(r router.Router)) router.Router`: Groups routes under a specified prefix.
+- `Group(prefix string, fn func(r *router.Router)) *router.Router`: Groups routes under a specified prefix.
 - `With(middleware ...func(http.Handler) http.Handler) *router.Router`: Uses middleware for a specific set of routes.
 
 ## Credits

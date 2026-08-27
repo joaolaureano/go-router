@@ -26,7 +26,7 @@ O projeto foi desenvolvido com o fim de aprendizado e experimentação da lingua
         r.Register(router.GET, "/ping", func(writer http.ResponseWriter, request *http.Request) {
             writer.Write([]byte("pong"))
         })
-        r.Group("/{id}", func(r router.Router) {
+        r.Group("/{id}", func(r *router.Router) {
             r.Use(func(next http.Handler) http.Handler {
                 return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
                     next.ServeHTTP(writer, request)
@@ -47,7 +47,7 @@ Mais exemplos no diretório ```.example/```
 - `Register(httpMethod router.Method, path string, method http.HandlerFunc)`: Registra um método HTTP para um determinado caminho.
 - `Use(middleware func(http.Handler) http.Handler)`: Utiliza um middleware para manipular as requisições HTTP.
 - `NotFound(notFoundFn http.HandlerFunc)`: Define um handler para requisições em rotas não encontradas.
-- `Group(prefix string, fn func(r router.Router)) router.Router`: Agrupa rotas com um determinado prefixo.
+- `Group(prefix string, fn func(r *router.Router)) *router.Router`: Agrupa rotas com um determinado prefixo.
 - `With(middleware ...func(http.Handler) http.Handler) *router.Router`: Utiliza middleware para um conjunto específico de rotas.
 
 ## Créditos

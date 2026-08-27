@@ -131,7 +131,10 @@ func (router *Router) NotFound(notFoundFn http.HandlerFunc) {
 	*router.notFound = notFoundFn
 }
 
-func (router *Router) Group(prefix string, fn func(r Router)) Router {
+// Group returns a subrouter that registers under prefix and starts from a copy
+// of this router's middleware. It shares the routing tree, so routes declared
+// on it are served by the router this was called on.
+func (router *Router) Group(prefix string, fn func(r *Router)) *Router {
 	router.mu.RLock()
 	middlewares := append([]func(http.Handler) http.Handler(nil), router.chain.Middlewares()...)
 	fullPrefix := router.prefix + prefix
@@ -146,9 +149,9 @@ func (router *Router) Group(prefix string, fn func(r Router)) Router {
 		mu:       mu,
 	}
 
-	fn(*subrouter)
+	fn(subrouter)
 
-	return *subrouter
+	return subrouter
 }
 
 func (router *Router) With(middleware ...func(http.Handler) http.Handler) *Router {

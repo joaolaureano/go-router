@@ -175,7 +175,7 @@ func TestRouter_Group(t *testing.T) {
 	}
 	router.Use(fn)
 	router.Register(GET, path1, method)
-	router.Group(group, func(r Router) {
+	router.Group(group, func(r *Router) {
 		r.Use(func(next http.Handler) http.Handler {
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				next.ServeHTTP(w, r)
@@ -197,8 +197,8 @@ func TestRouter_Group(t *testing.T) {
 
 func TestRouter_NestedGroupsComposePrefixes(t *testing.T) {
 	r := NewRouter()
-	r.Group("/api", func(api Router) {
-		api.Group("/v1", func(version Router) {
+	r.Group("/api", func(api *Router) {
+		api.Group("/v1", func(version *Router) {
 			version.Register(GET, "/users", func(w http.ResponseWriter, r *http.Request) {
 				w.Write([]byte("users"))
 			})
@@ -298,7 +298,7 @@ func TestRouter_WithInheritsParentMiddleware(t *testing.T) {
 
 func TestRouter_GroupRejectsMiddlewareAfterItsFirstRoute(t *testing.T) {
 	r := NewRouter()
-	group := r.Group("/group", func(subrouter Router) {
+	group := r.Group("/group", func(subrouter *Router) {
 		subrouter.Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {})
 	})
 
@@ -312,7 +312,7 @@ func TestRouter_GroupAcceptsMiddlewareAfterSiblingRoute(t *testing.T) {
 	r.Register(GET, "/ping", func(w http.ResponseWriter, r *http.Request) {})
 
 	assert.NotPanics(t, func() {
-		r.Group("/group", func(subrouter Router) {
+		r.Group("/group", func(subrouter *Router) {
 			subrouter.Use(func(next http.Handler) http.Handler { return next })
 			subrouter.Register(GET, "/path", func(w http.ResponseWriter, r *http.Request) {})
 		})
@@ -321,7 +321,7 @@ func TestRouter_GroupAcceptsMiddlewareAfterSiblingRoute(t *testing.T) {
 
 func TestRouter_GroupNotFoundReachesServingRouter(t *testing.T) {
 	r := NewRouter()
-	r.Group("/group", func(subrouter Router) {
+	r.Group("/group", func(subrouter *Router) {
 		subrouter.NotFound(func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte("custom"))
@@ -356,6 +356,24 @@ func TestRouter_TreatsParameterSyntaxInRequestPathAsLiteral(t *testing.T) {
 	assert.NotPanics(t, func() { r.ServeHTTP(response, request) })
 	assert.Equal(t, http.StatusOK, response.Code)
 	assert.Equal(t, "{*}", response.Body.String())
+}
+
+func TestRouter_GroupResultIsUsableAfterTheCallback(t *testing.T) {
+	r := NewRouter()
+	group := r.Group("/group", func(subrouter *Router) {
+		subrouter.Register(GET, "/first", func(w http.ResponseWriter, r *http.Request) {})
+	})
+	group.Register(GET, "/second", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("second"))
+	})
+
+	var handler http.Handler = group
+	request := httptest.NewRequest(http.MethodGet, "/group/second", nil)
+	response := httptest.NewRecorder()
+	handler.ServeHTTP(response, request)
+
+	assert.Equal(t, http.StatusOK, response.Code)
+	assert.Equal(t, "second", response.Body.String())
 }
 
 func TestRouter_RegisterPathWithQueryString(t *testing.T) {
