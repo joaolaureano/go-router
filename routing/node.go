@@ -138,12 +138,10 @@ func (n *node[E]) addChild(child *node[E], kind segmentKind) {
 	}
 }
 
+// setEndpoint records what this node resolves to under a method. It only ever
+// appends: registering a method twice on one path is rejected before the walk
+// gets here, and a merge asks whether the method is taken before grafting.
 func (n *node[E]) setEndpoint(httpMethod Method, handler E, variableNames []string) {
-	if existing := n.find(httpMethod); existing != nil {
-		existing.handler = handler
-		existing.variableNames = variableNames
-		return
-	}
 	n.endpoints = append(n.endpoints, endpoint[E]{
 		method:        httpMethod,
 		handler:       handler,

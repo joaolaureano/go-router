@@ -56,3 +56,14 @@ func TestNodeSetEndpoint(t *testing.T) {
 	assert.Equal(t, []string{"id"}, registered.variableNames)
 	assert.Nil(t, node.find(POST), "an unregistered method finds nothing")
 }
+
+func TestNodeSetEndpointOnlyAppends(t *testing.T) {
+	node := newNode[http.Handler]("users")
+
+	node.setEndpoint(GET, handler, []string{"id"})
+	node.setEndpoint(POST, handler, nil)
+
+	assert.Len(t, node.endpoints, 2, "a method already recorded never reaches here: register rejects a duplicate and merge skips one")
+	assert.Equal(t, []string{"id"}, node.find(GET).variableNames)
+	assert.Nil(t, node.find(POST).variableNames)
+}
