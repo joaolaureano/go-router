@@ -1,14 +1,12 @@
 {
-  "0": "testing.T",
+  "0": "CreateTree",
   "1": "Node",
-  "2": "NewRouter",
+  "2": "testing.T",
   "3": "NewContext",
   "4": "_const.HTTPMethods",
-  "5": "Tree",
   "6": "Router",
   "7": "Repository",
   "8": "github.com/joaolaureano/go-router",
   "9": "_const.HTTPMethods",
-  "10": "newNode",
-  "11": "github.com/joaolaureano/go-router/tree.RouterTree"
+  "10": "newNode"
 }

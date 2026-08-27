@@ -299,6 +299,29 @@ func TestRouter_WithInheritsParentMiddleware(t *testing.T) {
 	assert.Equal(t, "parentwithhandler", response.Body.String())
 }
 
+func TestRouter_GroupRejectsMiddlewareAfterItsFirstRoute(t *testing.T) {
+	r := NewRouter()
+	group := r.Group("/group", func(subrouter Router) {
+		subrouter.Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {})
+	})
+
+	assert.Panics(t, func() {
+		group.Use(func(next http.Handler) http.Handler { return next })
+	})
+}
+
+func TestRouter_GroupAcceptsMiddlewareAfterSiblingRoute(t *testing.T) {
+	r := NewRouter()
+	r.Register(_const.GET, "/ping", func(w http.ResponseWriter, r *http.Request) {})
+
+	assert.NotPanics(t, func() {
+		r.Group("/group", func(subrouter Router) {
+			subrouter.Use(func(next http.Handler) http.Handler { return next })
+			subrouter.Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {})
+		})
+	})
+}
+
 func TestRouter_RegisterPathWithQueryString(t *testing.T) {
 	r := NewRouter()
 	r.Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {

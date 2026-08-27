@@ -5,28 +5,26 @@
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 154 nodes · 367 edges · 12 communities (8 shown, 4 thin omitted)
+- 154 nodes · 367 edges · 10 communities (7 shown, 3 thin omitted)
 - Extraction: 81% EXTRACTED · 19% INFERRED · 0% AMBIGUOUS · INFERRED: 70 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e2856ac4`
+- Built from commit: `725fbbd3`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- testing.T
+- CreateTree
 - Node
-- NewRouter
+- testing.T
 - NewContext
 - _const.HTTPMethods
-- Tree
 - Router
 - Repository
 - github.com/joaolaureano/go-router
 - _const.HTTPMethods
 - newNode
-- github.com/joaolaureano/go-router/tree.RouterTree
 
 ## God Nodes (most connected - your core abstractions)
 1. `CreateTree()` - 30 edges
@@ -49,63 +47,61 @@
   router/router.go → tree/tree.go
 - `NewPrefixRouter()` --calls--> `CreateTree()`  [EXTRACTED]
   router/router.go → tree/tree.go
-- `TestFindRoute_FallsBackToParameterAfterStaticBranchFails()` --calls--> `NewContext()`  [EXTRACTED]
-  tree/tree_test.go → router/context/context.go
+- `CreateTree()` --calls--> `newNode()`  [INFERRED]
+  tree/tree.go → tree/node.go
 
 ## Import Cycles
 - None detected.
 
-## Communities (12 total, 4 thin omitted)
+## Communities (10 total, 3 thin omitted)
 
-### Community 0 - "testing.T"
-Cohesion: 0.17
-Nodes (31): testing.T, CreateTree(), TestCreateTree(), TestFindRoute(), TestFindRoute_EmptyPath(), TestFindRoute_FallsBackToParameterAfterStaticBranchFails(), TestFindRoute_InexistentMethod(), TestFindRoute_InexistentPath() (+23 more)
+### Community 0 - "CreateTree"
+Cohesion: 0.16
+Nodes (23): CreateTree(), TestCreateTree(), TestFindRoute(), TestFindRoute_EmptyPath(), TestFindRoute_InexistentMethod(), TestFindRoute_InexistentPath(), TestFindRoute_InexistentPathOnlyRoot(), TestFindRoute_InexistentRoot() (+15 more)
 
 ### Community 1 - "Node"
-Cohesion: 0.19
-Nodes (13): HTTPMethods, github.com/joaolaureano/go-router/router/context.RouterContext, Method, methodFilter, Node, cloneMethod(), cloneNode(), filterByAnyMethod() (+5 more)
+Cohesion: 0.18
+Nodes (15): HTTPMethods, github.com/joaolaureano/go-router/router/context.RouterContext, Method, methodFilter, Node, cloneMethod(), cloneNode(), filterByAnyMethod() (+7 more)
 
-### Community 2 - "NewRouter"
-Cohesion: 0.15
-Nodes (26): net/http/httptest.Server, NewPrefixRouter(), NewRouter(), setup(), TestNewRouter(), TestNewRouterWithPrefix(), TestRouter_BacktracksWhenStaticMatchLacksMethod(), TestRouter_Group() (+18 more)
+### Community 2 - "testing.T"
+Cohesion: 0.20
+Nodes (27): net/http/httptest.Server, testing.T, NewPrefixRouter(), NewRouter(), setup(), TestNewRouter(), TestNewRouterWithPrefix(), TestRouter_BacktracksWhenStaticMatchLacksMethod() (+19 more)
 
 ### Community 3 - "NewContext"
-Cohesion: 0.17
-Nodes (14): contextKey, context.RouterContext, net/http.Request, net/http.ResponseWriter, FromRequest(), NewContext(), setup(), TestContext_InvalidKey() (+6 more)
-
-### Community 5 - "Tree"
-Cohesion: 0.21
-Nodes (9): Chain, Middleware, Router, net/http.Handler, NewRouter(), tree.RouterTree, Tree, isParam() (+1 more)
+Cohesion: 0.13
+Nodes (18): contextKey, context.RouterContext, net/http.Request, net/http.ResponseWriter, FromRequest(), NewContext(), setup(), TestContext_InvalidKey() (+10 more)
 
 ### Community 6 - "Router"
-Cohesion: 0.17
-Nodes (10): NewChain(), TestChain_MiddlewareRunsInRegistrationOrder(), TestChain_MultipleMiddleware(), TestChain_NoMiddleware(), TestChain_SingleMiddleware(), TestNewChain(), TestNewChain_Middlewares(), net/http.HandlerFunc (+2 more)
+Cohesion: 0.12
+Nodes (16): Chain, Middleware, NewChain(), TestChain_MiddlewareRunsInRegistrationOrder(), TestChain_MultipleMiddleware(), TestChain_NoMiddleware(), TestChain_SingleMiddleware(), TestNewChain() (+8 more)
 
 ### Community 7 - "Repository"
 Cohesion: 0.39
 Nodes (3): Article, Repository, New()
 
 ### Community 10 - "newNode"
-Cohesion: 0.53
-Nodes (5): newNode(), TestNewNodeInitializesInvariantState(), TestNodeAddChildRejectsNil(), TestNodeAddChildSeparatesStaticAndParameterChildren(), TestNodeSetEndpoint()
+Cohesion: 0.19
+Nodes (10): newNode(), TestNewNodeInitializesInvariantState(), TestNodeAddChildRejectsNil(), TestNodeAddChildSeparatesStaticAndParameterChildren(), TestNodeSetEndpoint(), isParam(), TestIsParam(), TestValidatePath_InvalidPaths() (+2 more)
 
 ## Knowledge Gaps
 - **2 isolated node(s):** `contextKey`, `github.com/joaolaureano/go-router`
   These have ≤1 connection - possible missing edges or undocumented components.
-- **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `CreateTree()` connect `testing.T` to `NewRouter`, `newNode`, `Tree`?**
-  _High betweenness centrality (0.159) - this node is a cross-community bridge._
-- **Why does `Node` connect `Node` to `newNode`, `Tree`?**
-  _High betweenness centrality (0.127) - this node is a cross-community bridge._
-- **Why does `Tree` connect `Tree` to `testing.T`, `Node`?**
-  _High betweenness centrality (0.106) - this node is a cross-community bridge._
+- **Why does `CreateTree()` connect `CreateTree` to `NewContext`, `Node`, `testing.T`, `newNode`?**
+  _High betweenness centrality (0.170) - this node is a cross-community bridge._
+- **Why does `Node` connect `Node` to `newNode`?**
+  _High betweenness centrality (0.129) - this node is a cross-community bridge._
+- **Why does `Tree` connect `Node` to `CreateTree`, `newNode`?**
+  _High betweenness centrality (0.110) - this node is a cross-community bridge._
 - **Are the 27 inferred relationships involving `CreateTree()` (e.g. with `newNode()` and `TestCreateTree()`) actually correct?**
   _`CreateTree()` has 27 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 20 inferred relationships involving `NewRouter()` (e.g. with `TestNewRouter()` and `TestRouter_BacktracksWhenStaticMatchLacksMethod()`) actually correct?**
   _`NewRouter()` has 20 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `contextKey`, `github.com/joaolaureano/go-router` to the rest of the system?**
   _2 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `NewContext` be split into smaller, more focused modules?**
+  _Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected._

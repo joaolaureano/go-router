@@ -17,8 +17,6 @@ type Router struct {
 
 	notFound http.HandlerFunc
 
-	closed bool
-
 	prefix string
 
 	mu *sync.RWMutex
@@ -78,7 +76,6 @@ func (router *Router) Register(httpMethod _const.HTTPMethods, path string, metho
 	}
 	router.mu.Lock()
 	defer router.mu.Unlock()
-	router.closed = true
 	if router.prefix != "" {
 		path = router.prefix + path
 	}
@@ -90,7 +87,7 @@ func (router *Router) Register(httpMethod _const.HTTPMethods, path string, metho
 func (router *Router) Use(middleware func(http.Handler) http.Handler) {
 	router.mu.Lock()
 	defer router.mu.Unlock()
-	if router.closed {
+	if router.chain.Sealed() {
 		panic("unable to define middleware after creating first route")
 	}
 	router.chain.Add(middleware)
