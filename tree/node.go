@@ -2,6 +2,7 @@ package tree
 
 import (
 	"net/http"
+	"sort"
 
 	_const "github.com/joaolaureano/go-router/const"
 )
@@ -63,6 +64,17 @@ func (node *Node) hasMethod(httpMethod _const.HTTPMethods) bool {
 
 func (node *Node) hasAnyMethod() bool {
 	return len(node.Method) > 0
+}
+
+// AllowedMethods lists the methods registered on the node, sorted so that the
+// Allow header of a 405 response stays stable across requests.
+func (node *Node) AllowedMethods() []string {
+	methods := make([]string, 0, len(node.Method))
+	for httpMethod := range node.Method {
+		methods = append(methods, string(httpMethod))
+	}
+	sort.Strings(methods)
+	return methods
 }
 
 // methodFilter decides which nodes are allowed to terminate a search. Matching

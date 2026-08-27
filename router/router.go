@@ -2,6 +2,8 @@ package router
 
 import (
 	"net/http"
+
+	"strings"
 	"sync"
 
 	"github.com/joaolaureano/go-router/chain"
@@ -53,17 +55,18 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	router.mu.RLock()
 	route := router.root.FindRoute(ctx, _const.HTTPMethods(method), uri)
 	var routeHandler http.Handler
-	pathExists := false
+	var allowedMethods []string
 	if route != nil {
 		routeHandler = route.Method[_const.HTTPMethods(r.Method)].Handler
-	} else {
-		pathExists = router.root.FindPath(uri) != nil
+	} else if pathNode := router.root.FindPath(uri); pathNode != nil {
+		allowedMethods = pathNode.AllowedMethods()
 	}
 	notFound := router.notFound
 	router.mu.RUnlock()
 	if routeHandler != nil {
 		routeHandler.ServeHTTP(w, r)
-	} else if pathExists {
+	} else if len(allowedMethods) > 0 {
+		w.Header().Set("Allow", strings.Join(allowedMethods, ", "))
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 	} else {
 		notFound(w, r)

@@ -362,6 +362,20 @@ func TestRouter_ReturnsMethodNotAllowed(t *testing.T) {
 	r.ServeHTTP(response, request)
 
 	assert.Equal(t, http.StatusMethodNotAllowed, response.Code)
+	assert.Equal(t, "GET", response.Header().Get("Allow"))
+}
+
+func TestRouter_MethodNotAllowedListsEveryRegisteredMethod(t *testing.T) {
+	r := NewRouter()
+	r.Register(_const.PATCH, "/path", func(w http.ResponseWriter, r *http.Request) {})
+	r.Register(_const.GET, "/path", func(w http.ResponseWriter, r *http.Request) {})
+
+	request := httptest.NewRequest(http.MethodDelete, "/path", nil)
+	response := httptest.NewRecorder()
+	r.ServeHTTP(response, request)
+
+	assert.Equal(t, http.StatusMethodNotAllowed, response.Code)
+	assert.Equal(t, "GET, PATCH", response.Header().Get("Allow"))
 }
 
 func TestRouter_BacktracksWhenStaticMatchLacksMethod(t *testing.T) {

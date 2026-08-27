@@ -6,9 +6,9 @@
     "semantic_hash": "d8f0ed28b1d58c40ad91cf55b7411a48"
   },
   "chain/chain.go": {
-    "mtime": 1787799467.722091,
-    "seen": 1787801229.588199,
-    "ast_hash": "df1ab3b28852c77138620f0cae470d02",
+    "mtime": 1787804132.875845,
+    "seen": 1787804152.251273,
+    "ast_hash": "ce66fb13afe482c8b01be046627d234a",
     "semantic_hash": ""
   },
   "chain/chain_test.go": {
@@ -48,15 +48,15 @@
     "semantic_hash": ""
   },
   "router/router.go": {
-    "mtime": 1787804023.290926,
-    "seen": 1787804030.851546,
-    "ast_hash": "a69cdfefd832255a65c01e71ae84e780",
+    "mtime": 1787804132.8760765,
+    "seen": 1787804152.2512798,
+    "ast_hash": "3e3275ed62e27885d7ed8904fc5718bc",
     "semantic_hash": ""
   },
   "router/router_test.go": {
-    "mtime": 1787804023.2913375,
-    "seen": 1787804030.8515468,
-    "ast_hash": "f80bc5b5ae7e67bce1a93ccec0dcdebc",
+    "mtime": 1787804143.7940528,
+    "seen": 1787804152.2512808,
+    "ast_hash": "3d01612cd21c7ac202a089eaa07e57a5",
     "semantic_hash": ""
   },
   "tree/tree.go": {
@@ -66,9 +66,9 @@
     "semantic_hash": ""
   },
   "tree/tree_test.go": {
-    "mtime": 1787802438.8621962,
-    "seen": 1787802520.238538,
-    "ast_hash": "3c7962373b7f75760cd98f3dcbb99596",
+    "mtime": 1787804190.8903284,
+    "seen": 1787804197.918294,
+    "ast_hash": "bf09a93facf9e8327366c0616fae74e4",
     "semantic_hash": ""
   },
   "README.md": {
@@ -84,9 +84,9 @@
     "semantic_hash": ""
   },
   "tree/node.go": {
-    "mtime": 1787803950.1962311,
-    "seen": 1787803984.3164039,
-    "ast_hash": "ed36b5013f384b365365fcae18df2b9c",
+    "mtime": 1787804170.4236681,
+    "seen": 1787804197.918292,
+    "ast_hash": "212460be32c224deb0490a8831a46cd1",
     "semantic_hash": ""
   },
   "tree/node_test.go": {
