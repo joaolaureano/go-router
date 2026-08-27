@@ -240,6 +240,20 @@ func TestFindRoute_InexistentMethod(t *testing.T) {
 	assert.Nil(t, foundNode, "Found node should be nil")
 }
 
+func TestFindRoute_FallsBackToParameterAfterStaticBranchFails(t *testing.T) {
+	tree := CreateTree()
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
+	ctx := context.NewContext()
+
+	tree.RegisterRoute(_const.GET, "/files/static/view", handler)
+	tree.RegisterRoute(_const.GET, "/files/{id}/edit", handler)
+
+	foundNode := tree.FindRoute(ctx, _const.GET, "/files/static/edit")
+
+	assert.NotNil(t, foundNode)
+	assert.Equal(t, "static", ctx.Value("id"))
+}
+
 func TestFindRoute_RootWithoutChildren(t *testing.T) {
 	tree := CreateTree()
 	ctx := &context.RouterContext{}

@@ -130,32 +130,36 @@ func (t *Tree) findPath(path string) (*Node, []string) {
 		return currNode, nil
 	}
 	if len(currNode.children) == 0 {
-		return nil, nil
-	}
-	paths := strings.Split(strings.Trim(path, "/"), "/")
-	idx := 0
-	pathVariableValues := make([]string, 0, len(paths))
-	nextNode := currNode.getChild(paths[idx])
-	if nextNode == nil {
-		nextNode = currNode.parameter
-	}
-	for {
-		if nextNode == nil {
+		if currNode.parameter == nil {
 			return nil, nil
 		}
-		if isParam(nextNode.path) {
-			pathVariableValues = append(pathVariableValues, paths[idx])
+	}
+	paths := strings.Split(strings.Trim(path, "/"), "/")
+	return matchPath(currNode, paths, 0, nil)
+}
+
+func matchPath(node *Node, paths []string, index int, values []string) (*Node, []string) {
+	if index == len(paths) {
+		if len(node.Method) == 0 {
+			return nil, nil
 		}
-		idx++
-		if idx == len(paths) {
-			return nextNode, pathVariableValues
-		}
-		currNode = nextNode
-		nextNode = currNode.getChild(paths[idx])
-		if nextNode == nil {
-			nextNode = currNode.parameter
+		return node, values
+	}
+
+	if child := node.getChild(paths[index]); child != nil {
+		if matchedNode, matchedValues := matchPath(child, paths, index+1, values); matchedNode != nil {
+			return matchedNode, matchedValues
 		}
 	}
+
+	if node.parameter != nil {
+		values = append(values, paths[index])
+		if matchedNode, matchedValues := matchPath(node.parameter, paths, index+1, values); matchedNode != nil {
+			return matchedNode, matchedValues
+		}
+	}
+
+	return nil, nil
 }
 
 func (t *Tree) Merge(tree RouterTree) {
