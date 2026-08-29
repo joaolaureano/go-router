@@ -156,15 +156,15 @@
     "semantic_hash": ""
   },
   "loadtest/harness_test.go": {
-    "mtime": 1787964650.9833562,
-    "seen": 1787964652.11873,
-    "ast_hash": "9bf768a2a824ddca1dedf002acd2c86c",
+    "mtime": 1787963889.6956656,
+    "seen": 1787964165.262153,
+    "ast_hash": "2dff1212c3ad7b03eb3ac335a9a90701",
     "semantic_hash": ""
   },
   "loadtest/run.sh": {
-    "mtime": 1787964543.780217,
-    "seen": 1787964652.11873,
-    "ast_hash": "4eeeee380412153f997e2566c53a5b65",
+    "mtime": 1787963998.4940772,
+    "seen": 1787964165.262154,
+    "ast_hash": "33917f8a715920da50c8f35bc949a6d0",
     "semantic_hash": ""
   },
   "loadtest/scenarios_test.go": {
@@ -174,9 +174,9 @@
     "semantic_hash": ""
   },
   "loadtest/README.md": {
-    "mtime": 1787964596.9127865,
-    "seen": 1787964652.118749,
-    "ast_hash": "5c699746a8b0b49a062c6566e08ca060",
+    "mtime": 1787964156.9817362,
+    "seen": 1787964165.2621708,
+    "ast_hash": "0bd753faa6b8f2a19356f56665c68911",
     "semantic_hash": ""
   },
   "loadtest/targets/catchall.txt": {
@@ -219,24 +219,6 @@
     "mtime": 1787963982.6909206,
     "seen": 1787964165.262177,
     "ast_hash": "57db7a8e46735396fee7f7e55c6ea67b",
-    "semantic_hash": ""
-  },
-  "loadtest/app/catalog.go": {
-    "mtime": 1787964508.6446316,
-    "seen": 1787964652.1187258,
-    "ast_hash": "7621d349b50a4f6ba114429197cbcaa2",
-    "semantic_hash": ""
-  },
-  "loadtest/burst_test.go": {
-    "mtime": 1787964484.179405,
-    "seen": 1787964652.118727,
-    "ast_hash": "fc196f867aded1ae156559f9afa77f9c",
-    "semantic_hash": ""
-  },
-  "loadtest/cmd/loadserver/main.go": {
-    "mtime": 1787964527.286393,
-    "seen": 1788018573.31264,
-    "ast_hash": "060bfcf4eef69df16a65f774918a03fb",
     "semantic_hash": ""
   }
 }

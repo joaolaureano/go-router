@@ -1,6 +1,6 @@
 {
   "0": "routing_test.go",
-  "1": "requireNoTransportErrors",
+  "1": "attack",
   "2": "testing.T",
   "3": "FromRequest",
   "4": "Load tests",
@@ -8,13 +8,12 @@
   "6": "Router",
   "7": "Repository",
   "8": "github.com/joaolaureano/go-router",
-  "9": "NewCatalog",
   "10": "Go-Router",
   "11": "NewChain",
   "15": "Go-Router",
   "18": "bench_test.go",
   "19": "router/errors.go",
   "20": "node",
-  "28": "routing/fuzz_test.go",
+  "28": "E",
   "30": "routing/errors.go"
 }
