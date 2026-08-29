@@ -1,0 +1,14 @@
+GET http://localhost:8080/ping
+GET http://localhost:8080/users/42
+GET http://localhost:8080/users/me
+GET http://localhost:8080/users/42/posts/1001
+GET http://localhost:8080/files/deep/nested/file.txt
+GET http://localhost:8080/api/health
+GET http://localhost:8080/api/v1/items/99/reviews/7
+GET http://localhost:8080/admin/users/17
+GET http://localhost:8080/deep/5
+GET http://localhost:8080/users/a%2Fb
+GET http://localhost:8080/nope
+DELETE http://localhost:8080/users/42/posts/1001
+OPTIONS http://localhost:8080/ping
+HEAD http://localhost:8080/ping

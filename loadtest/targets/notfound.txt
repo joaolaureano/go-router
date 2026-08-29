@@ -1,0 +1,4 @@
+GET http://localhost:8080/nope
+GET http://localhost:8080/users/42/posts
+GET http://localhost:8080/users/42/posts/1001/comments/9
+GET http://localhost:8080/api/v2/items/1

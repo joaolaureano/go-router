@@ -1,3 +1,5 @@
-main.go
+/main.go
 *.test
 *.out
+loadtest/results/
+loadtest/targets/catalog.txt

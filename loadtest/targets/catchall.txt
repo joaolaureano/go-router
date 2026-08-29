@@ -1,0 +1,2 @@
+GET http://localhost:8080/files/readme.md
+GET http://localhost:8080/files/deep/nested/path/to/file.txt
