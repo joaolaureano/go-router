@@ -5,11 +5,11 @@
 
 # go-router
 
-Um roteador HTTP pequeno e sem dependências para Go, construído sobre uma radix tree com buscas lock-free. Começou como um projeto de aprendizado inspirado no [chi](https://github.com/go-chi/chi); desde então ganhou uma árvore de roteamento testada com fuzzing e uma história de concorrência validada por [teste de carga](loadtest/README.md).
+Um roteador HTTP pequeno e sem dependências para Go, construído sobre uma patricia trie (radix tree comprimida) com buscas lock-free. Começou como um projeto de aprendizado inspirado no [chi](https://github.com/go-chi/chi); desde então ganhou uma árvore de roteamento testada com fuzzing e uma história de concorrência validada por [teste de carga](loadtest/README.md).
 
 ## Funcionalidades
 
-- **Matching por radix tree** — segmentos estáticos, captura via `{param}` e um catch-all final `*`, com rotas estáticas e de parâmetro tendo precedência sobre o catch-all.
+- **Matching por patricia trie** — só rotas estáticas e captura via `{param}`, como um router padrão. Um prefixo literal compartilhado, mesmo atravessando uma `/`, vira uma única aresta em vez de um nó por segmento, dividindo-se só no byte em que duas rotas divergem.
 - **Grupos e montagem** — `Group` para prefixos e middlewares compartilhados, `Mount` para enxertar as rotas de um router sob o prefixo de outro.
 - **Cadeias de middleware** — `Use` para um router ou grupo, `With` para aplicar middleware a um conjunto específico de rotas.
 - **Fallback correto de métodos** — `HEAD` recorre ao `GET`, `OPTIONS` é respondido automaticamente com um `Allow` calculado, a não ser que você registre o seu próprio.
@@ -77,18 +77,6 @@ r.Get("/users/{id}", func(w http.ResponseWriter, r *http.Request) {
 })
 ```
 
-### Rotas catch-all
-
-Um segmento final `*` casa com o resto do caminho e o captura sob `router.WildcardParam`:
-
-```go
-r.Get("/files/*", func(w http.ResponseWriter, r *http.Request) {
-    http.ServeFile(w, r, filepath.Join("./public", context.Param(r, router.WildcardParam)))
-})
-```
-
-Rotas estáticas e com parâmetro têm precedência, portanto `/files/readme` continua a chegar à rota registrada para tal. `*` só é catch-all como segmento inteiro, e apenas como o último.
-
 ### Tratamento de métodos
 
 `HEAD` recorre à rota `GET` a não ser que exista uma registrada para ele, e `OPTIONS` num caminho conhecido responde `204` com cabeçalho `Allow` a não ser que uma rota o reclame. Registrar qualquer um deles explicitamente tem sempre precedência. O `Allow` anuncia os métodos registrados mais os dois que o router responde por conta deles.
@@ -111,7 +99,7 @@ Rotas estáticas e com parâmetro têm precedência, portanto `/files/readme` co
 A árvore de roteamento carrega três camadas de verificação além dos testes unitários comuns:
 
 - **Testes de fuzzing** (`routing/fuzz_test.go`, `router/fuzz_test.go`) exercitam registro e busca de rotas contra entradas arbitrárias.
-- **Benchmarks** (`router/bench_test.go`) cobrem buscas estáticas, com parâmetro, catch-all, com escape e sem match, incluindo casos paralelos e de alto fan-out.
+- **Benchmarks** (`router/bench_test.go`) cobrem buscas estáticas, com parâmetro, com escape e sem match, incluindo casos paralelos e de alto fan-out.
 - **Testes de carga** (`loadtest/`), rodados com [vegeta](https://github.com/tsenart/vegeta), verificam a corretude *sob carga concorrente* — incluindo registrar ou montar rotas com tráfego em andamento. Veja [`loadtest/README.md`](loadtest/README.md) para a lista completa de cenários e como rodá-los.
 
 ```sh

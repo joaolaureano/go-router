@@ -50,8 +50,8 @@ func burst(t *testing.T, name string, targeter vegeta.Targeter) *run {
 
 // TestBurst_EveryRouteInTheTable is the usage test: build the whole table --
 // three API versions as nested groups, eight resources each, sub-collections,
-// static siblings, catch-alls, mounted subtrees -- then hammer every single
-// route in it with no pacing, and check that each one answered its own body.
+// static siblings, mounted subtrees -- then hammer every single route in it
+// with no pacing, and check that each one answered its own body.
 //
 // The pass condition is not throughput. It is that after a few hundred
 // thousand unpaced requests spread over the entire tree, every route still

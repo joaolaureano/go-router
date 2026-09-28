@@ -128,7 +128,7 @@ func TestLoad_MountWhileServing(t *testing.T) {
 	out := attack(t, "mount-while-serving", roundRobin(srv.URL,
 		get("/ping"),
 		get("/admin/users/17"),
-		get("/files/a/b/c"),
+		get("/api/v1/items/99"),
 	))
 
 	close(stop)
@@ -162,7 +162,6 @@ func TestLoad_ShapeComparison(t *testing.T) {
 		{"static depth 2", get("/users/me")},
 		{"1 parameter", get("/users/42")},
 		{"2 parameters", get("/users/42/posts/1001")},
-		{"catch-all", get("/files/deep/nested/file.txt")},
 		{"escaped segment", get("/users/a%2Fb")},
 		{"2 middleware", get("/api/v1/items/99")},
 		{"5 middleware", get("/deep/99")},

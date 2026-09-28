@@ -45,7 +45,6 @@ func TestNewPrefixRouterRegistersUnderThePrefix(t *testing.T) {
 // TestReExportedVocabularyMatchesTheRouter guards against the constants drifting
 // from the ones they stand in for, which no compiler check would catch.
 func TestReExportedVocabularyMatchesTheRouter(t *testing.T) {
-	assert.Equal(t, router.WildcardParam, WildcardParam)
 	assert.Equal(t, []Method{router.GET, router.HEAD, router.POST, router.PUT, router.PATCH, router.DELETE, router.OPTIONS},
 		[]Method{GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS})
 }

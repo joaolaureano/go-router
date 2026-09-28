@@ -57,15 +57,11 @@ func identity(pattern string) http.HandlerFunc {
 	}
 }
 
-// variablesOf lists a pattern's capture names in order, the catch-all
-// included under the name it binds to.
+// variablesOf lists a pattern's capture names in order.
 func variablesOf(pattern string) []string {
 	var names []string
 	for _, segment := range strings.Split(strings.TrimPrefix(pattern, "/"), "/") {
-		switch {
-		case segment == router.WildcardParam:
-			names = append(names, router.WildcardParam)
-		case strings.HasPrefix(segment, "{") && strings.HasSuffix(segment, "}"):
+		if strings.HasPrefix(segment, "{") && strings.HasSuffix(segment, "}") {
 			names = append(names, strings.Trim(segment, "{}"))
 		}
 	}
@@ -82,11 +78,7 @@ func wantFor(pattern, request string) string {
 
 	var bound []string
 	for i, segment := range patternSegments {
-		switch {
-		case segment == router.WildcardParam:
-			// The catch-all takes the whole remaining tail, slashes included.
-			bound = append(bound, router.WildcardParam+"="+strings.Join(requestSegments[i:], "/"))
-		case strings.HasPrefix(segment, "{"):
+		if strings.HasPrefix(segment, "{") {
 			bound = append(bound, strings.Trim(segment, "{}")+"="+requestSegments[i])
 		}
 	}
@@ -95,9 +87,9 @@ func wantFor(pattern, request string) string {
 
 // The shape of the generated table: three API versions, each a nested group,
 // each carrying the same resources, each resource with an id, a static sibling
-// of that id, two sub-collections under it and a catch-all. It is the shape a
-// real service's routing table has -- wide at the resource level, three to
-// five deep, static and parameter siblings at the same node -- rather than a
+// of that id and two sub-collections under it. It is the shape a real
+// service's routing table has -- wide at the resource level, three to five
+// deep, static and parameter siblings at the same node -- rather than a
 // microbenchmark's single branch.
 var (
 	catalogVersions  = []string{"v1", "v2", "v3"}
@@ -140,10 +132,6 @@ func Catalog() []Route {
 				add(router.GET, base+"/{id}/"+sub, base+"/"+id+"/"+sub)
 				add(router.GET, base+"/{id}/"+sub+"/{subID}", base+"/"+id+"/"+sub+"/"+sub+"-7")
 			}
-
-			// A catch-all deep inside the tree, not at the root: the walk has
-			// to get past four levels before it can fall back to this.
-			add(router.GET, base+"/{id}/files/*", base+"/"+id+"/files/deep/nested/report.pdf")
 		}
 	}
 

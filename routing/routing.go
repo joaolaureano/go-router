@@ -61,7 +61,7 @@ func (t *Tree[E]) RegisterRoute(httpMethod Method, newValue string, method E) {
 }
 
 func (t *Tree[E]) register(httpMethod Method, path string, method E) {
-	target, variableNames := t.ensurePath(path)
+	target, variableNames := t.ensurePath(path, false)
 	if target.hasMethod(httpMethod) {
 		panic(fmt.Errorf("%w: %s %s", ErrDuplicateRoute, httpMethod, path))
 	}
@@ -72,7 +72,30 @@ func (t *Tree[E]) register(httpMethod Method, path string, method E) {
 // missing, and reports the variable names the path declares along the way. Those
 // names are what an endpoint stored here has to be able to pair with the values
 // a lookup collects.
-func (t *Tree[E]) ensurePath(path string) (*node[E], []string) {
+//
+// Consecutive literal segments are joined with "/" and inserted as one run,
+// which is what lets the tree compress a shared prefix across several of them
+// into a single edge instead of one node per segment. A parameter always
+// interrupts a run: it is inserted separately, so it can only ever anchor to
+// the node that run's insertion returns -- a node that represents having fully
+// consumed some number of whole segments, never a partial one.
+//
+// A run immediately followed by a parameter carries that separating "/" as
+// its own trailing byte, matching is a lookup arrives with it still attached to
+// the raw path: a literal edge is matched by raw byte comparison, with nothing
+// else to strip the separator the way a parameter's own capture does for
+// whatever follows it. A run with no parameter after it -- the tail of the
+// pattern -- needs no such trailing byte, and a parameter with nothing literal
+// before it (the first segment, or right after another parameter) needs none
+// either, since there is no pending run to close.
+//
+// tailNeedsSeparator asks for that same trailing byte on the very last run,
+// even though nothing in path itself follows it. MergeAt passes true: the node
+// this returns becomes the attachment point for a whole grafted subtree, which
+// is exactly the position a parameter would be in, and needs the same "/"
+// accounted for. A plain registration passes false -- there path really does
+// end at the node this returns, with nothing left to separate it from.
+func (t *Tree[E]) ensurePath(path string, tailNeedsSeparator bool) (*node[E], []string) {
 	if path[0] != '/' {
 		panic(fmt.Errorf("%w: %s", ErrPathNotRooted, path))
 	}
@@ -83,23 +106,31 @@ func (t *Tree[E]) ensurePath(path string) (*node[E], []string) {
 
 	currNode := t.root
 	var variableNames []string
-	for _, segment := range segments {
-		kind := classify(segment)
-		nodePath := segment
-		switch kind {
-		case parameterSegment:
-			nodePath = parameterNodePath
-			variableNames = append(variableNames, strings.Trim(segment, "{}"))
-		case wildcardSegment:
-			variableNames = append(variableNames, WildcardParam)
+	var literalRun []string
+	flushLiteralRun := func(beforeParameter bool) {
+		if len(literalRun) == 0 {
+			return
 		}
-		nextNode := currNode.childFor(nodePath, kind)
-		if nextNode == nil {
-			nextNode = newNode[E](nodePath)
-			currNode.addChild(nextNode, kind)
+		text := strings.Join(literalRun, "/")
+		if beforeParameter {
+			text += "/"
 		}
-		currNode = nextNode
+		currNode = ensureStaticChild(currNode, text)
+		literalRun = literalRun[:0]
 	}
+	for _, segment := range segments {
+		if isParam(segment) {
+			flushLiteralRun(true)
+			variableNames = append(variableNames, strings.Trim(segment, "{}"))
+			if currNode.parameter == nil {
+				currNode.parameter = newNode[E](parameterNodePath)
+			}
+			currNode = currNode.parameter
+		} else {
+			literalRun = append(literalRun, segment)
+		}
+	}
+	flushLiteralRun(tailNeedsSeparator)
 	return currNode, variableNames
 }
 
@@ -114,8 +145,15 @@ func (t *Tree[E]) Lookup(httpMethod Method, path string) (Match[E], Status) {
 // the walk reaches it, so nothing has to be materialised up front and a path
 // with nothing to decode passes nil and pays nothing.
 func (t *Tree[E]) LookupDecoded(httpMethod Method, path string, decode func(string) string) (Match[E], Status) {
-	search := lookup{httpMethod: httpMethod, decode: decode}
-	matched := t.root.match(strings.Trim(path, "/"), &search)
+	search := lookup{httpMethod: httpMethod}
+	trimmed := strings.Trim(path, "/")
+
+	var matched *node[E]
+	if decode == nil {
+		matched = t.root.match(trimmed, &search)
+	} else {
+		matched = t.root.matchDecoded(newDecodedCursor(trimmed, decode), &search)
+	}
 	if matched == nil {
 		if allowed := search.allowedMethods(); allowed != nil {
 			return Match[E]{AllowedMethods: allowed}, StatusMethodNotAllowed
@@ -165,15 +203,7 @@ func (t *Tree[E]) Merge(source *Tree[E]) {
 // that, a lookup would pair the prefix's captured value with the first name the
 // grafted route declared.
 func (t *Tree[E]) MergeAt(prefix string, source *Tree[E]) {
-	// A catch-all node is terminal by construction: it consumes whatever is
-	// left of the path, so nothing grafted below one can ever be walked to.
-	// Accepting such a prefix would swallow every route of source in silence.
-	if segments := splitSegments(prefix); len(segments) > 0 &&
-		classify(segments[len(segments)-1]) == wildcardSegment {
-		panic(fmt.Errorf("%w: nothing mounted under the catch-all %q in %s could be reached", ErrInvalidPattern, WildcardParam, prefix))
-	}
-
-	target, prefixVariables := t.ensurePath(prefix)
+	target, prefixVariables := t.ensurePath(prefix, true)
 	if target == source.root {
 		return
 	}
@@ -201,16 +231,9 @@ func validateSegments(path string, segments []string) error {
 	// few short strings costs less than the map this used to allocate on every
 	// registration.
 	var paramNames []string
-	for i, segment := range segments {
+	for _, segment := range segments {
 		if segment == "" {
 			return fmt.Errorf("%w: %s contains an empty segment", ErrInvalidPattern, path)
-		}
-
-		if segment == WildcardParam {
-			if i != len(segments)-1 {
-				return fmt.Errorf("%w: catch-all %q must be the last segment of %s", ErrInvalidPattern, WildcardParam, path)
-			}
-			continue
 		}
 
 		startsWithBrace := segment[0] == '{'
@@ -224,9 +247,6 @@ func validateSegments(path string, segments []string) error {
 			if paramName == "" || strings.ContainsAny(paramName, "{}") {
 				return fmt.Errorf("%w: invalid parameter %q in %s", ErrInvalidPattern, segment, path)
 			}
-			if paramName == WildcardParam {
-				return fmt.Errorf("%w: %q is reserved for the catch-all and cannot name a parameter", ErrInvalidPattern, WildcardParam)
-			}
 			if slices.Contains(paramNames, paramName) {
 				return fmt.Errorf("%w: %s declares %q twice", ErrInvalidPattern, path, segment)
 			}
@@ -238,26 +258,10 @@ func validateSegments(path string, segments []string) error {
 	return nil
 }
 
-// WildcardParam is the name a catch-all segment captures under. A request to
-// "/files/a/b" against "/files/*" reads "a/b" from it.
-const WildcardParam = "*"
-
 // parameterNodePath is the internal path every parameter node is stored under.
-// It is not a pattern anyone writes: "{*}" as a route parameter is rejected,
-// and as a request segment it is literal text.
+// It is not a pattern anyone writes: braces anywhere but wrapping a whole
+// segment are rejected, so "{*}" as a request segment is always literal text.
 const parameterNodePath = "{*}"
-
-// classify reports how a pattern segment was written.
-func classify(segment string) segmentKind {
-	switch {
-	case segment == WildcardParam:
-		return wildcardSegment
-	case isParam(segment):
-		return parameterSegment
-	default:
-		return staticSegment
-	}
-}
 
 func isParam(path string) bool {
 	return len(path) >= 3 && path[0] == '{' && path[len(path)-1] == '}'

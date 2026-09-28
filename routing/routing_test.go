@@ -103,10 +103,12 @@ func TestRegister_SimpleTree(t *testing.T) {
 
 	tree.RegisterRoute(GET, "/path/{valid}/path", handler)
 
-	// Root
+	// The run carries the "/" that separates it from the parameter as its own
+	// trailing byte: a literal edge is matched by raw comparison, with nothing
+	// else to strip that separator the way a parameter's own capture does.
 	firstChild := tree.root.children[0]
 	assert.NotNil(t, firstChild.children, "Children should not be nil")
-	assert.Equal(t, "path", firstChild.path, "Path should be /path")
+	assert.Equal(t, "path/", firstChild.path, "Path should be /path/")
 	assert.Zero(t, len(firstChild.endpoints), "Method should be nil")
 	assert.NotNil(t, firstChild.parameter, "Parameter child should not be nil")
 	// First child node
@@ -133,37 +135,63 @@ func TestRegister_DuplicatedPath(t *testing.T) {
 		}, "Should panic when creating same route multiple times")
 }
 
-func TestRegister_MultipleBranches(t *testing.T) {
+func TestRegister_SharedLiteralPrefixesCompressIntoOneEdge(t *testing.T) {
 	tree := CreateTree[http.Handler]()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 	tree.RegisterRoute(GET, "/path/{valid}/path1", handler)
 	tree.RegisterRoute(GET, "/path/{valid}/path2", handler)
 
-	// First Child
 	firstChild := tree.root.children[0]
 	assert.NotNil(t, firstChild.children, "Children should not be nil")
-	assert.Equal(t, "path", firstChild.path, "Path should be /path")
+	assert.Equal(t, "path/", firstChild.path, "Path should be /path/")
 	assert.Zero(t, len(firstChild.endpoints), "Method should be nil")
-
-	// Second child
-	secondChild := firstChild.parameter
 	assert.NotNil(t, firstChild.parameter, "Parameter child should not be nil")
-	assert.NotNil(t, secondChild.children, "First child's children should not be nil")
 	assert.Len(t, firstChild.children, 0, "First child should contain static children only")
-	assert.Equal(t, "{*}", firstChild.parameter.path, "Path should be {valid}")
-	assert.Zero(t, len(firstChild.parameter.endpoints), "Method should be nil")
-	//
-	//// Third child node - branching paths
-	branch1 := firstChild.parameter.children[0]
-	branch2 := firstChild.parameter.children[1]
-	assert.NotNil(t, branch1.children, "Second child's children should not be nil")
-	assert.NotNil(t, branch2.children, "Second child's children should not be nil")
-	assert.Equal(t, "path1", branch1.path, "Path should be /path1")
-	assert.Equal(t, "path2", branch2.path, "Path should be /path2")
-	assert.NotNil(t, branch1.endpoints, "Method should not be nil")
-	assert.NotNil(t, branch2.endpoints, "Method should not be nil")
-	assert.NotZero(t, len(branch1.endpoints), "Method should be 1")
-	assert.NotZero(t, len(branch2.endpoints), "Method should be 1")
+
+	// "path1" and "path2" share "path": a patricia trie holds that once, as one
+	// intermediate edge, rather than duplicating it under two full siblings.
+	branchPoint := firstChild.parameter.children[0]
+	assert.Equal(t, "path", branchPoint.path, "the shared prefix collapses into a single edge")
+	assert.Len(t, branchPoint.children, 2)
+	assert.Equal(t, "1", branchPoint.children[0].path)
+	assert.Equal(t, "2", branchPoint.children[1].path)
+	assert.NotZero(t, len(branchPoint.children[0].endpoints), "Method should be 1")
+	assert.NotZero(t, len(branchPoint.children[1].endpoints), "Method should be 1")
+
+	assertFound(t, &tree, GET, "/path/x/path1")
+	assertFound(t, &tree, GET, "/path/x/path2")
+}
+
+func TestRegister_LiteralRunsSpanningSlashesCompressIntoOneEdge(t *testing.T) {
+	tree := CreateTree[http.Handler]()
+	tree.RegisterRoute(GET, "/api/v1/users", handler)
+
+	// With nothing to diverge on, "api/v1/users" is a single edge off the
+	// root -- three path segments, but one node, not three.
+	assert.Len(t, tree.root.children, 1)
+	assert.Equal(t, "api/v1/users", tree.root.children[0].path)
+
+	assertFound(t, &tree, GET, "/api/v1/users")
+}
+
+func TestRegister_LiteralRunSplitsAtTheByteAParameterNeeds(t *testing.T) {
+	tree := CreateTree[http.Handler]()
+	tree.RegisterRoute(GET, "/api/v1/users", handler)
+	tree.RegisterRoute(GET, "/api/v1/{resource}", handler)
+
+	// A parameter can only anchor to a node ending exactly on a segment
+	// boundary, so registering it splits the merged "api/v1/users" edge back
+	// apart at the "/" the parameter needs -- which the split node keeps, since
+	// a literal edge has nothing else to strip it before a parameter's own
+	// capture would.
+	anchor := tree.root.children[0]
+	assert.Equal(t, "api/v1/", anchor.path)
+	assert.NotNil(t, anchor.parameter)
+	assert.Len(t, anchor.children, 1)
+	assert.Equal(t, "users", anchor.children[0].path)
+
+	assertFound(t, &tree, GET, "/api/v1/users")
+	assertFound(t, &tree, GET, "/api/v1/anything")
 }
 
 func TestValidatePath_ValidPaths(t *testing.T) {
@@ -187,40 +215,16 @@ func TestValidatePath_InvalidPaths(t *testing.T) {
 	}
 }
 
-func TestMergeAt_RejectsACatchAllPrefix(t *testing.T) {
-	source := CreateTree[http.Handler]()
-	source.RegisterRoute(GET, "/posts/{postID}", handler)
-
-	for _, prefix := range []string{"/*", "/api/*", "/{tenant}/*", "/*/"} {
-		target := CreateTree[http.Handler]()
-		assertPanicsWith(t, ErrInvalidPattern, func() { target.MergeAt(prefix, &source) })
-	}
-}
-
-func TestMergeAt_KeepsACatchAllInsideTheGraftedTree(t *testing.T) {
-	source := CreateTree[http.Handler]()
-	source.RegisterRoute(GET, "/files/*", handler)
-
-	target := CreateTree[http.Handler]()
-	target.MergeAt("/api", &source)
-
-	match, status := target.Lookup(GET, "/api/files/a/b")
-
-	assert.Equal(t, StatusFound, status, "only the prefix may not end in a catch-all")
-	assert.Equal(t, []Param{{Name: WildcardParam, Value: "a/b"}}, match.Params)
-}
-
 func TestRegister_PanicsCarryDistinguishableErrors(t *testing.T) {
 	for name, testCase := range map[string]struct {
 		register func(tree *Tree[http.Handler])
 		want     error
 	}{
-		"empty path":          {func(tree *Tree[http.Handler]) { tree.RegisterRoute(GET, "", handler) }, ErrEmptyPath},
-		"nil handler":         {func(tree *Tree[http.Handler]) { tree.RegisterRoute(GET, "/path", nil) }, ErrNilHandler},
-		"not rooted":          {func(tree *Tree[http.Handler]) { tree.RegisterRoute(GET, "path", handler) }, ErrPathNotRooted},
-		"unbalanced brace":    {func(tree *Tree[http.Handler]) { tree.RegisterRoute(GET, "/{id", handler) }, ErrInvalidPattern},
-		"duplicate param":     {func(tree *Tree[http.Handler]) { tree.RegisterRoute(GET, "/{id}/{id}", handler) }, ErrInvalidPattern},
-		"misplaced catch-all": {func(tree *Tree[http.Handler]) { tree.RegisterRoute(GET, "/*/edit", handler) }, ErrInvalidPattern},
+		"empty path":       {func(tree *Tree[http.Handler]) { tree.RegisterRoute(GET, "", handler) }, ErrEmptyPath},
+		"nil handler":      {func(tree *Tree[http.Handler]) { tree.RegisterRoute(GET, "/path", nil) }, ErrNilHandler},
+		"not rooted":       {func(tree *Tree[http.Handler]) { tree.RegisterRoute(GET, "path", handler) }, ErrPathNotRooted},
+		"unbalanced brace": {func(tree *Tree[http.Handler]) { tree.RegisterRoute(GET, "/{id", handler) }, ErrInvalidPattern},
+		"duplicate param":  {func(tree *Tree[http.Handler]) { tree.RegisterRoute(GET, "/{id}/{id}", handler) }, ErrInvalidPattern},
 		"duplicate route": {func(tree *Tree[http.Handler]) {
 			tree.RegisterRoute(GET, "/path", handler)
 			tree.RegisterRoute(GET, "/path", handler)
@@ -262,7 +266,7 @@ func TestTree_CloneIsIndependent(t *testing.T) {
 }
 
 func TestLookup_FindsEveryChildAcrossTheBisectionThreshold(t *testing.T) {
-	// Children are kept sorted so that staticChild can bisect above a
+	// Children are kept sorted so that childByFirstByte can bisect above a
 	// threshold. A bisection that is off by one fails silently as a 404, and
 	// only past the threshold, so this sweeps both sides of it.
 	for _, count := range []int{1, 2, 7, 8, 9, 33, 200} {
@@ -416,72 +420,13 @@ func TestLookup_AllowCollectsEveryBranchThatEndsThePath(t *testing.T) {
 	assert.Equal(t, []Method{PATCH, POST}, match.AllowedMethods)
 }
 
-func TestLookup_CatchAll(t *testing.T) {
-	tree := CreateTree[http.Handler]()
-	tree.RegisterRoute(GET, "/files/*", handler)
-
-	for path, want := range map[string]string{
-		"/files/a/b/c": "a/b/c",
-		"/files/a":     "a",
-		"/files/":      "",
-		"/files":       "",
-	} {
-		match, status := tree.Lookup(GET, path)
-
-		assert.Equal(t, StatusFound, status, path)
-		assert.Equal(t, []Param{{Name: WildcardParam, Value: want}}, match.Params, path)
-	}
-}
-
-func TestLookup_CatchAllYieldsToStaticAndParameter(t *testing.T) {
-	tree := CreateTree[http.Handler]()
-	tree.RegisterRoute(GET, "/files/exact", handler)
-	tree.RegisterRoute(GET, "/files/{id}/edit", handler)
-	tree.RegisterRoute(GET, "/files/*", handler)
-
-	match, status := tree.Lookup(GET, "/files/exact")
-	assert.Equal(t, StatusFound, status)
-	assert.Empty(t, match.Params, "a static route wins over the catch-all")
-
-	match, status = tree.Lookup(GET, "/files/7/edit")
-	assert.Equal(t, StatusFound, status)
-	assert.Equal(t, []Param{{Name: "id", Value: "7"}}, match.Params, "a parameter route wins over the catch-all")
-
-	match, status = tree.Lookup(GET, "/files/7/other")
-	assert.Equal(t, StatusFound, status)
-	assert.Equal(t, []Param{{Name: WildcardParam, Value: "7/other"}}, match.Params, "the catch-all takes what nothing else matched")
-}
-
-func TestLookup_CatchAllAfterParameters(t *testing.T) {
-	tree := CreateTree[http.Handler]()
-	tree.RegisterRoute(GET, "/{tenant}/files/*", handler)
-
-	match, status := tree.Lookup(GET, "/acme/files/a/b")
-
-	assert.Equal(t, StatusFound, status)
-	assert.Equal(t, []Param{{Name: "tenant", Value: "acme"}, {Name: WildcardParam, Value: "a/b"}}, match.Params)
-}
-
-func TestLookup_CatchAllIsMethodAware(t *testing.T) {
-	tree := CreateTree[http.Handler]()
-	tree.RegisterRoute(POST, "/files/*", handler)
-
-	match, status := tree.Lookup(GET, "/files/a/b")
-
-	assert.Equal(t, StatusMethodNotAllowed, status)
-	assert.Equal(t, []Method{POST}, match.AllowedMethods)
-}
-
-func TestRegister_CatchAllMustBeLast(t *testing.T) {
+func TestRegister_RejectsABraceInsideASegment(t *testing.T) {
 	tree := CreateTree[http.Handler]()
 
-	assert.Panics(t, func() { tree.RegisterRoute(GET, "/files/*/edit", handler) })
-}
-
-func TestRegister_WildcardNameIsReserved(t *testing.T) {
-	tree := CreateTree[http.Handler]()
-
-	assert.Panics(t, func() { tree.RegisterRoute(GET, "/{*}", handler) })
+	// Braces are how a variable is spelled, so a segment carrying one anywhere
+	// but around the whole of itself is a typo, not a literal.
+	assertPanicsWith(t, ErrInvalidPattern, func() { tree.RegisterRoute(GET, "/a{b}c", handler) })
+	assertPanicsWith(t, ErrInvalidPattern, func() { tree.RegisterRoute(GET, "/pre{id}", handler) })
 }
 
 func TestLookup_EmptyTree(t *testing.T) {
@@ -493,6 +438,7 @@ func TestLookup_EmptyTree(t *testing.T) {
 		assert.Equal(t, StatusNotFound, status, path)
 	}
 }
+
 func TestIsParam(t *testing.T) {
 	assert.True(t, isParam("{param}"), "Should return true for a parameter")
 	assert.False(t, isParam("{test"), "Should return false for a non-parameter")
@@ -569,14 +515,12 @@ func TestTree_MergeWithItselfIsNoOp(t *testing.T) {
 	assertFound(t, &tree, GET, "/health")
 }
 
-func TestMerge_CombinesParameterAndCatchAllBranchesInPlace(t *testing.T) {
+func TestMerge_CombinesParameterBranchesInPlace(t *testing.T) {
 	target := CreateTree[http.Handler]()
 	target.RegisterRoute(GET, "/{id}/a", handler)
-	target.RegisterRoute(GET, "/files/*", handler)
 
 	source := CreateTree[http.Handler]()
 	source.RegisterRoute(POST, "/{id}/b", handler)
-	source.RegisterRoute(POST, "/files/*", handler)
 	source.RegisterRoute(GET, "/{other}/c", handler)
 
 	target.Merge(&source)
@@ -586,10 +530,26 @@ func TestMerge_CombinesParameterAndCatchAllBranchesInPlace(t *testing.T) {
 	assertFound(t, &target, GET, "/1/a")
 	assertFound(t, &target, POST, "/1/b")
 	assertFound(t, &target, GET, "/1/c")
+}
 
-	// So did the catch-all, which is a single slot and cannot be duplicated.
-	assertFound(t, &target, GET, "/files/x/y")
-	assertFound(t, &target, POST, "/files/x/y")
+func TestMerge_SplitsAnEdgeTheOtherSideOnlyPartiallyShares(t *testing.T) {
+	target := CreateTree[http.Handler]()
+	target.RegisterRoute(GET, "/api/v1/users", handler)
+
+	source := CreateTree[http.Handler]()
+	source.RegisterRoute(GET, "/api/v1/orders", handler)
+
+	target.Merge(&source)
+
+	assertFound(t, &target, GET, "/api/v1/users")
+	assertFound(t, &target, GET, "/api/v1/orders")
+
+	// The two sides only agreed on "api/v1/", so merging had to split target's
+	// single "api/v1/users" edge to make room for "orders" beside it -- rather
+	// than leaving two children that both start with the same byte.
+	anchor := target.root.children[0]
+	assert.Equal(t, "api/v1/", anchor.path)
+	assert.Len(t, anchor.children, 2)
 }
 
 func TestMerge_IsANoOpOnItself(t *testing.T) {
@@ -602,42 +562,38 @@ func TestMerge_IsANoOpOnItself(t *testing.T) {
 	assertFound(t, &tree, GET, "/users/7")
 }
 
-func TestLookup_CatchAllUnderAnotherMethodReports405(t *testing.T) {
-	tree := CreateTree[http.Handler]()
-	tree.RegisterRoute(GET, "/files/*", handler)
-
-	match, status := tree.Lookup(POST, "/files/a/b")
-
-	assert.Equal(t, StatusMethodNotAllowed, status)
-	assert.Equal(t, []Method{GET}, match.AllowedMethods)
-	assert.Empty(t, match.Params, "a refused route captures nothing")
-}
-
 func TestLookupDecoded_TransformsEveryKindOfSegment(t *testing.T) {
 	tree := CreateTree[http.Handler]()
 	tree.RegisterRoute(GET, "/a b/{name}", handler)
-	tree.RegisterRoute(GET, "/files/*", handler)
 
 	decode := func(segment string) string { return strings.ReplaceAll(segment, "+", " ") }
 
 	// The static and parameter segments each pass through decode as the walk
-	// reaches them...
+	// reaches them.
 	match, status := tree.LookupDecoded(GET, "/a+b/jo+ao", decode)
 	assert.Equal(t, StatusFound, status)
 	assert.Equal(t, []Param{{Name: "name", Value: "jo ao"}}, match.Params)
+}
 
-	// ...and so does the remainder a catch-all swallows whole.
-	match, status = tree.LookupDecoded(GET, "/files/x+y/z", decode)
+func TestLookupDecoded_MatchesAnEdgeSpanningMultipleSegments(t *testing.T) {
+	tree := CreateTree[http.Handler]()
+	tree.RegisterRoute(GET, "/api/v1/my app", handler)
+
+	decode := func(segment string) string { return strings.ReplaceAll(segment, "+", " ") }
+
+	// "api/v1/my app" is one edge, crossing two real "/" separators: decoding
+	// has to pull and join each raw segment in turn to compare against it,
+	// only reaching the third once the first two have matched.
+	match, status := tree.LookupDecoded(GET, "/api/v1/my+app", decode)
 	assert.Equal(t, StatusFound, status)
-	assert.Equal(t, []Param{{Name: WildcardParam, Value: "x y/z"}}, match.Params)
+	assert.Empty(t, match.Params)
 }
 
 func TestMerge_ClonesABranchTheTargetLacks(t *testing.T) {
 	source := CreateTree[http.Handler]()
 	source.RegisterRoute(GET, "/{id}", handler)
-	source.RegisterRoute(GET, "/*", handler)
 
-	// The target has neither slot filled, so both are cloned across rather than
+	// The target has no parameter branch, so it is cloned across rather than
 	// merged into.
 	target := CreateTree[http.Handler]()
 	target.RegisterRoute(GET, "/static", handler)
@@ -645,17 +601,4 @@ func TestMerge_ClonesABranchTheTargetLacks(t *testing.T) {
 
 	assertFound(t, &target, GET, "/static")
 	assertFound(t, &target, GET, "/7")
-
-	match, status := target.Lookup(GET, "/a/b")
-	assert.Equal(t, StatusFound, status, "the cloned catch-all has to answer too")
-	assert.Equal(t, []Param{{Name: WildcardParam, Value: "a/b"}}, match.Params)
-}
-
-func TestRegister_RejectsABraceInsideASegment(t *testing.T) {
-	tree := CreateTree[http.Handler]()
-
-	// Braces are how a variable is spelled, so a segment carrying one anywhere
-	// but around the whole of itself is a typo, not a literal.
-	assertPanicsWith(t, ErrInvalidPattern, func() { tree.RegisterRoute(GET, "/a{b}c", handler) })
-	assertPanicsWith(t, ErrInvalidPattern, func() { tree.RegisterRoute(GET, "/pre{id}", handler) })
 }

@@ -16,32 +16,63 @@ func TestNewNodeInitializesInvariantState(t *testing.T) {
 	assert.Empty(t, node.endpoints)
 }
 
-func TestNodeAddChildSeparatesTheThreeSlots(t *testing.T) {
-	node := newNode[http.Handler]("users")
-	staticChild := newNode[http.Handler]("list")
-	parameterChild := newNode[http.Handler](parameterNodePath)
-	wildcardChild := newNode[http.Handler](WildcardParam)
+func TestEnsureStaticChildCreatesALeafOnAnEmptyNode(t *testing.T) {
+	node := newNode[http.Handler]("")
 
-	node.addChild(staticChild, staticSegment)
-	node.addChild(parameterChild, parameterSegment)
-	node.addChild(wildcardChild, wildcardSegment)
+	child := ensureStaticChild(node, "users")
 
-	assert.Same(t, staticChild, node.staticChild("list"))
-	assert.Nil(t, node.staticChild(parameterNodePath), "a literal segment must not reach the parameter branch")
-	assert.Nil(t, node.staticChild(WildcardParam), "a literal segment must not reach the catch-all branch")
-	assert.Same(t, parameterChild, node.childFor(parameterNodePath, parameterSegment))
-	assert.Same(t, wildcardChild, node.childFor(WildcardParam, wildcardSegment))
 	assert.Len(t, node.children, 1)
-	assert.Same(t, parameterChild, node.parameter)
-	assert.Same(t, wildcardChild, node.wildcard)
+	assert.Same(t, child, node.children[0])
+	assert.Equal(t, "users", child.path)
 }
 
-func TestNodeAddChildRejectsNil(t *testing.T) {
-	node := newNode[http.Handler]("users")
+func TestEnsureStaticChildSplitsOnTheFirstDivergingByte(t *testing.T) {
+	node := newNode[http.Handler]("")
 
-	assert.PanicsWithValue(t, "node child must not be nil", func() {
-		node.addChild(nil, staticSegment)
-	})
+	first := ensureStaticChild(node, "path1")
+	second := ensureStaticChild(node, "path2")
+
+	// "path1" and "path2" share "path": a patricia trie holds that once, as one
+	// intermediate edge, rather than two full, separately-stored strings.
+	assert.Len(t, node.children, 1)
+	branchPoint := node.children[0]
+	assert.Equal(t, "path", branchPoint.path)
+	assert.Len(t, branchPoint.children, 2)
+	assert.Same(t, first, branchPoint.children[0])
+	assert.Same(t, second, branchPoint.children[1])
+	assert.Equal(t, "1", first.path)
+	assert.Equal(t, "2", second.path)
+}
+
+func TestEnsureStaticChildReturnsTheSameNodeForTheSameKey(t *testing.T) {
+	node := newNode[http.Handler]("")
+
+	first := ensureStaticChild(node, "users")
+	second := ensureStaticChild(node, "users")
+
+	assert.Same(t, first, second)
+}
+
+func TestEnsureStaticChildDescendsPastAFullyConsumedEdge(t *testing.T) {
+	node := newNode[http.Handler]("")
+
+	ensureStaticChild(node, "user")
+	agent := ensureStaticChild(node, "userAgent")
+
+	assert.Len(t, node.children, 1, "\"user\" is a prefix of \"userAgent\": no split is needed, only a deeper child")
+	assert.Equal(t, "user", node.children[0].path)
+	assert.Same(t, agent, node.children[0].children[0])
+	assert.Equal(t, "Agent", agent.path)
+}
+
+func TestNodeParameterIsASeparateSlotFromStaticChildren(t *testing.T) {
+	node := newNode[http.Handler]("users")
+	staticChild := ensureStaticChild(node, "list")
+	node.parameter = newNode[http.Handler](parameterNodePath)
+
+	_, foundByFirstByte := node.childByFirstByte('l')
+	assert.Same(t, staticChild, foundByFirstByte)
+	assert.NotSame(t, node.parameter, staticChild)
 }
 
 func TestNodeSetEndpoint(t *testing.T) {

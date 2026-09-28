@@ -37,12 +37,8 @@ func concreteFor(pattern string) (path string, names []string) {
 	}
 	segments := strings.Split(trimmed, "/")
 	for i, segment := range segments {
-		switch classify(segment) {
-		case parameterSegment:
+		if isParam(segment) {
 			names = append(names, strings.Trim(segment, "{}"))
-			segments[i] = capturedValue
-		case wildcardSegment:
-			names = append(names, WildcardParam)
 			segments[i] = capturedValue
 		}
 	}
@@ -63,8 +59,6 @@ func FuzzRegisteredPatternMatchesItsOwnPath(f *testing.F) {
 		"/users",
 		"/users/{id}",
 		"/users/{id}/posts/{postID}",
-		"/files/*",
-		"/*",
 		"/{*}",
 		"/a%2Fb",
 		"/{id}/{id}",
@@ -93,11 +87,11 @@ func FuzzRegisteredPatternMatchesItsOwnPath(f *testing.F) {
 
 // FuzzLookupOfAnyPathTerminates asserts that an arbitrary request path is
 // answered rather than crashing the walk, whatever backtracking it drives
-// through the static, parameter and catch-all branches of a table that has all
-// three at every level.
+// through the static and parameter branches of a table that has both at every
+// level.
 func FuzzLookupOfAnyPathTerminates(f *testing.F) {
 	for _, seed := range []string{
-		"/", "", "//", "/a/b/c", "/{*}", "/*", "/x/{*}/y",
+		"/", "", "//", "/a/b/c", "/{*}", "/x/{*}/y",
 		strings.Repeat("/a", 64), strings.Repeat("/", 64), "/a%2Fb",
 	} {
 		f.Add(seed)
@@ -105,7 +99,7 @@ func FuzzLookupOfAnyPathTerminates(f *testing.F) {
 
 	tree := CreateTree[string]()
 	for _, pattern := range []string{
-		"/", "/a", "/a/b", "/a/{id}", "/a/{id}/c", "/{first}", "/{first}/{second}", "/{first}/*", "/*",
+		"/", "/a", "/a/b", "/a/{id}", "/a/{id}/c", "/{first}", "/{first}/{second}",
 	} {
 		tree.RegisterRoute(GET, pattern, "handler")
 	}
@@ -148,7 +142,7 @@ func tryMergeAt(target *Tree[string], prefix string, source *Tree[string]) (acce
 func FuzzMergeAtPairsPrefixVariables(f *testing.F) {
 	for _, seed := range []string{
 		"/", "/api", "/{tenant}", "/{tenant}/{region}", "/api/{version}",
-		"/{a}/b/{c}", "/*", "/{postID}",
+		"/{a}/b/{c}", "/{postID}",
 	} {
 		f.Add(seed)
 	}

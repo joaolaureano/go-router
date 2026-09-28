@@ -31,7 +31,6 @@ func fuzzRouter() *Router {
 	r.Get("/users/{id}/posts/{postID}", handler)
 	r.Head("/head-only", handler)
 	r.Options("/explicit-options", handler)
-	r.Get("/files/*", handler)
 	return r
 }
 

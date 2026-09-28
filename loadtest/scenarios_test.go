@@ -5,8 +5,6 @@ import (
 	"testing"
 
 	vegeta "github.com/tsenart/vegeta/v12/lib"
-
-	"github.com/joaolaureano/go-router/router"
 )
 
 // Each scenario isolates one decision the tree makes, so a regression names
@@ -81,26 +79,6 @@ func TestLoad_StaticBeatsParameterUnderLoad(t *testing.T) {
 	requireStatus(t, out, http.StatusOK)
 	requireBody(t, out, "GET "+srv.URL+"/users/me", "me")
 	requireBody(t, out, "GET "+srv.URL+"/users/notme", "id=notme")
-	requireLatencyBudget(t, out)
-}
-
-// The catch-all swallows the tail, slashes included, and hands it over under
-// the wildcard name.
-func TestLoad_CatchAll(t *testing.T) {
-	skipShort(t)
-	srv := server(t)
-
-	out := attack(t, "catch-all", roundRobin(srv.URL,
-		get("/files/readme.md"),
-		get("/files/deep/nested/path/to/file.txt"),
-	))
-
-	requireNoTransportErrors(t, out)
-	requireStatus(t, out, http.StatusOK)
-	requireBody(t, out, "GET "+srv.URL+"/files/readme.md",
-		router.WildcardParam+"=readme.md")
-	requireBody(t, out, "GET "+srv.URL+"/files/deep/nested/path/to/file.txt",
-		router.WildcardParam+"=deep/nested/path/to/file.txt")
 	requireLatencyBudget(t, out)
 }
 
@@ -252,7 +230,6 @@ func TestLoad_MixedTraffic(t *testing.T) {
 		get("/users/42"),
 		get("/users/me"),
 		get("/users/42/posts/1001"),
-		get("/files/deep/nested/file.txt"),
 		get("/api/health"),
 		get("/api/v1/items/99/reviews/7"),
 		get("/admin/users/17"),

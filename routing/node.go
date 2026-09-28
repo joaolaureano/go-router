@@ -5,26 +5,24 @@ import (
 	"strings"
 )
 
-// node is one path segment of the tree. It is deliberately unexported: the
-// invariant tying an endpoint's variable names to the parameter nodes above it
-// only holds while Tree is the sole writer.
+// node is one edge of a compressed (patricia) trie. path is the literal text
+// this edge adds relative to its parent -- not necessarily a whole path
+// segment, and not necessarily bounded by a single one either: two routes that
+// share a long literal run, even across a "/", share one chain of edges for it,
+// split apart only at the byte where they first diverge.
+//
+// Only a parameter placeholder forces a node boundary, because only it needs
+// one: a placeholder always spans exactly one whole segment, so it can only
+// ever anchor to a node that represents having fully consumed some number of
+// whole segments. Nothing else about where an edge starts or ends carries
+// meaning, which is what lets registration split and merge edges freely
+// without disturbing that invariant.
 type node[E any] struct {
 	path      string
 	children  []*node[E]
 	parameter *node[E]
-	wildcard  *node[E]
 	endpoints []endpoint[E]
 }
-
-// segmentKind tells the three shapes a pattern segment can take apart. Only the
-// registrar classifies a segment: to a request, every segment is literal text.
-type segmentKind int
-
-const (
-	staticSegment segmentKind = iota
-	parameterSegment
-	wildcardSegment
-)
 
 // endpoint is what a single method registered on a node resolves to. The
 // variable names live here rather than on the node because two methods on the
@@ -63,79 +61,102 @@ func newNode[E any](path string) *node[E] {
 // saved are worth the mispredictions.
 const linearScanLimit = 8
 
-// staticChild finds the child holding this exact segment. It never returns the
-// parameter or catch-all branch: a request segment that happens to read "{*}"
-// or "*" is literal text, not a request for those slots.
+// childByFirstByte returns the child whose edge could match b, and the index
+// it occupies (or where it would belong, if nil is returned).
 //
-// children is kept sorted by addChild so that a node with many of them costs
-// log(n) comparisons rather than n. A router fanning out to fifty resources at
-// one level is ordinary, and scanning them all was the largest cost in the
-// walk by some way.
-func (n *node[E]) staticChild(path string) *node[E] {
+// A byte, not the whole edge, is enough: children are kept disjoint on their
+// first byte by construction (ensureStaticChild and mergeStaticChild never
+// leave two children agreeing there), so at most one can ever answer, and this
+// is the dispatch every walk and every insertion is built on.
+//
+// children is kept sorted so that a node with many of them costs log(n)
+// comparisons rather than n. A router fanning out to fifty resources at one
+// level is ordinary, and scanning them all was the largest cost in the walk
+// by some way.
+func (n *node[E]) childByFirstByte(b byte) (int, *node[E]) {
 	children := n.children
 	if len(children) < linearScanLimit {
-		for _, child := range children {
-			if child.path == path {
-				return child
+		for i, child := range children {
+			if child.path[0] == b {
+				return i, child
+			}
+			if child.path[0] > b {
+				return i, nil
 			}
 		}
-		return nil
+		return len(children), nil
 	}
 
-	at := searchChildren(children, path)
-	if at < len(children) && children[at].path == path {
-		return children[at]
-	}
-	return nil
-}
-
-// searchChildren returns the position where path belongs among children, which
-// is where it is if present. Written out rather than via sort.Search so that
-// the comparison stays a direct string compare with no closure behind it.
-func searchChildren[E any](children []*node[E], path string) int {
 	low, high := 0, len(children)
 	for low < high {
 		middle := int(uint(low+high) >> 1)
-		if children[middle].path < path {
+		if children[middle].path[0] < b {
 			low = middle + 1
 		} else {
 			high = middle
 		}
 	}
-	return low
+	if low < len(children) && children[low].path[0] == b {
+		return low, children[low]
+	}
+	return low, nil
 }
 
-// childFor returns the slot a registration should descend into. Only the
-// registrar knows how a segment was written, so only it may ask for the
-// parameter or wildcard branch.
-func (n *node[E]) childFor(path string, kind segmentKind) *node[E] {
-	switch kind {
-	case parameterSegment:
-		return n.parameter
-	case wildcardSegment:
-		return n.wildcard
-	default:
-		return n.staticChild(path)
-	}
+// insertChildAt splices child in at the position childByFirstByte named, kept
+// sorted so that childByFirstByte can bisect. Registration pays the shift; a
+// lookup would pay for the scan on every request.
+func (n *node[E]) insertChildAt(at int, child *node[E]) {
+	n.children = append(n.children, nil)
+	copy(n.children[at+1:], n.children[at:])
+	n.children[at] = child
 }
 
-func (n *node[E]) addChild(child *node[E], kind segmentKind) {
-	if child == nil {
-		panic("node child must not be nil")
+// commonPrefixLen returns how much of a and b agree from the start.
+func commonPrefixLen(a, b string) int {
+	limit := min(len(a), len(b))
+	i := 0
+	for i < limit && a[i] == b[i] {
+		i++
 	}
-	switch kind {
-	case parameterSegment:
-		n.parameter = child
-	case wildcardSegment:
-		n.wildcard = child
-	default:
-		// Kept sorted so that staticChild can bisect. Registration pays the
-		// shift; a lookup would pay for the scan on every request.
-		at := searchChildren(n.children, child.path)
-		n.children = append(n.children, nil)
-		copy(n.children[at+1:], n.children[at:])
-		n.children[at] = child
+	return i
+}
+
+// splitEdgeAt breaks the edge at children[at] into two: an intermediate node
+// holding the first commonLen bytes, with the original -- now shortened to
+// what follows -- as its sole child. It returns the intermediate node, which
+// is where whatever needs the shared prefix now belongs.
+func splitEdgeAt[E any](target *node[E], at int, commonLen int) *node[E] {
+	existing := target.children[at]
+	split := newNode[E](existing.path[:commonLen])
+	existing.path = existing.path[commonLen:]
+	split.children = []*node[E]{existing}
+	target.children[at] = split
+	return split
+}
+
+// ensureStaticChild finds or creates the node representing key's literal text
+// under target, splitting an existing edge wherever key and it first diverge.
+// key never crosses into a placeholder: it is exactly the literal run a
+// pattern declares between two placeholders (or between one and either end of
+// the pattern), which is what lets a placeholder always anchor to the node
+// this returns.
+func ensureStaticChild[E any](target *node[E], key string) *node[E] {
+	if key == "" {
+		return target
 	}
+
+	at, existing := target.childByFirstByte(key[0])
+	if existing == nil {
+		leaf := newNode[E](key)
+		target.insertChildAt(at, leaf)
+		return leaf
+	}
+
+	common := commonPrefixLen(existing.path, key)
+	if common < len(existing.path) {
+		existing = splitEdgeAt(target, at, common)
+	}
+	return ensureStaticChild(existing, key[common:])
 }
 
 // setEndpoint records what this node resolves to under a method. It only ever
@@ -171,11 +192,6 @@ type lookup struct {
 	// slice of values and a second one to pair it with.
 	params []Param
 
-	// decode transforms each segment as the walk reaches it, or is nil when the
-	// path needs nothing done to it -- which is the usual case, and the reason
-	// the walk can run straight off the request path without splitting it.
-	decode func(string) string
-
 	// allowed accumulates the methods a path answers under when the walk reaches
 	// it with the wrong one. A slice, not a set: a path is registered under one
 	// or two methods and never more than the seven that exist, and at that size
@@ -191,7 +207,7 @@ type lookup struct {
 // not to size for.
 const typicalCaptureCount = 2
 
-// capture records a value the walk matched against a parameter or catch-all.
+// capture records a value the walk matched against a parameter.
 // The name stays blank until the matched endpoint says what it is called.
 func (search *lookup) capture(value string) {
 	if search.params == nil {
@@ -224,8 +240,8 @@ func (search *lookup) allowedMethods() []Method {
 const typicalMethodCount = 6
 
 // recordAllowed notes the methods this node answers under. More than one node
-// can reach here in a single walk -- a parameter branch and the catch-all below
-// it both end the same path -- so a method already recorded is skipped.
+// can reach here in a single walk -- a parameter branch and a static one both
+// ending the same path -- so a method already recorded is skipped.
 func (n *node[E]) recordAllowed(search *lookup) {
 	if search.allowed == nil && len(n.endpoints) > 0 {
 		search.allowed = make([]Method, 0, typicalMethodCount)
@@ -237,44 +253,41 @@ func (n *node[E]) recordAllowed(search *lookup) {
 	}
 }
 
-// match walks what is left of the path, preferring the static child, then the
-// parameter branch, and only then the catch-all, and returns the first node
-// answering the method being searched for.
+// splitSegment peels the first "/"-delimited segment off path, the way a raw
+// request path is walked one segment at a time wherever decoding is involved.
+func splitSegment(path string) (segment, rest string) {
+	if separator := strings.IndexByte(path, '/'); separator >= 0 {
+		return path[:separator], path[separator+1:]
+	}
+	return path, ""
+}
+
+// match walks what is left of the raw path, preferring the static edge and
+// only then the parameter branch, and returns the first node answering the
+// method being searched for.
 //
 // It reads the path with a cursor rather than a list of segments, so an
 // ordinary lookup allocates nothing at all. An empty path means the walk has
 // arrived: the caller trims the separators off the ends, so only the root
 // reaches this with nothing left on the first call.
-//
-// The catch-all is tried once the path runs out too, so that "/files/*" covers
-// "/files" itself with an empty remainder.
 func (n *node[E]) match(path string, search *lookup) *node[E] {
 	if path == "" {
 		if n.hasMethod(search.httpMethod) {
 			return n
 		}
 		n.recordAllowed(search)
-		return n.matchWildcard(path, search)
+		return nil
 	}
 
-	// IndexByte is called here rather than behind a helper, and rather than
-	// via strings.Cut: neither inlines, and this runs once per segment of every
-	// request. Measured, Cut costs 8% on a static route.
-	segment, rest := path, ""
-	if separator := strings.IndexByte(path, '/'); separator >= 0 {
-		segment, rest = path[:separator], path[separator+1:]
-	}
-	if search.decode != nil {
-		segment = search.decode(segment)
-	}
-
-	if child := n.staticChild(segment); child != nil {
-		if matched := child.match(rest, search); matched != nil {
+	if _, child := n.childByFirstByte(path[0]); child != nil &&
+		len(path) >= len(child.path) && path[:len(child.path)] == child.path {
+		if matched := child.match(path[len(child.path):], search); matched != nil {
 			return matched
 		}
 	}
 
 	if n.parameter != nil {
+		segment, rest := splitSegment(path)
 		search.capture(segment)
 		if matched := n.parameter.match(rest, search); matched != nil {
 			return matched
@@ -282,29 +295,137 @@ func (n *node[E]) match(path string, search *lookup) *node[E] {
 		search.uncapture()
 	}
 
-	return n.matchWildcard(path, search)
+	return nil
 }
 
-// matchWildcard consumes whatever is left of the path in one value. A catch-all
-// node is always terminal, so there is nothing further to walk -- and since the
-// remainder is a slice of the path already, taking it costs nothing.
-func (n *node[E]) matchWildcard(path string, search *lookup) *node[E] {
-	if n.wildcard == nil {
+// decodedCursor presents a raw path as decoded text, one segment at a time, so
+// that matching against the tree's (always literal) edges can compare decoded
+// bytes throughout -- without ever decoding more of the path than a match
+// actually consumes.
+//
+// segment and raw are kept apart deliberately, rather than joined into one
+// buffer: a "/" a segment's own decoding produces -- a %2F, the very thing
+// that has to stay inside one variable -- would otherwise be indistinguishable
+// from the separator between two segments, and a search for one would find
+// the other instead.
+//
+// It is a plain value: passing it by copy to each recursive call gives every
+// branch its own snapshot for free, exactly as passing path by value already
+// does for the undecoded walk. A failed branch simply discards its copy;
+// nothing needs to be saved and restored by hand.
+type decodedCursor struct {
+	segment string // decoded text of the raw segment currently being matched
+	raw     string // whatever of the raw path lies beyond it, undecoded
+	decode  func(string) string
+}
+
+// newDecodedCursor decodes the first segment of raw, so that a cursor is
+// always ready to compare or capture without a special case for "nothing
+// pulled yet".
+func newDecodedCursor(raw string, decode func(string) string) decodedCursor {
+	return decodedCursor{raw: raw, decode: decode}.pullSegment()
+}
+
+// pullSegment decodes the next raw segment into segment, discarding whatever
+// was left of the one before it -- always called once that one is either
+// fully matched or fully captured, never partway through.
+func (c decodedCursor) pullSegment() decodedCursor {
+	segment, rest := splitSegment(c.raw)
+	return decodedCursor{segment: c.decode(segment), raw: rest, decode: c.decode}
+}
+
+// advance moves past the current segment entirely: to the next one if the raw
+// path has one, or to the exhausted state match reads as "nothing left".
+func (c decodedCursor) advance() decodedCursor {
+	if c.raw == "" {
+		return decodedCursor{decode: c.decode}
+	}
+	return c.pullSegment()
+}
+
+// exhausted reports whether every byte of the request has been matched or
+// captured, with nothing decoded and nothing raw left to decode.
+func (c decodedCursor) exhausted() bool {
+	return c.segment == "" && c.raw == ""
+}
+
+// matchDecoded is match for a lookup that needs percent-decoding. Decoding
+// happens lazily, one raw segment at a time, only as far as a candidate edge
+// or a parameter capture actually requires -- the same walk as match, just
+// reading through decodedCursor instead of the raw path directly.
+func (n *node[E]) matchDecoded(cur decodedCursor, search *lookup) *node[E] {
+	if cur.exhausted() {
+		if n.hasMethod(search.httpMethod) {
+			return n
+		}
+		n.recordAllowed(search)
 		return nil
 	}
 
-	remainder := path
-	if search.decode != nil {
-		remainder = search.decode(remainder)
+	if cur.segment != "" {
+		if child, next, ok := n.matchStaticDecoded(cur); ok {
+			if matched := child.matchDecoded(next, search); matched != nil {
+				return matched
+			}
+		}
 	}
 
-	search.capture(remainder)
-	if n.wildcard.hasMethod(search.httpMethod) {
-		return n.wildcard
+	if n.parameter != nil {
+		search.capture(cur.segment)
+		if matched := n.parameter.matchDecoded(cur.advance(), search); matched != nil {
+			return matched
+		}
+		search.uncapture()
 	}
-	n.wildcard.recordAllowed(search)
-	search.uncapture()
+
 	return nil
+}
+
+// matchStaticDecoded finds a child whose edge matches what cur has decoded so
+// far, pulling and decoding one further raw segment at a time as the edge's
+// own embedded "/" boundaries are reached. Segments are compared whole against
+// the edge's own text rather than joined into a shared buffer first, which is
+// what keeps a "/" a decoding produces from ever being mistaken for one of
+// those boundaries.
+func (n *node[E]) matchStaticDecoded(cur decodedCursor) (*node[E], decodedCursor, bool) {
+	_, child := n.childByFirstByte(cur.segment[0])
+	if child == nil {
+		return nil, cur, false
+	}
+
+	edge := child.path
+	for {
+		switch {
+		case len(cur.segment) < len(edge):
+			// The segment is a strict prefix of what is left of the edge: the
+			// edge can only continue with a literal "/", crossing into the
+			// next raw segment, since edges are only ever merged at whole
+			// segment boundaries.
+			if edge[len(cur.segment)] != '/' || cur.segment != edge[:len(cur.segment)] {
+				return nil, cur, false
+			}
+			if cur.raw == "" {
+				return nil, cur, false
+			}
+			edge = edge[len(cur.segment)+1:]
+			cur = cur.pullSegment()
+		case len(cur.segment) == len(edge):
+			if cur.segment != edge {
+				return nil, cur, false
+			}
+			return child, cur.advance(), true
+		default: // len(cur.segment) > len(edge)
+			// The edge ends inside this segment's own decoded text: whatever
+			// is left of it stays the current segment, for child's own
+			// children to keep matching -- no more of the raw path is
+			// consulted until this segment is spent.
+			if cur.segment[:len(edge)] != edge {
+				return nil, cur, false
+			}
+			cur.segment = cur.segment[len(edge):]
+			return child, cur, true
+		}
+	}
 }
 
 // mergeNodes copies source into target. prefixVariables names the variables
@@ -317,20 +438,51 @@ func mergeNodes[E any](target, source *node[E], prefixVariables []string) {
 	}
 
 	for _, sourceChild := range source.children {
-		targetChild := target.staticChild(sourceChild.path)
-		if targetChild == nil {
-			target.addChild(cloneNode(sourceChild, prefixVariables), staticSegment)
-			continue
-		}
-		mergeNodes(targetChild, sourceChild, prefixVariables)
+		mergeStaticChild(target, sourceChild, prefixVariables)
 	}
 
 	mergeBranch(&target.parameter, source.parameter, prefixVariables)
-	mergeBranch(&target.wildcard, source.wildcard, prefixVariables)
 }
 
-// mergeBranch merges one of the single-slot branches, cloning when the target
-// has nothing there yet.
+// mergeStaticChild grafts source -- an edge and its subtree -- into target's
+// children. The two sides may have split what is logically the same literal
+// text at different points, so this splits and descends exactly as
+// ensureStaticChild does, merging the two subtrees only once both edges agree
+// all the way to one end of the shorter one.
+func mergeStaticChild[E any](target *node[E], source *node[E], prefixVariables []string) {
+	at, existing := target.childByFirstByte(source.path[0])
+	if existing == nil {
+		target.insertChildAt(at, cloneNode(source, prefixVariables))
+		return
+	}
+
+	common := commonPrefixLen(existing.path, source.path)
+	if common < len(existing.path) {
+		existing = splitEdgeAt(target, at, common)
+	}
+
+	remainder := source.path[common:]
+	if remainder == "" {
+		mergeNodes(existing, source, prefixVariables)
+		return
+	}
+	mergeStaticChild(existing, withPath(source, remainder), prefixVariables)
+}
+
+// withPath returns a shallow, read-only view of n under a different path. It
+// exists so that mergeStaticChild can recurse with "the part of source not yet
+// matched" without mutating source, which belongs to the other tree.
+func withPath[E any](n *node[E], path string) *node[E] {
+	return &node[E]{
+		path:      path,
+		children:  n.children,
+		parameter: n.parameter,
+		endpoints: n.endpoints,
+	}
+}
+
+// mergeBranch merges the parameter branch, cloning when the target has nothing
+// there yet.
 func mergeBranch[E any](target **node[E], source *node[E], prefixVariables []string) {
 	if source == nil {
 		return
@@ -353,9 +505,6 @@ func cloneNode[E any](source *node[E], prefixVariables []string) *node[E] {
 	}
 	if source.parameter != nil {
 		clone.parameter = cloneNode(source.parameter, prefixVariables)
-	}
-	if source.wildcard != nil {
-		clone.wildcard = cloneNode(source.wildcard, prefixVariables)
 	}
 	return clone
 }

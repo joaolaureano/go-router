@@ -5,11 +5,11 @@
 
 # go-router
 
-A small, dependency-free HTTP router for Go, built on a radix tree with lock-free lookups. Started as a learning project inspired by [chi](https://github.com/go-chi/chi); it has since grown a fuzz-tested routing tree and a [load-tested](loadtest/README.md) concurrency story.
+A small, dependency-free HTTP router for Go, built on a compressed (patricia) trie with lock-free lookups. Started as a learning project inspired by [chi](https://github.com/go-chi/chi); it has since grown a fuzz-tested routing tree and a [load-tested](loadtest/README.md) concurrency story.
 
 ## Features
 
-- **Radix tree matching** — static segments, `{param}` captures, and a trailing `*` catch-all, with static and parameter routes taking precedence over the catch-all.
+- **Patricia trie matching** — static routes and `{param}` captures only, like a standard router. A shared literal prefix, even across a `/`, collapses into one edge instead of one node per segment, splitting only at the byte where two routes first diverge.
 - **Groups & mounting** — `Group` for shared prefixes and middleware, `Mount` for grafting one router's routes under another's prefix.
 - **Middleware chains** — `Use` for a router or group, `With` for a one-off set of middleware on specific routes.
 - **Correct method fallbacks** — `HEAD` falls back to `GET`, `OPTIONS` is answered automatically with a computed `Allow` header, unless you register your own.
@@ -77,18 +77,6 @@ r.Get("/users/{id}", func(w http.ResponseWriter, r *http.Request) {
 })
 ```
 
-### Catch-all routes
-
-A trailing `*` segment matches the rest of the path and captures it under `router.WildcardParam`:
-
-```go
-r.Get("/files/*", func(w http.ResponseWriter, r *http.Request) {
-    http.ServeFile(w, r, filepath.Join("./public", context.Param(r, router.WildcardParam)))
-})
-```
-
-Static and parameter routes take precedence, so `/files/readme` still reaches a route registered for it. `*` is only a catch-all as a whole segment, and only as the last one.
-
 ### Method handling
 
 `HEAD` falls back to the `GET` route unless one is registered for it, and `OPTIONS` on a known path answers `204` with an `Allow` header unless a route claims it. Registering either explicitly always wins. `Allow` advertises the registered methods plus the two the router answers on their behalf.
@@ -111,7 +99,7 @@ Static and parameter routes take precedence, so `/files/readme` still reaches a 
 The routing tree carries three layers of verification beyond ordinary unit tests:
 
 - **Fuzz tests** (`routing/fuzz_test.go`, `router/fuzz_test.go`) exercise route registration and lookup against arbitrary inputs.
-- **Benchmarks** (`router/bench_test.go`) cover static, parameter, catch-all, escaped, and miss lookups, including parallel and large-fanout cases.
+- **Benchmarks** (`router/bench_test.go`) cover static, parameter, escaped, and miss lookups, including parallel and large-fanout cases.
 - **Load tests** (`loadtest/`), driven by [vegeta](https://github.com/tsenart/vegeta), verify correctness *under concurrent load* — including registering or mounting routes while traffic is in flight. See [`loadtest/README.md`](loadtest/README.md) for the full scenario list and how to run them.
 
 ```sh

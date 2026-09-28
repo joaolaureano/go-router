@@ -59,9 +59,8 @@ func tag(name string) func(http.Handler) http.Handler {
 
 // New builds the routing table under load. Every route here corresponds to a
 // distinct decision inside the tree -- static hit, parameter capture, deeper
-// static under a parameter, catch-all, mounted subtree -- so that a regression
-// in any one of them shows up as its own scenario rather than as a blurred
-// average.
+// static under a parameter, mounted subtree -- so that a regression in any one
+// of them shows up as its own scenario rather than as a blurred average.
 func New() *router.Router {
 	r := router.NewRouter()
 
@@ -87,9 +86,6 @@ func New() *router.Router {
 	// A path that exists under exactly one method, used for the 405 scenario
 	// where nothing else shares the node.
 	r.Put("/users/{id}/avatar", echo("id"))
-
-	// Catch-all: the tail lands in one variable, slashes included.
-	r.Get("/files/*", echo(router.WildcardParam))
 
 	// Group with its own middleware stack, nested one level deeper. Three
 	// layers of chain on every request that lands here.
@@ -139,7 +135,6 @@ func Describe() string {
 		"GET    /users/{id}/posts/{postID}\n",
 		"POST   /users/{id}/posts/{postID}\n",
 		"PUT    /users/{id}/avatar\n",
-		"GET    /files/*\n",
 		"GET    /api/health\n",
 		"GET    /api/v1/items/{itemID}\n",
 		"GET    /api/v1/items/{itemID}/reviews/{reviewID}\n",

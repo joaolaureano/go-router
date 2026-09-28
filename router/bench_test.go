@@ -2,8 +2,8 @@ package router
 
 // The benchmarks the routing decisions in this repository were made against.
 // They serve one router covering the shapes a real table mixes -- static
-// segments, variables, a catch-all, a level fanning out fifty ways -- so that a
-// change cannot look good on one shape while quietly taxing another.
+// segments, variables, a level fanning out fifty ways -- so that a change
+// cannot look good on one shape while quietly taxing another.
 //
 // Read them with benchstat and -count=10 or more. A single sample has more
 // than once suggested a regression that turned out to be a double-digit gain.
@@ -25,7 +25,6 @@ func benchRouter() *Router {
 	r.Post("/users/{id}", h)
 	r.Put("/users/{id}", h)
 	r.Delete("/users/{id}", h)
-	r.Get("/files/*", h)
 	r.Get("/a/b/c/d/e", h)
 	for i := range 50 {
 		r.Get(fmt.Sprintf("/res%d", i), h)
@@ -45,7 +44,6 @@ func run(b *testing.B, r *Router, method, target string) {
 
 func BenchmarkStatic(b *testing.B)   { run(b, benchRouter(), "GET", "/a/b/c/d/e") }
 func BenchmarkParam(b *testing.B)    { run(b, benchRouter(), "GET", "/users/42/posts/7") }
-func BenchmarkCatchAll(b *testing.B) { run(b, benchRouter(), "GET", "/files/x/y/z") }
 func BenchmarkMiss(b *testing.B)     { run(b, benchRouter(), "GET", "/nope/nothing") }
 func BenchmarkEscaped(b *testing.B)  { run(b, benchRouter(), "GET", "/users/a%2Fb") }
 func BenchmarkFanout50(b *testing.B) { run(b, benchRouter(), "GET", "/res49") }
