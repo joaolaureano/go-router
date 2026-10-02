@@ -4,3 +4,4 @@
 loadtest/results/
 loadtest/targets/catalog.txt
 graphify-out/
+.idea
